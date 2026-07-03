@@ -452,19 +452,47 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .field .hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--n100);margin-top:-2px}
 
-/* Dropdowns */
-.p-select{
-  width:100%;height:52px;
-  border:1px solid var(--p50);border-radius:8px;background:var(--n10);
-  font-size:16px;color:var(--p120);font-family:'Inter',sans-serif;
-  padding:0 36px 0 12px;
-  appearance:none;-webkit-appearance:none;cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%233e7e7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 10px center;
-  transition:border-color .15s;
+/* Custom Pulse-styled dropdown — replaces native <select> */
+.c-select{position:relative;width:100%;user-select:none}
+.c-select-trigger{
+  width:100%;height:52px;border:1px solid var(--n40);border-radius:8px;
+  background:var(--n30);font-size:16px;color:var(--n80);
+  font-family:'Inter',sans-serif;padding:0 40px 0 12px;
+  display:flex;align-items:center;cursor:not-allowed;
+  transition:border-color .15s,box-shadow .15s,background .15s;
 }
-.p-select:focus{outline:none;border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
-.p-select:disabled{background:var(--n30);color:var(--n80);border-color:var(--n40);cursor:not-allowed}
+.c-select.enabled .c-select-trigger{
+  border-color:var(--p50);background:var(--n10);color:var(--p120);cursor:pointer;
+}
+.c-select.enabled .c-select-trigger:hover{border-color:var(--p70)}
+.c-select.filled .c-select-trigger{background:var(--p10)}
+.c-select.open .c-select-trigger{border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
+.c-select-chevron{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;pointer-events:none;color:var(--n60);
+  transition:transform .2s,color .2s;
+}
+.c-select.enabled .c-select-chevron{color:var(--p90)}
+.c-select.open .c-select-chevron{transform:translateY(-50%) rotate(180deg)}
+.c-select-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-select-panel{
+  display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;
+  background:var(--n10);border:1px solid var(--n50);border-radius:8px;
+  box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:999;
+  max-height:240px;overflow-y:auto;padding:4px 0;
+}
+.c-select-panel::-webkit-scrollbar{width:3px}
+.c-select-panel::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
+.c-select.open .c-select-panel{display:block}
+.c-select-opt{
+  padding:10px 14px;font-size:16px;line-height:1.3;
+  font-family:'Inter',sans-serif;color:var(--n120);
+  cursor:pointer;transition:background .1s;
+}
+.c-select-opt:hover{background:var(--p10)}
+.c-select-opt.selected{background:var(--p20);font-weight:500}
+.c-select-opt.is-placeholder{color:var(--n80)}
+.c-select-opt.divider-top{border-top:1px solid var(--n40);margin-top:4px}
 
 /* Browse tree — Figma 743-25700 */
 .browse-tree-wrap{
@@ -559,18 +587,20 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .status-tag.new{background:var(--su20);color:var(--su70)}
 
-/* ── Toast ─────────────────────────────────────────────────────────────── */
+/* ── Toast — Pulse success ─────────────────────────────────────────────── */
 .toast{
   position:fixed;bottom:24px;left:50%;
   transform:translateX(-50%) translateY(80px);
-  background:var(--p120);color:var(--n10);
+  background:var(--pulse-color-success-20);color:var(--pulse-color-neutral-120);
   padding:10px 18px;border-radius:8px;font-size:13px;font-weight:400;
-  box-shadow:0 4px 16px rgba(0,0,0,.18);z-index:200;
+  box-shadow:0 4px 16px rgba(0,0,0,.10);z-index:200;
   display:flex;align-items:center;gap:10px;white-space:nowrap;
-  border-left:4px solid var(--p70);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  border:1px solid var(--pulse-color-success-70);
+  border-left:4px solid var(--pulse-color-success-70);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
 }
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast svg{width:16px;height:16px;color:var(--p70);flex-shrink:0}
+.toast svg{width:16px;height:16px;color:var(--pulse-color-success-70);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -685,36 +715,36 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           </div>
 
           <!-- L1 items — right caret = collapsed -->
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Behaviour</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capac...</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Communications</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Continence</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritua...</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Daily Living and Environment</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Education and Employment</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Medication and Healthcare</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mental Health</div>
-          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mobility and Physical</div>
+          <div class="lhs-row l1" data-section="behaviour"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Behaviour</div>
+          <div class="lhs-row l1" data-section="cognition"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capac...</div>
+          <div class="lhs-row l1" data-section="communications"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Communications</div>
+          <div class="lhs-row l1" data-section="continence"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Continence</div>
+          <div class="lhs-row l1" data-section="cultural"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritua...</div>
+          <div class="lhs-row l1" data-section="daily-living"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Daily Living and Environment</div>
+          <div class="lhs-row l1" data-section="education"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Education and Employment</div>
+          <div class="lhs-row l1" data-section="medication"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Medication and Healthcare</div>
+          <div class="lhs-row l1" data-section="mental-health"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mental Health</div>
+          <div class="lhs-row l1" data-section="mobility"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mobility and Physical</div>
 
           <!-- Nutrition — expanded (down caret) -->
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Nutrition and Hydration</div>
+          <div class="lhs-row l1" data-section="nutrition"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Nutrition and Hydration</div>
 
-          <!-- L2 items — dot bullet -->
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Diet Need</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>General Nutrition and Hyd...</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Dysphagia / Swallowing</div>
-          <div class="lhs-row l2 selected"><div class="lhs-caret dot"><svg/></div>Food Allergies</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Enteral Feeding</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Weight Management</div>
+          <!-- L2 items — dot bullet (no svg/ — CSS ::after draws the dot) -->
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Diet Need</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>General Nutrition and Hyd...</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Dysphagia / Swallowing</div>
+          <div class="lhs-row l2 selected"><div class="lhs-caret dot"></div>Food Allergies</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Enteral Feeding</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Weight Management</div>
 
           <!-- Remaining L1 collapsed -->
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Personal Care &amp; Hygiene</div>
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sensory</div>
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sexuality and Relationship</div>
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Skin Integrity</div>
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sleep And Rest</div>
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recr...</div>
-          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Specific LTC</div>
+          <div class="lhs-row l1" data-section="personal-care"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Personal Care &amp; Hygiene</div>
+          <div class="lhs-row l1" data-section="sensory"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sensory</div>
+          <div class="lhs-row l1" data-section="sexuality"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sexuality and Relationship</div>
+          <div class="lhs-row l1" data-section="skin"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Skin Integrity</div>
+          <div class="lhs-row l1" data-section="sleep"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sleep And Rest</div>
+          <div class="lhs-row l1" data-section="social"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recr...</div>
+          <div class="lhs-row l1" data-section="specific-ltc"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Specific LTC</div>
 
         </div>
 
@@ -725,8 +755,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <!-- Section Page group 1 -->
           <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
           <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Need 1</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Need 2</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Need 2</div>
         </div>
 
         <!-- Divider -->
@@ -736,7 +766,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <!-- Section Page group 2 -->
           <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
           <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Need 1</div>
         </div>
 
         <!-- Divider -->
@@ -948,18 +978,30 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 
       <div class="field">
         <label>I wish to restore</label>
-        <select class="p-select" id="sel-type" onchange="onType()">
-          <option value="">Select Page</option>
-          <option value="page">A Page</option>
-          <option value="need">A Need</option>
-        </select>
+        <div class="c-select enabled" id="dd-type">
+          <div class="c-select-trigger" onclick="ddToggle('dd-type')">
+            <span class="c-select-value">Select type…</span>
+            <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="c-select-panel">
+            <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-type','','Select type…')">Select type…</div>
+            <div class="c-select-opt" data-value="page" onclick="ddPick('dd-type','page','A Page')">A Page</div>
+            <div class="c-select-opt" data-value="need" onclick="ddPick('dd-type','need','A Need')">A Need</div>
+          </div>
+        </div>
       </div>
 
       <div class="field">
         <label>Select item</label>
-        <select class="p-select" id="sel-item" disabled onchange="onItem()">
-          <option value="">Select Page</option>
-        </select>
+        <div class="c-select" id="dd-item">
+          <div class="c-select-trigger" onclick="ddToggle('dd-item')">
+            <span class="c-select-value">Select item…</span>
+            <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="c-select-panel">
+            <!-- populated by JS when type is selected -->
+          </div>
+        </div>
       </div>
 
       <!-- Browse tree — matches Figma 743-25700 -->
@@ -995,28 +1037,34 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
         <label>Destination</label>
         <div class="hint">Select where in the one care plan these items will be restored</div>
         <!-- "Create New Section" is an option in this list — Figma 743-25832 -->
-        <select class="p-select" id="sel-dest" disabled onchange="onDest()">
-          <option value="">Select...</option>
-          <option value="behaviour">Behaviour</option>
-          <option value="cognition">Cognition and Mental Capacity</option>
-          <option value="communications">Communications</option>
-          <option value="continence">Continence</option>
-          <option value="cultural">Cultural, Religious &amp; Spiritual</option>
-          <option value="daily-living">Daily Living and Environment</option>
-          <option value="education">Education and Employment</option>
-          <option value="medication">Medication and Healthcare</option>
-          <option value="mental-health">Mental Health</option>
-          <option value="mobility">Mobility and Physical</option>
-          <option value="nutrition">Nutrition and Hydration</option>
-          <option value="personal-care">Personal Care and Hygiene</option>
-          <option value="sensory">Sensory</option>
-          <option value="sexuality">Sexuality and Relationships</option>
-          <option value="skin">Skin Integrity</option>
-          <option value="sleep">Sleep and Rest</option>
-          <option value="social">Social, Community and Recreation</option>
-          <option value="specific-ltc">Specific LTC</option>
-          <option value="create-new">Create New Section</option>
-        </select>
+        <div class="c-select" id="dd-dest">
+          <div class="c-select-trigger" onclick="ddToggle('dd-dest')">
+            <span class="c-select-value">Select destination…</span>
+            <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="c-select-panel">
+            <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-dest','','Select destination…')">Select destination…</div>
+            <div class="c-select-opt" data-value="behaviour" onclick="ddPick('dd-dest','behaviour','Behaviour')">Behaviour</div>
+            <div class="c-select-opt" data-value="cognition" onclick="ddPick('dd-dest','cognition','Cognition and Mental Capacity')">Cognition and Mental Capacity</div>
+            <div class="c-select-opt" data-value="communications" onclick="ddPick('dd-dest','communications','Communications')">Communications</div>
+            <div class="c-select-opt" data-value="continence" onclick="ddPick('dd-dest','continence','Continence')">Continence</div>
+            <div class="c-select-opt" data-value="cultural" onclick="ddPick('dd-dest','cultural','Cultural, Religious &amp; Spiritual')">Cultural, Religious &amp; Spiritual</div>
+            <div class="c-select-opt" data-value="daily-living" onclick="ddPick('dd-dest','daily-living','Daily Living and Environment')">Daily Living and Environment</div>
+            <div class="c-select-opt" data-value="education" onclick="ddPick('dd-dest','education','Education and Employment')">Education and Employment</div>
+            <div class="c-select-opt" data-value="medication" onclick="ddPick('dd-dest','medication','Medication and Healthcare')">Medication and Healthcare</div>
+            <div class="c-select-opt" data-value="mental-health" onclick="ddPick('dd-dest','mental-health','Mental Health')">Mental Health</div>
+            <div class="c-select-opt" data-value="mobility" onclick="ddPick('dd-dest','mobility','Mobility and Physical')">Mobility and Physical</div>
+            <div class="c-select-opt" data-value="nutrition" onclick="ddPick('dd-dest','nutrition','Nutrition and Hydration')">Nutrition and Hydration</div>
+            <div class="c-select-opt" data-value="personal-care" onclick="ddPick('dd-dest','personal-care','Personal Care and Hygiene')">Personal Care and Hygiene</div>
+            <div class="c-select-opt" data-value="sensory" onclick="ddPick('dd-dest','sensory','Sensory')">Sensory</div>
+            <div class="c-select-opt" data-value="sexuality" onclick="ddPick('dd-dest','sexuality','Sexuality and Relationships')">Sexuality and Relationships</div>
+            <div class="c-select-opt" data-value="skin" onclick="ddPick('dd-dest','skin','Skin Integrity')">Skin Integrity</div>
+            <div class="c-select-opt" data-value="sleep" onclick="ddPick('dd-dest','sleep','Sleep and Rest')">Sleep and Rest</div>
+            <div class="c-select-opt" data-value="social" onclick="ddPick('dd-dest','social','Social, Community and Recreation')">Social, Community and Recreation</div>
+            <div class="c-select-opt" data-value="specific-ltc" onclick="ddPick('dd-dest','specific-ltc','Specific LTC')">Specific LTC</div>
+            <div class="c-select-opt divider-top" data-value="create-new" onclick="ddPick('dd-dest','create-new','Create New Section')">+ Create New Section</div>
+          </div>
+        </div>
       </div>
 
       <!-- Shown only when "Create New Section" selected -->
@@ -1086,6 +1134,63 @@ const DEST_LABELS = {
 
 let sType='', sItem='', sItemLabel='', sDest='', newSecName=''
 
+/* ── Custom dropdown state ───────────────────────────────────────────── */
+const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 'dd-dest':{value:'',label:''} }
+
+function ddToggle(id){
+  const dd = document.getElementById(id)
+  if(!dd.classList.contains('enabled')) return
+  const wasOpen = dd.classList.contains('open')
+  document.querySelectorAll('.c-select.open').forEach(el => el.classList.remove('open'))
+  if(!wasOpen) dd.classList.add('open')
+}
+
+function ddPick(id, value, label){
+  const dd = document.getElementById(id)
+  dd.classList.remove('open')
+  ddState[id] = { value, label }
+  dd.querySelector('.c-select-value').textContent = label
+  dd.querySelectorAll('.c-select-opt').forEach(o =>
+    o.classList.toggle('selected', !!value && o.dataset.value === value))
+  dd.classList.toggle('filled', !!value)
+  if(id === 'dd-type')  handleTypeChange()
+  else if(id === 'dd-item') handleItemChange()
+  else if(id === 'dd-dest') handleDestChange()
+}
+
+function ddSetEnabled(id, enabled){
+  const dd = document.getElementById(id)
+  dd.classList.toggle('enabled', enabled)
+  if(!enabled) dd.classList.remove('open')
+}
+
+function ddReset(id, placeholder){
+  const dd = document.getElementById(id)
+  ddState[id] = { value:'', label:'' }
+  dd.querySelector('.c-select-value').textContent = placeholder
+  dd.querySelectorAll('.c-select-opt').forEach(o => o.classList.remove('selected'))
+  dd.classList.remove('open','filled')
+}
+
+function ddSetOptions(id, items){
+  const panel = document.getElementById(id).querySelector('.c-select-panel')
+  panel.innerHTML = ''
+  items.forEach(i => {
+    const el = document.createElement('div')
+    el.className = 'c-select-opt'
+    el.dataset.value = i.id
+    el.textContent = i.label
+    el.onclick = () => ddPick(id, i.id, i.label)
+    panel.appendChild(el)
+  })
+}
+
+/* Close dropdowns when clicking outside */
+document.addEventListener('click', e => {
+  if(!e.target.closest('.c-select'))
+    document.querySelectorAll('.c-select.open').forEach(el => el.classList.remove('open'))
+})
+
 /* ── Browse tree ─────────────────────────────────────────────────────── */
 function initTree(){
   const c = document.getElementById('bt-main')
@@ -1103,16 +1208,24 @@ function btPick(el, id, label){
   document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
   el.classList.add('selected')
   sItem = id; sItemLabel = label
-  // Mirror selection into dropdown
-  const iEl = document.getElementById('sel-item')
-  let opt = iEl.querySelector(`option[value="${id}"]`)
+  /* Update dd-item display directly (bypasses handleItemChange to avoid loop) */
+  ddState['dd-item'] = { value: id, label }
+  const ddItem = document.getElementById('dd-item')
+  ddItem.querySelector('.c-select-value').textContent = label
+  ddItem.classList.add('filled')
+  /* Ensure option exists and is marked */
+  let opt = ddItem.querySelector(`.c-select-opt[data-value="${id}"]`)
   if(!opt){
-    opt = document.createElement('option')
-    opt.value = id; opt.textContent = label
-    iEl.appendChild(opt)
+    opt = document.createElement('div')
+    opt.className = 'c-select-opt'
+    opt.dataset.value = id
+    opt.textContent = label
+    opt.onclick = () => ddPick('dd-item', id, label)
+    ddItem.querySelector('.c-select-panel').appendChild(opt)
   }
-  iEl.value = id
-  document.getElementById('sel-dest').disabled = false
+  ddItem.querySelectorAll('.c-select-opt').forEach(o =>
+    o.classList.toggle('selected', o.dataset.value === id))
+  ddSetEnabled('dd-dest', true)
   sync()
 }
 
@@ -1126,42 +1239,36 @@ function closeDrawer(){
   document.getElementById('drawer').classList.remove('open')
 }
 
-/* ── Form interactions ───────────────────────────────────────────────── */
-function onType(){
-  sType = document.getElementById('sel-type').value
+/* ── Form interaction handlers ───────────────────────────────────────── */
+function handleTypeChange(){
+  sType = ddState['dd-type'].value
   sItem=''; sItemLabel=''; sDest=''; newSecName=''
-  const iEl = document.getElementById('sel-item')
-  const dEl = document.getElementById('sel-dest')
-  iEl.innerHTML = '<option value="">Select Page</option>'
-  dEl.value = ''; dEl.disabled = true
+  ddReset('dd-item','Select item…')
+  ddReset('dd-dest','Select destination…')
+  ddSetEnabled('dd-dest', false)
   document.getElementById('new-sec-field').classList.remove('show')
   document.getElementById('new-sec-name').value = ''
   const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : []
-  items.forEach(i => {
-    const o = document.createElement('option')
-    o.value = i.id; o.textContent = i.label
-    iEl.appendChild(o)
-  })
-  iEl.disabled = !sType
+  ddSetOptions('dd-item', items)
+  ddSetEnabled('dd-item', !!sType)
   document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
   sync()
 }
 
-function onItem(){
-  const iEl = document.getElementById('sel-item')
-  sItem = iEl.value
+function handleItemChange(){
+  sItem = ddState['dd-item'].value
   const items = sType==='page' ? LEGACY_PAGES : LEGACY_NEEDS
   const found = items.find(i => i.id===sItem)
   sItemLabel = found ? found.label : ''
-  // Mirror highlight in tree
   document.querySelectorAll('.bt-node').forEach(n =>
     n.classList.toggle('selected', n.dataset.id===sItem))
-  document.getElementById('sel-dest').disabled = !sItem
+  ddSetEnabled('dd-dest', !!sItem)
+  if(!sItem){ ddReset('dd-dest','Select destination…'); sDest='' }
   sync()
 }
 
-function onDest(){
-  sDest = document.getElementById('sel-dest').value
+function handleDestChange(){
+  sDest = ddState['dd-dest'].value
   const nf = document.getElementById('new-sec-field')
   if(sDest==='create-new'){
     nf.classList.add('show')
@@ -1185,7 +1292,7 @@ function sync(){
 
 /* ── Restore ─────────────────────────────────────────────────────────── */
 function doRestore(){
-  addToSidebar()
+  addToLHS()
   const destLabel = sDest==='create-new' ? newSecName : (DEST_LABELS[sDest]||sDest)
   const msg = sDest==='create-new'
     ? `"${sItemLabel}" restored into new section "${newSecName}"`
@@ -1197,12 +1304,11 @@ function doRestore(){
 
 const CARET = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`
 
-function addToSidebar(){
-  const c = document.getElementById('restored-items')
-  const div = document.createElement('div')
-
-  if(sDest==='create-new'){
-    /* New section: "(New)" italic label + filled yellow dot — Figma 743-26264 */
+function addToLHS(){
+  if(sDest === 'create-new'){
+    /* Create brand-new section at the bottom of the LHS tree */
+    const c = document.getElementById('restored-items')
+    const div = document.createElement('div')
     div.innerHTML = `
       <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
       <div class="lhs-items">
@@ -1212,52 +1318,62 @@ function addToSidebar(){
           <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
           <div class="lhs-new-dot" style="margin-left:auto"></div>
         </div>
-        <div class="lhs-row l1" style="gap:4px">
-          <div class="lhs-caret">${CARET}</div>
-          ${sItemLabel}
-        </div>
-      </div>`
-  } else {
-    /* Existing section: hollow ring on parent, item appended with filled dot — Figma 743-27202 / 743-27581 */
-    const destLabel = DEST_LABELS[sDest] || sDest
-    addHollowRing(destLabel)
-    div.innerHTML = `
-      <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
-      <div class="lhs-items">
-        <div class="lhs-row l1" style="gap:4px">
-          <div class="lhs-caret dot"><svg/></div>
+        <div class="lhs-row l2" style="gap:4px">
+          <div class="lhs-caret dot"></div>
           <span>${sItemLabel}</span>
           <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
           <div class="lhs-new-dot" style="margin-left:auto"></div>
         </div>
       </div>`
-  }
-  c.appendChild(div)
-}
-
-/* Add hollow yellow ring to the matching LHS parent row — Figma 743-27202 */
-function addHollowRing(sectionLabel){
-  document.querySelectorAll('.lhs-row').forEach(row => {
-    const txt = row.textContent.replace(/\s+/g,' ').trim()
-    if(txt.includes(sectionLabel) && !row.querySelector('.lhs-new-ring') && !row.querySelector('.lhs-new-dot')){
-      const ring = document.createElement('div')
-      ring.className = 'lhs-new-ring'
-      row.appendChild(ring)
+    c.appendChild(div)
+  } else {
+    /* Inject under the existing matching LHS section row — Figma 743-27202 / 743-27581 */
+    const targetRow = document.querySelector(`.lhs-row.l1[data-section="${sDest}"]`)
+    if(targetRow){
+      /* Mark parent with hollow ring and expand its caret */
+      if(!targetRow.querySelector('.lhs-new-ring')){
+        const caret = targetRow.querySelector('.lhs-caret')
+        if(caret) caret.classList.add('down')
+        const ring = document.createElement('div')
+        ring.className = 'lhs-new-ring'
+        targetRow.appendChild(ring)
+      }
+      /* Find insertion point: after all existing l2 siblings */
+      let insertAfter = targetRow
+      let next = targetRow.nextElementSibling
+      while(next && next.classList.contains('l2')){
+        insertAfter = next
+        next = next.nextElementSibling
+      }
+      /* Create the new child row */
+      const newRow = document.createElement('div')
+      newRow.className = 'lhs-row l2'
+      newRow.innerHTML = `
+        <div class="lhs-caret dot"></div>
+        <span>${sItemLabel}</span>
+        <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
+        <div class="lhs-new-dot" style="margin-left:auto"></div>`
+      insertAfter.parentNode.insertBefore(newRow, insertAfter.nextSibling)
+      /* Scroll to reveal */
+      setTimeout(() => newRow.scrollIntoView({behavior:'smooth',block:'nearest'}), 50)
     }
-  })
+  }
 }
 
 function reset(){
   sType=''; sItem=''; sItemLabel=''; sDest=''; newSecName=''
-  document.getElementById('sel-type').value=''
-  document.getElementById('sel-item').innerHTML='<option value="">Select Page</option>'
-  document.getElementById('sel-item').disabled=true
-  document.getElementById('sel-dest').value=''
-  document.getElementById('sel-dest').disabled=true
+  ddReset('dd-type','Select type…')
+  ddReset('dd-item','Select item…')
+  ddReset('dd-dest','Select destination…')
+  /* keep dd-item and dd-dest disabled after reset */
+  ddSetEnabled('dd-item', false)
+  ddSetEnabled('dd-dest', false)
   document.getElementById('new-sec-field').classList.remove('show')
   document.getElementById('new-sec-name').value=''
   document.getElementById('restore-btn').disabled=true
   document.querySelectorAll('.bt-node').forEach(n=>n.classList.remove('selected'))
+  /* dd-type stays enabled */
+  ddSetEnabled('dd-type', true)
 }
 
 function toast(msg){
