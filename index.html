@@ -1,902 +1,711 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unarchiving Legacy Needs — Care Plan Prototype</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Care Plan — Nourish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ── Pulse tokens ──────────────────────────────────────────────────────── */
+:root {
+  --p120:#172f2f; --p110:#214343; --p100:#2b5656; --p90:#3e7e7e;
+  --p80:#52a5a5;  --p70:#66cccc;  --p60:#85d6d6;  --p50:#a3e0e0;
+  --p40:#c2ebeb;  --p30:#d1f0f0;  --p20:#e0f5f5;  --p10:#f0fafa;
+  --n120:#36393f; --n110:#51555e; --n100:#6c727e; --n90:#878e9d;
+  --n80:#9fa5b1;  --n70:#b7bbc4;  --n60:#cfd2d8;  --n50:#dbdde2;
+  --n40:#e7e8eb;  --n30:#f3f4f5;  --n20:#f9f9fa;  --n10:#ffffff;
+  --cd6:#ba4e74;  --cd5:#dd5f8b;  --cd1:#f8dfe8;  --cd05:#fceff3;
+  --su70:#4bb97e; --su20:#edfcf4; --su10:#f6fef9;
+  --at70:#e6c020; --at10:#fcf9e9;
+  --ur70:#cc5252; --ur10:#fff5f5;
+  --ge70:#7390cd; --ge10:#f5f8ff;
+}
 
-  <!-- Google Fonts: Inter (Pulse body font) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:var(--n30);height:100vh;overflow:hidden;display:flex;flex-direction:column}
 
-  <style>
-    /* ─── Pulse Design Tokens ─────────────────────────────────────────────── */
-    :root {
-      /* Primary */
-      --pulse-color-primary-120: #172f2f;
-      --pulse-color-primary-110: #214343;
-      --pulse-color-primary-100: #2b5656;
-      --pulse-color-primary-90:  #3e7e7e;
-      --pulse-color-primary-80:  #52a5a5;
-      --pulse-color-primary-70:  #66cccc;
-      --pulse-color-primary-60:  #85d6d6;
-      --pulse-color-primary-50:  #a3e0e0;
-      --pulse-color-primary-40:  #c2ebeb;
-      --pulse-color-primary-30:  #d1f0f0;
-      --pulse-color-primary-20:  #e0f5f5;
-      --pulse-color-primary-10:  #f0fafa;
+/* ── App header bar ────────────────────────────────────────────────────── */
+.app-header{
+  height:44px;background:var(--p70);display:flex;align-items:center;
+  padding:0 16px;flex-shrink:0;position:relative;
+}
+.app-logo{display:flex;align-items:center;gap:8px;color:var(--n120);font-weight:700;font-size:15px}
+.app-logo-mark{
+  width:28px;height:28px;background:var(--p110);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+}
+.app-logo-mark svg{width:16px;height:16px;color:var(--p70)}
+.app-header-title{
+  position:absolute;left:50%;transform:translateX(-50%);
+  font-size:14px;font-weight:600;color:var(--n120);
+}
+.app-header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.notif-btn{
+  position:relative;width:32px;height:32px;border-radius:50%;
+  background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;color:var(--n120);
+}
+.notif-btn svg{width:20px;height:20px}
+.notif-dot{
+  position:absolute;top:2px;right:2px;
+  background:var(--ur70);color:#fff;font-size:9px;font-weight:700;
+  min-width:16px;height:16px;border-radius:99px;
+  display:flex;align-items:center;justify-content:center;padding:0 3px;
+}
 
-      /* Neutral */
-      --pulse-color-neutral-130: #000000;
-      --pulse-color-neutral-120: #36393f;
-      --pulse-color-neutral-110: #51555e;
-      --pulse-color-neutral-100: #6c727e;
-      --pulse-color-neutral-90:  #878e9d;
-      --pulse-color-neutral-80:  #9fa5b1;
-      --pulse-color-neutral-70:  #b7bbc4;
-      --pulse-color-neutral-60:  #cfd2d8;
-      --pulse-color-neutral-50:  #dbdde2;
-      --pulse-color-neutral-40:  #e7e8eb;
-      --pulse-color-neutral-30:  #f3f4f5;
-      --pulse-color-neutral-20:  #f9f9fa;
-      --pulse-color-neutral-10:  #ffffff;
+/* ── Secondary nav ─────────────────────────────────────────────────────── */
+.sec-nav{
+  height:44px;background:var(--n10);border-bottom:1px solid var(--n50);
+  display:flex;align-items:stretch;padding:0 16px;flex-shrink:0;gap:4px;
+}
+.sec-nav-link{
+  display:flex;align-items:center;gap:6px;padding:0 12px;
+  font-size:13px;color:var(--n100);text-decoration:none;
+  border-bottom:2px solid transparent;cursor:pointer;
+  background:none;border-top:none;border-left:none;border-right:none;
+  font-family:'Inter',sans-serif;white-space:nowrap;
+  transition:color .15s;
+}
+.sec-nav-link:hover{color:var(--n120)}
+.sec-nav-link.active{color:var(--cd6);border-bottom-color:var(--cd6);font-weight:500}
+.sec-nav-link svg{width:16px;height:16px;flex-shrink:0}
 
-      /* Semantic */
-      --pulse-color-success-70: #4bb97e;
-      --pulse-color-success-20: #edfcf4;
-      --pulse-color-success-10: #f6fef9;
-      --pulse-color-urgency-70: #cc5252;
-      --pulse-color-urgency-20: #fee7e7;
-      --pulse-color-urgency-10: #fff5f5;
-      --pulse-color-error-70:   #f77321;
-      --pulse-color-error-10:   #fef1e9;
-      --pulse-color-general-70: #7390cd;
-      --pulse-color-general-10: #f5f8ff;
-      --pulse-color-attention-70: #e6c020;
-      --pulse-color-attention-10: #fcf9e9;
+/* ── Main layout ───────────────────────────────────────────────────────── */
+.layout{display:flex;flex:1;overflow:hidden}
 
-      /* Typography */
-      --pulse-font-size-caption-small:   clamp(11px, 10.6667px + 0.0926vw, 12px);
-      --pulse-font-size-caption-regular: clamp(12px, 11.3333px + 0.1852vw, 14px);
-      --pulse-font-size-small:   clamp(15px, 14.7143px + 0.0893vw, 16px);
-      --pulse-font-size-regular: clamp(16px, 15.4286px + 0.1786vw, 18px);
-      --pulse-font-size-large:   clamp(18px, 17.4286px + 0.1786vw, 20px);
-      --pulse-font-size-xlarge:  clamp(20px, 18.8571px + 0.3571vw, 24px);
-      --pulse-font-size-xxlarge: clamp(24px, 21.7143px + 0.7143vw, 32px);
+/* ── Icon rail ─────────────────────────────────────────────────────────── */
+.icon-rail{
+  width:40px;background:var(--p120);display:flex;flex-direction:column;
+  align-items:center;padding:8px 0;gap:2px;flex-shrink:0;
+}
+.ir-avatar{
+  width:28px;height:28px;border-radius:50%;background:var(--p100);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:var(--n10);margin-bottom:8px;
+}
+.ir-btn{
+  width:32px;height:32px;border-radius:6px;background:none;border:none;
+  color:rgba(255,255,255,.45);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;
+}
+.ir-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.ir-btn.active{background:var(--p100);color:var(--p70)}
+.ir-btn svg{width:16px;height:16px}
+.ir-spacer{flex:1}
 
-      --pulse-font-weight-light:   300;
-      --pulse-font-weight-regular: 400;
-      --pulse-font-weight-strong:  500;
-      --pulse-font-weight-bold:    700;
+/* ── LHS panel ─────────────────────────────────────────────────────────── */
+.lhs{
+  width:210px;background:var(--n10);border-right:1px solid var(--n50);
+  display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;
+}
+.lhs-actions{
+  padding:10px 12px;border-bottom:1px solid var(--n40);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.btn-add{
+  padding:5px 12px;background:var(--p90);border:none;border-radius:5px;
+  color:#fff;font-size:12px;font-weight:500;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:background .15s;
+}
+.btn-add:hover{background:var(--p80)}
+.btn-edit{
+  margin-left:auto;width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--n50);background:var(--n10);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--n100);transition:background .15s;
+}
+.btn-edit:hover{background:var(--n30)}
+.btn-edit svg{width:14px;height:14px}
 
-      /* Spacing */
-      --pulse-space-3xs: clamp(2px,   1.4286px + 0.1786vw, 4px);
-      --pulse-space-2xs: clamp(4px,   3.7143px + 0.0893vw, 5px);
-      --pulse-space-xs:  clamp(8px,   7.7143px + 0.0893vw, 9px);
-      --pulse-space-s:   clamp(16px, 15.4286px + 0.1786vw, 18px);
-      --pulse-space-m:   clamp(24px, 23.1429px + 0.2679vw, 27px);
-      --pulse-space-l:   clamp(32px, 30.8571px + 0.3571vw, 36px);
-      --pulse-space-s-m: clamp(16px, 12.8571px + 0.9821vw, 27px);
-    }
+.lhs-scroll{flex:1;overflow-y:auto;padding:6px 0}
+.lhs-scroll::-webkit-scrollbar{width:3px}
+.lhs-scroll::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
 
-    /* ─── Reset & Base ────────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.lhs-row{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 12px;font-size:12.5px;color:var(--n110);
+  cursor:pointer;transition:background .12s;user-select:none;
+}
+.lhs-row:hover{background:var(--n30)}
+.lhs-row.active{background:#e8f4ff;color:#1a6bbf;font-weight:500}
+.lhs-row svg{width:12px;height:12px;color:var(--n80);flex-shrink:0}
+.lhs-row .badge-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--at70);margin-left:auto;flex-shrink:0;
+}
+.lhs-divider{height:1px;background:var(--n40);margin:4px 0}
+.lhs-section{
+  display:flex;align-items:center;gap:4px;
+  padding:6px 12px 2px;font-size:11px;font-weight:600;
+  color:var(--n90);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;
+}
+.lhs-section svg{width:10px;height:10px;color:var(--n80)}
+.lhs-row.indent{padding-left:24px}
+.lhs-row.indent2{padding-left:34px}
+.lhs-row.indent2::before{content:'·';margin-right:2px;color:var(--n70)}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      font-size: var(--pulse-font-size-small);
-      font-weight: var(--pulse-font-weight-regular);
-      color: var(--pulse-color-neutral-120);
-      background: var(--pulse-color-neutral-30);
-      height: 100vh;
-      overflow: hidden;
-    }
+/* Legacy Archived Content — pinned bottom */
+.lhs-legacy{
+  border-top:1px solid var(--n40);flex-shrink:0;
+}
+.lhs-legacy .lhs-row{
+  color:var(--p90);font-weight:500;padding:10px 12px;
+}
+.lhs-legacy .lhs-row:hover{background:var(--p10)}
+.lhs-legacy .lhs-row svg{color:var(--p70);width:14px;height:14px}
 
-    /* ─── Top Nav ─────────────────────────────────────────────────────────── */
-    .top-nav {
-      height: 52px;
-      background: var(--pulse-color-primary-120);
-      display: flex;
-      align-items: center;
-      padding: 0 var(--pulse-space-s);
-      gap: var(--pulse-space-s);
-      position: relative;
-      z-index: 10;
-    }
-    .top-nav-logo {
-      font-size: var(--pulse-font-size-large);
-      font-weight: var(--pulse-font-weight-bold);
-      color: var(--pulse-color-neutral-10);
-      letter-spacing: 0.5px;
-      margin-right: var(--pulse-space-xs);
-    }
-    .top-nav-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: var(--pulse-font-size-caption-regular);
-      font-weight: var(--pulse-font-weight-regular);
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      border: none;
-      background: transparent;
-      font-family: inherit;
-    }
-    .top-nav-link:hover { background: rgba(255,255,255,0.1); color: var(--pulse-color-neutral-10); }
-    .top-nav-link.active {
-      background: rgba(255,255,255,0.15);
-      color: var(--pulse-color-neutral-10);
-      font-weight: var(--pulse-font-weight-strong);
-    }
-    .top-nav-link svg { width: 16px; height: 16px; }
-    .top-nav-spacer { flex: 1; }
-    .top-nav-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--pulse-color-primary-90);
-      border: 2px solid rgba(255,255,255,0.25);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--pulse-color-neutral-10);
-      font-size: var(--pulse-font-size-caption-small);
-      font-weight: var(--pulse-font-weight-bold);
-    }
+/* ── Main content ──────────────────────────────────────────────────────── */
+.main{flex:1;overflow-y:auto;background:var(--n20)}
+.main::-webkit-scrollbar{width:4px}
+.main::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
 
-    /* ─── App Layout ──────────────────────────────────────────────────────── */
-    .app-layout {
-      display: flex;
-      height: calc(100vh - 52px);
-      overflow: hidden;
-    }
+/* Patient header */
+.patient-bar{
+  background:var(--n10);border-bottom:1px solid var(--n40);
+  padding:14px 28px;display:flex;align-items:center;gap:16px;
+}
+.patient-avatar{
+  width:60px;height:60px;border-radius:50%;background:var(--p40);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:700;color:var(--p110);flex-shrink:0;overflow:hidden;
+}
+.patient-avatar img{width:100%;height:100%;object-fit:cover}
+.patient-name{font-size:18px;font-weight:700;color:var(--n120)}
+.patient-age{font-size:14px;color:var(--n100);margin-top:2px}
+.patient-tag{
+  display:inline-flex;align-items:center;gap:4px;margin-top:5px;
+  font-size:11px;font-weight:500;color:var(--cd6);
+  background:var(--cd05);border:1px solid var(--cd1);
+  padding:2px 8px;border-radius:4px;
+}
+.patient-tag::before{content:'⚕';font-size:10px}
 
-    /* ─── Icon Rail ───────────────────────────────────────────────────────── */
-    .icon-rail {
-      width: 48px;
-      background: var(--pulse-color-primary-110);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: var(--pulse-space-xs) 0;
-      gap: var(--pulse-space-3xs);
-      flex-shrink: 0;
-    }
-    .icon-rail-btn {
-      width: 36px; height: 36px;
-      border: none;
-      background: transparent;
-      border-radius: 8px;
-      color: rgba(255,255,255,0.55);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, color 0.15s;
-    }
-    .icon-rail-btn:hover { background: rgba(255,255,255,0.1); color: var(--pulse-color-neutral-10); }
-    .icon-rail-btn.active {
-      background: var(--pulse-color-primary-100);
-      color: var(--pulse-color-primary-70);
-    }
-    .icon-rail-btn svg { width: 18px; height: 18px; }
+/* Sections */
+.content-section{padding:20px 28px 0}
+.section-heading{font-size:16px;font-weight:700;color:var(--n120);margin-bottom:12px}
 
-    /* ─── Sidebar (PulseCard / sidebar pattern) ───────────────────────────── */
-    .sidebar {
-      width: 260px;
-      background: var(--pulse-color-neutral-10);
-      border-right: 1px solid var(--pulse-color-neutral-50);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
+/* Search */
+.search-wrap{
+  background:var(--n10);border:1px solid var(--n50);border-radius:8px;
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  margin-bottom:20px;
+}
+.search-wrap svg{width:18px;height:18px;color:var(--n80);flex-shrink:0}
+.search-wrap input{
+  border:none;outline:none;font-size:13px;color:var(--n120);
+  background:transparent;width:100%;font-family:'Inter',sans-serif;
+}
+.search-wrap input::placeholder{color:var(--n80)}
 
-    .sidebar-patient {
-      padding: var(--pulse-space-xs) var(--pulse-space-s);
-      border-bottom: 1px solid var(--pulse-color-neutral-40);
-    }
-    .sidebar-patient-name {
-      font-size: var(--pulse-font-size-small);
-      font-weight: var(--pulse-font-weight-bold);
-      color: var(--pulse-color-primary-120);
-    }
-    .sidebar-patient-sub {
-      font-size: var(--pulse-font-size-caption-small);
-      color: var(--pulse-color-neutral-100);
-      margin-top: 2px;
-    }
+/* Recently updated carousel */
+.carousel{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px}
+.carousel::-webkit-scrollbar{height:3px}
+.carousel::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
+.carousel-card{
+  min-width:210px;background:var(--n10);border:1px solid var(--n50);
+  border-radius:8px;padding:12px 14px;flex-shrink:0;
+}
+.carousel-card h4{font-size:13px;font-weight:600;color:var(--n120)}
+.carousel-card .cat{font-size:11px;color:var(--cd6);margin-top:2px}
+.carousel-card .change{font-size:12px;color:var(--n100);margin-top:6px}
 
-    .sidebar-actions {
-      padding: var(--pulse-space-xs) var(--pulse-space-s);
-      border-bottom: 1px solid var(--pulse-color-neutral-40);
-      display: flex;
-      gap: var(--pulse-space-xs);
-    }
+/* Section cards */
+.section-cards{display:flex;flex-direction:column;gap:0;background:var(--n10);border:1px solid var(--n50);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.section-card{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 18px;border-bottom:1px solid var(--n40);
+}
+.section-card:last-child{border-bottom:none}
+.sc-icon{
+  width:36px;height:36px;border-radius:8px;background:var(--p20);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.sc-icon svg{width:18px;height:18px;color:var(--p90)}
+.sc-body h4{font-size:13px;font-weight:600;color:var(--n120)}
+.sc-body p{font-size:11.5px;color:var(--n100);margin-top:2px;line-height:1.4}
+.sc-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
 
-    /* Secondary button (Pulse secondary style) */
-    .btn-secondary {
-      flex: 1;
-      padding: 5px var(--pulse-space-xs);
-      background: var(--pulse-color-primary-10);
-      border: 1px solid var(--pulse-color-primary-100);
-      border-radius: 6px;
-      font-size: var(--pulse-font-size-caption-small);
-      font-weight: var(--pulse-font-weight-regular);
-      color: var(--pulse-color-neutral-120);
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: background 0.15s;
-    }
-    .btn-secondary:hover { background: var(--pulse-color-primary-20); }
+/* All Care Domains list */
+.domain-list{display:flex;flex-direction:column;gap:0;background:var(--n10);border:1px solid var(--n50);border-radius:8px;overflow:hidden;margin-bottom:28px}
+.domain-row{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 18px;border-bottom:1px solid var(--n40);
+  cursor:pointer;transition:background .12s;
+}
+.domain-row:last-child{border-bottom:none}
+.domain-row:hover{background:var(--n30)}
+.domain-icon{
+  width:36px;height:36px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;
+}
+.domain-icon svg{width:18px;height:18px}
+.domain-body{flex:1;min-width:0}
+.domain-body h4{font-size:13px;font-weight:600;color:var(--n120)}
+.domain-body p{font-size:11.5px;color:var(--n100);margin-top:2px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.domain-body .sc-tags{margin-top:5px}
 
-    .sidebar-scroll {
-      flex: 1;
-      overflow-y: auto;
-      padding: var(--pulse-space-xs) 0;
-    }
-    .sidebar-scroll::-webkit-scrollbar { width: 3px; }
-    .sidebar-scroll::-webkit-scrollbar-thumb {
-      background: var(--pulse-color-neutral-50);
-      border-radius: 2px;
-    }
+/* Chips / tags */
+.chip{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:11px;font-weight:500;padding:2px 7px;border-radius:4px;
+  white-space:nowrap;
+}
+.chip-pink{background:var(--cd05);color:var(--cd6)}
+.chip-green{background:var(--su20);color:var(--su70)}
+.chip-blue{background:var(--ge10);color:var(--ge70)}
+.chip-amber{background:var(--at10);color:#85600a}
 
-    .sidebar-group-label {
-      font-size: var(--pulse-font-size-caption-small);
-      font-weight: var(--pulse-font-weight-bold);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--pulse-color-neutral-90);
-      padding: var(--pulse-space-xs) var(--pulse-space-s) var(--pulse-space-3xs);
-    }
+/* Carousel pagination dots */
+.carousel-dots{display:flex;align-items:center;gap:4px;margin-bottom:12px}
+.dot{width:20px;height:4px;border-radius:2px;background:var(--cd5)}
+.dot.sm{width:6px;background:var(--n50)}
 
-    .sidebar-divider {
-      height: 1px;
-      background: var(--pulse-color-neutral-40);
-      margin: var(--pulse-space-xs) var(--pulse-space-s);
-    }
+/* ── Overlay ───────────────────────────────────────────────────────────── */
+.overlay{
+  position:fixed;inset:0;background:rgba(23,47,47,.4);z-index:100;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.overlay.open{opacity:1;pointer-events:all}
 
-    .sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: var(--pulse-space-xs);
-      padding: 5px var(--pulse-space-s);
-      font-size: var(--pulse-font-size-caption-regular);
-      font-weight: var(--pulse-font-weight-regular);
-      color: var(--pulse-color-neutral-120);
-      cursor: pointer;
-      transition: background 0.12s;
-      user-select: none;
-    }
-    .sidebar-item:hover { background: var(--pulse-color-neutral-30); }
-    .sidebar-item.active {
-      background: var(--pulse-color-primary-10);
-      color: var(--pulse-color-primary-120);
-      font-weight: var(--pulse-font-weight-strong);
-    }
-    .sidebar-item svg { width: 14px; height: 14px; color: var(--pulse-color-neutral-90); flex-shrink: 0; }
-    .sidebar-item.active svg { color: var(--pulse-color-primary-90); }
-    .sidebar-item.indent { padding-left: 32px; }
-    .sidebar-item.indent2 { padding-left: 46px; }
+/* ── Drawer ────────────────────────────────────────────────────────────── */
+.drawer{
+  position:fixed;top:0;right:0;width:540px;height:100vh;
+  background:var(--n10);z-index:101;
+  display:flex;flex-direction:column;
+  box-shadow:-4px 0 24px rgba(0,0,0,.15);
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.drawer.open{transform:translateX(0)}
 
-    /* PulseTag-style badge */
-    .sidebar-badge {
-      margin-left: auto;
-      background: var(--pulse-color-primary-40);
-      color: var(--pulse-color-primary-120);
-      font-size: var(--pulse-font-size-caption-small);
-      font-weight: var(--pulse-font-weight-bold);
-      padding: 1px 6px;
-      border-radius: 99px;
-      line-height: 1.5;
-    }
-    .sidebar-badge.success {
-      background: var(--pulse-color-success-20);
-      color: var(--pulse-color-success-70);
-    }
+.drawer-header{
+  padding:16px 20px;border-bottom:1px solid var(--n40);
+  display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;
+}
+.drawer-title{font-size:16px;font-weight:700;color:var(--n120)}
+.drawer-sub{font-size:12.5px;color:var(--n100);margin-top:4px;line-height:1.5;max-width:430px}
+.drawer-close{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--n50);background:var(--n10);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--n90);flex-shrink:0;margin-left:12px;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.drawer-close:hover{background:var(--ur10);color:var(--ur70);border-color:var(--ur70)}
+.drawer-close svg{width:14px;height:14px}
 
-    /* Unarchived content trigger — bottom of sidebar */
-    .sidebar-unarchive {
-      border-top: 1px solid var(--pulse-color-neutral-40);
-    }
-    .sidebar-unarchive .sidebar-item {
-      color: var(--pulse-color-primary-90);
-      font-weight: var(--pulse-font-weight-strong);
-      padding: var(--pulse-space-xs) var(--pulse-space-s);
-    }
-    .sidebar-unarchive .sidebar-item:hover { background: var(--pulse-color-primary-10); }
-    .sidebar-unarchive .sidebar-item svg { color: var(--pulse-color-primary-70); }
+.drawer-body{flex:1;overflow-y:auto;padding:0 20px 20px}
+.drawer-body::-webkit-scrollbar{width:3px}
+.drawer-body::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
 
-    /* ─── Main Content ────────────────────────────────────────────────────── */
-    .main {
-      flex: 1;
-      background: var(--pulse-color-neutral-30);
-      overflow-y: auto;
-    }
-    .main-header {
-      background: var(--pulse-color-neutral-10);
-      border-bottom: 1px solid var(--pulse-color-neutral-50);
-      padding: var(--pulse-space-s) var(--pulse-space-m);
-    }
-    .main-title {
-      font-size: var(--pulse-font-size-large);
-      font-weight: var(--pulse-font-weight-bold);
-      color: var(--pulse-color-primary-120);
-    }
-    .main-subtitle {
-      font-size: var(--pulse-font-size-caption-regular);
-      color: var(--pulse-color-neutral-100);
-      margin-top: 2px;
-    }
-    .domain-grid {
-      padding: var(--pulse-space-m);
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: var(--pulse-space-s);
-    }
+.form-block{margin-top:20px}
+.form-block-title{font-size:13px;font-weight:700;color:var(--n120);margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;width:100%}
+.field label{font-size:13px;color:var(--n120)}
+.field .hint{font-size:11px;color:var(--n100);margin-top:-4px}
 
-    /* PulseCard */
-    .pulse-card {
-      background: var(--pulse-color-neutral-10);
-      border: 1px solid var(--pulse-color-neutral-50);
-      border-radius: 8px;
-      padding: var(--pulse-space-s);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-    .pulse-card h3 {
-      font-size: var(--pulse-font-size-small);
-      font-weight: var(--pulse-font-weight-bold);
-      color: var(--pulse-color-primary-120);
-    }
-    .pulse-card p {
-      font-size: var(--pulse-font-size-caption-regular);
-      color: var(--pulse-color-neutral-100);
-      margin-top: var(--pulse-space-3xs);
-      line-height: 1.5;
-    }
-    .card-tags {
-      display: flex;
-      gap: var(--pulse-space-xs);
-      margin-top: var(--pulse-space-xs);
-      flex-wrap: wrap;
-    }
+.p-select{
+  width:100%;height:52px;
+  border:1px solid var(--p50);border-radius:8px;
+  background:var(--n10);
+  font-size:14px;color:var(--p120);
+  font-family:'Inter',sans-serif;
+  padding:0 36px 0 12px;
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%233e7e7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  transition:border-color .15s,box-shadow .15s;
+}
+.p-select:focus{outline:none;border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
+.p-select:disabled{background:var(--n40);color:var(--n90);border-color:var(--n50);cursor:not-allowed}
+.p-select:not(:disabled):valid:not([value=""]){background-color:var(--p10)}
 
-    /* PulseTag */
-    .pulse-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: var(--pulse-font-size-caption-small);
-      font-weight: var(--pulse-font-weight-strong);
-      padding: 2px 8px;
-      border-radius: 99px;
-    }
-    .pulse-tag.primary {
-      background: var(--pulse-color-primary-20);
-      color: var(--pulse-color-primary-110);
-    }
-    .pulse-tag.success {
-      background: var(--pulse-color-success-20);
-      color: var(--pulse-color-success-70);
-    }
-    .pulse-tag.attention {
-      background: var(--pulse-color-attention-10);
-      color: var(--pulse-color-neutral-120);
-    }
+.p-inputtext{
+  width:100%;height:52px;
+  border:1px solid var(--p50);border-radius:8px;
+  background:var(--n10);font-size:14px;color:var(--p120);
+  font-family:'Inter',sans-serif;padding:0 12px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.p-inputtext:focus{outline:none;border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
+.p-inputtext::placeholder{color:var(--n80)}
 
-    /* ─── Overlay ─────────────────────────────────────────────────────────── */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(23, 47, 47, 0.4); /* primary-120 at 40% */
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .overlay.open { opacity: 1; pointer-events: all; }
+.form-divider{height:1px;background:var(--n40);margin:20px 0}
 
-    /* ─── PulseDrawer (right, 540px) ──────────────────────────────────────── */
-    .p-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 540px;
-      min-width: 320px;
-      height: 100vh;
-      background: var(--pulse-color-neutral-10);
-      z-index: 101;
-      display: flex;
-      flex-direction: column;
-      box-shadow: -4px 0 24px rgba(0,0,0,0.14);
-      transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .p-drawer.open { transform: translateX(0); }
+.checkbox-row{display:none;align-items:flex-start;gap:10px;margin-bottom:14px}
+.checkbox-row.show{display:flex}
+.checkbox-row input{width:16px;height:16px;accent-color:var(--p70);margin-top:2px;flex-shrink:0;cursor:pointer}
+.checkbox-row label{font-size:12.5px;color:var(--n110);cursor:pointer;line-height:1.5}
+.new-section-field{display:none}
+.new-section-field.show{display:flex;flex-direction:column;gap:7px}
 
-    .p-drawer-header {
-      padding: var(--pulse-space-s);
-      border-bottom: 1px solid var(--pulse-color-neutral-40);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .p-drawer-header-title {
-      font-size: var(--pulse-font-size-regular);
-      font-weight: var(--pulse-font-weight-bold);
-      color: var(--pulse-color-primary-120);
-      line-height: 1.3;
-    }
-    .p-drawer-header-subtitle {
-      font-size: var(--pulse-font-size-caption-regular);
-      color: var(--pulse-color-neutral-100);
-      margin-top: var(--pulse-space-3xs);
-      line-height: 1.5;
-    }
-    .p-drawer-close {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      border: 1px solid var(--pulse-color-neutral-50);
-      background: var(--pulse-color-neutral-10);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--pulse-color-neutral-100);
-      flex-shrink: 0;
-      margin-left: var(--pulse-space-xs);
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-    .p-drawer-close:hover {
-      background: var(--pulse-color-urgency-10);
-      color: var(--pulse-color-urgency-70);
-      border-color: var(--pulse-color-urgency-70);
-    }
-    .p-drawer-close svg { width: 14px; height: 14px; }
+.drawer-footer{
+  padding:12px 20px;border-top:1px solid var(--n40);
+  display:flex;gap:10px;flex-shrink:0;
+}
+.btn-primary{
+  flex:1;padding:10px 16px;border-radius:6px;font-size:13px;
+  font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;
+  background:var(--p110);border:1px solid var(--n10);color:var(--n20);
+  transition:background .15s;
+}
+.btn-primary:hover:not(:disabled){background:var(--p100)}
+.btn-primary:disabled{background:var(--n40);color:var(--n90);border-color:var(--n90);cursor:not-allowed}
+.btn-secondary-drawer{
+  flex:1;padding:10px 16px;border-radius:6px;font-size:13px;
+  font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;
+  background:var(--p10);border:1px solid var(--p100);color:var(--n120);
+  transition:background .15s;
+}
+.btn-secondary-drawer:hover{background:var(--p20)}
 
-    .p-drawer-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 var(--pulse-space-s) var(--pulse-space-s);
-    }
-    .p-drawer-content::-webkit-scrollbar { width: 3px; }
-    .p-drawer-content::-webkit-scrollbar-thumb {
-      background: var(--pulse-color-neutral-50);
-      border-radius: 2px;
-    }
+/* Status tag */
+.status-tag{
+  display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;
+  padding:1px 6px;border-radius:3px;margin-left:auto;flex-shrink:0;
+}
+.status-tag.new{background:var(--su20);color:var(--su70)}
 
-    /* ─── Form inside Drawer ─────────────────────────────────────────────── */
-    .form-section { margin-top: var(--pulse-space-s); }
-
-    .form-section-title {
-      font-size: var(--pulse-font-size-small);
-      font-weight: var(--pulse-font-weight-bold);
-      color: var(--pulse-color-primary-120);
-      margin-bottom: var(--pulse-space-s);
-    }
-
-    /* PulseInputWrapper group */
-    .pulse-input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      margin-bottom: var(--pulse-space-s);
-    }
-
-    .pulse-input-label {
-      font-size: var(--pulse-font-size-small);
-      font-weight: var(--pulse-font-weight-regular);
-      color: var(--pulse-color-neutral-120);
-    }
-
-    .pulse-input-hint {
-      font-size: var(--pulse-font-size-caption-small);
-      color: var(--pulse-color-neutral-100);
-    }
-
-    /* p-select style (PulseSelect) */
-    .p-select {
-      width: 100%;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      padding: 0 var(--pulse-space-xs);
-      border: 1px solid var(--pulse-color-primary-50);
-      border-radius: 8px;
-      background: var(--pulse-color-neutral-10);
-      font-size: var(--pulse-font-size-regular);
-      color: var(--pulse-color-primary-120);
-      font-family: 'Inter', sans-serif;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%233e7e7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right var(--pulse-space-xs) center;
-      padding-right: 36px;
-      cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      line-height: var(--pulse-font-size-xlarge);
-    }
-    .p-select:focus {
-      outline: none;
-      border-color: var(--pulse-color-primary-70);
-      box-shadow: 0 0 0 3px rgba(102,204,204,0.2);
-    }
-    /* Filled state */
-    .p-select:not(:disabled):not([value=""]) {
-      background-color: var(--pulse-color-primary-10);
-    }
-    /* Disabled */
-    .p-select:disabled {
-      background: var(--pulse-color-neutral-40);
-      color: var(--pulse-color-neutral-90);
-      border-color: var(--pulse-color-neutral-50);
-      cursor: not-allowed;
-    }
-
-    /* PulseInputText */
-    .p-inputtext {
-      width: 100%;
-      height: 54px;
-      padding: 0 var(--pulse-space-xs);
-      border: 1px solid var(--pulse-color-primary-50);
-      border-radius: 8px;
-      background: var(--pulse-color-neutral-10);
-      font-size: var(--pulse-font-size-regular);
-      color: var(--pulse-color-primary-120);
-      font-family: 'Inter', sans-serif;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .p-inputtext:focus {
-      outline: none;
-      border-color: var(--pulse-color-primary-70);
-      box-shadow: 0 0 0 3px rgba(102,204,204,0.2);
-    }
-    .p-inputtext::placeholder { color: var(--pulse-color-neutral-80); }
-
-    .form-divider {
-      height: 1px;
-      background: var(--pulse-color-neutral-40);
-      margin: var(--pulse-space-s) 0;
-    }
-
-    /* Checkbox row */
-    .pulse-checkbox-row {
-      display: none;
-      align-items: flex-start;
-      gap: var(--pulse-space-xs);
-      margin-bottom: var(--pulse-space-s);
-    }
-    .pulse-checkbox-row.visible { display: flex; }
-    .pulse-checkbox-row input[type="checkbox"] {
-      width: 16px; height: 16px;
-      accent-color: var(--pulse-color-primary-70);
-      margin-top: 2px;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-    .pulse-checkbox-row label {
-      font-size: var(--pulse-font-size-caption-regular);
-      color: var(--pulse-color-neutral-110);
-      cursor: pointer;
-      line-height: 1.5;
-    }
-
-    .new-section-input { display: none; }
-    .new-section-input.visible { display: flex; flex-direction: column; gap: 8px; }
-
-    /* ─── PulseDrawer Footer ──────────────────────────────────────────────── */
-    .p-drawer-footer {
-      padding: var(--pulse-space-xs) var(--pulse-space-s);
-      border-top: 1px solid var(--pulse-color-neutral-40);
-      display: flex;
-      gap: var(--pulse-space-xs);
-      flex-shrink: 0;
-    }
-
-    /* PulseButton — primary */
-    .p-button {
-      flex: 1;
-      padding: 10px var(--pulse-space-s);
-      border-radius: 6px;
-      font-size: var(--pulse-font-size-small);
-      font-weight: var(--pulse-font-weight-regular);
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      border: 1px solid transparent;
-    }
-    /* Primary: bg primary-110, text neutral-20 */
-    .p-button-primary {
-      background: var(--pulse-color-primary-110);
-      border-color: var(--pulse-color-neutral-10);
-      color: var(--pulse-color-neutral-20);
-    }
-    .p-button-primary:hover:not(:disabled) {
-      background: var(--pulse-color-primary-100);
-      border-color: var(--pulse-color-primary-80);
-    }
-    .p-button-primary:disabled {
-      background: var(--pulse-color-neutral-40);
-      color: var(--pulse-color-neutral-90);
-      border-color: var(--pulse-color-neutral-90);
-      cursor: not-allowed;
-    }
-    /* Secondary: bg primary-10, border primary-100 */
-    .p-button-secondary {
-      background: var(--pulse-color-primary-10);
-      border-color: var(--pulse-color-primary-100);
-      color: var(--pulse-color-neutral-120);
-    }
-    .p-button-secondary:hover {
-      background: var(--pulse-color-primary-20);
-      border-color: var(--pulse-color-primary-100);
-    }
-
-    /* ─── PulseStatusTag — restored indicator ─────────────────────────────── */
-    .status-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: var(--pulse-font-size-caption-small);
-      font-weight: var(--pulse-font-weight-strong);
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-    .status-tag.success {
-      background: var(--pulse-color-success-20);
-      color: var(--pulse-color-success-70);
-    }
-
-    /* ─── Toast ───────────────────────────────────────────────────────────── */
-    .toast {
-      position: fixed;
-      bottom: var(--pulse-space-m);
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--pulse-color-primary-120);
-      color: var(--pulse-color-neutral-10);
-      padding: var(--pulse-space-xs) var(--pulse-space-s);
-      border-radius: 8px;
-      font-size: var(--pulse-font-size-caption-regular);
-      font-weight: var(--pulse-font-weight-regular);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      z-index: 200;
-      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-      display: flex;
-      align-items: center;
-      gap: var(--pulse-space-xs);
-      white-space: nowrap;
-      border-left: 4px solid var(--pulse-color-primary-70);
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast svg { width: 16px; height: 16px; color: var(--pulse-color-primary-70); flex-shrink: 0; }
-  </style>
+/* ── Toast ─────────────────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--p120);color:var(--n10);
+  padding:10px 18px;border-radius:8px;font-size:13px;font-weight:400;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);z-index:200;
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+  border-left:4px solid var(--p70);transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast svg{width:16px;height:16px;color:var(--p70);flex-shrink:0}
+</style>
 </head>
 <body>
 
-<!-- ── Top Nav ───────────────────────────────────────────────────────────── -->
-<nav class="top-nav">
-  <span class="top-nav-logo">1CP</span>
-
-  <button class="top-nav-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-    Profile
-  </button>
-  <button class="top-nav-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    Circle of Care
-  </button>
-  <button class="top-nav-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-    Assessments
-  </button>
-  <button class="top-nav-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-    Timeline
-  </button>
-  <button class="top-nav-link active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-    Care Plan
-  </button>
-  <button class="top-nav-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-    Warnings
-  </button>
-  <button class="top-nav-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
-    Goals
-  </button>
-
-  <span class="top-nav-spacer"></span>
-  <div class="top-nav-avatar">HH</div>
-</nav>
-
-<div class="app-layout">
-
-  <!-- ── Icon Rail ─────────────────────────────────────────────────────────── -->
-  <div class="icon-rail">
-    <button class="icon-rail-btn" title="Dashboard">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    </button>
-    <button class="icon-rail-btn active" title="Care Plan">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-    </button>
-    <button class="icon-rail-btn" title="Goals">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
-    </button>
-    <button class="icon-rail-btn" title="Needs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+<!-- ── App Header ──────────────────────────────────────────────────────── -->
+<header class="app-header">
+  <div class="app-logo">
+    <div class="app-logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8"/></svg>
+    </div>
+    nourish
+  </div>
+  <div class="app-header-title">Care Plan Template</div>
+  <div class="app-header-right">
+    <button class="notif-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-dot">30</span>
     </button>
   </div>
+</header>
 
-  <!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
-  <aside class="sidebar">
-    <div class="sidebar-patient">
-      <div class="sidebar-patient-name">Annette L.</div>
-      <div class="sidebar-patient-sub">DOB: 12 Mar 1948 · MRN 00421</div>
+<!-- ── Secondary Nav ───────────────────────────────────────────────────── -->
+<nav class="sec-nav">
+  <button class="sec-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Profile
+  </button>
+  <button class="sec-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Circle of Care
+  </button>
+  <button class="sec-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+    Assessments
+  </button>
+  <button class="sec-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    Timeline
+  </button>
+  <button class="sec-nav-link active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    Care Plan
+  </button>
+  <button class="sec-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    Warnings
+  </button>
+  <button class="sec-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+    Goals
+  </button>
+</nav>
+
+<div class="layout">
+
+  <!-- ── Icon Rail ──────────────────────────────────────────────────────── -->
+  <div class="icon-rail">
+    <div class="ir-avatar">NCS</div>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></button>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+    <button class="ir-btn active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></button>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></button>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></button>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></button>
+    <div class="ir-spacer"></div>
+    <button class="ir-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+  </div>
+
+  <!-- ── LHS Panel ──────────────────────────────────────────────────────── -->
+  <aside class="lhs">
+    <div class="lhs-actions">
+      <button class="btn-add">Add Item</button>
+      <button class="btn-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
     </div>
-    <div class="sidebar-actions">
-      <button class="btn-secondary">+ Add</button>
-      <button class="btn-secondary">Filter</button>
-    </div>
 
-    <div class="sidebar-scroll">
-      <div class="sidebar-group-label">Recommendations</div>
-      <div class="sidebar-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Unresolved needs
-        <span class="sidebar-badge">3</span>
+    <div class="lhs-scroll">
+      <div class="lhs-row">Recommendations <span class="badge-dot"></span></div>
+      <div class="lhs-row">Archived</div>
+      <div class="lhs-divider"></div>
+
+      <div class="lhs-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        Care Plan
       </div>
 
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-group-label">Folders</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Behaviour</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Cognition and Mental Capac...</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Communications</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Continence</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Cultural, Religious &amp; Spiritua...</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Daily Living and Environment</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Education and Employment</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Medication and Healthcare</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Mental Health</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Mobility and Physical</div>
 
-      <div class="sidebar-item" id="folder-physical">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        Physical Health
-      </div>
-      <div class="sidebar-item indent">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Mobility
-      </div>
-      <div class="sidebar-item indent">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Nutrition
-      </div>
+      <!-- Expanded: Nutrition -->
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Nutrition and Hydration</div>
+      <div class="lhs-row indent2">Diet Need</div>
+      <div class="lhs-row indent2">General Nutrition and Hyd...</div>
+      <div class="lhs-row indent2">Dysphagia / Swallowing</div>
+      <div class="lhs-row indent2 active">Food Allergies</div>
+      <div class="lhs-row indent2">Enteral Feeding</div>
+      <div class="lhs-row indent2">Weight Management</div>
 
-      <div class="sidebar-item" id="folder-mental">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        Mental Wellbeing
-      </div>
-      <div class="sidebar-item indent">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Mood tracking
-      </div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Personal Care &amp; Hygiene</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Sensory</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Sexuality and Relationship</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Skin Integrity</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Sleep And Rest</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Social, Community and Recr...</div>
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Specific LTC</div>
 
-      <div class="sidebar-item active" id="folder-social">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        Social Support
-      </div>
-      <div class="sidebar-item indent">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Community engagement
-      </div>
+      <div class="lhs-divider"></div>
 
-      <!-- Restored items appear here -->
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
+      <div class="lhs-row indent2" style="padding-left:44px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
+      <div class="lhs-row" style="padding-left:54px;font-size:12px;color:var(--n100)">· Need 1</div>
+      <div class="lhs-row" style="padding-left:54px;font-size:12px;color:var(--n100)">· Need 2</div>
+
+      <div class="lhs-divider"></div>
+
+      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
+      <div class="lhs-row indent2" style="padding-left:44px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
+      <div class="lhs-row" style="padding-left:54px;font-size:12px;color:var(--n100)">· Need 1</div>
+
+      <!-- Dynamically added restored items appear here -->
       <div id="restored-items"></div>
-
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-group-label">Archived</div>
-      <div class="sidebar-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-        Archived items
-        <span class="sidebar-badge">7</span>
-      </div>
     </div>
 
-    <!-- Unarchived content trigger -->
-    <div class="sidebar-unarchive">
-      <div class="sidebar-item" onclick="openDrawer()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Unarchived content
-        <span class="sidebar-badge">5</span>
+    <!-- Legacy Archived Content — pinned bottom -->
+    <div class="lhs-legacy">
+      <div class="lhs-row" onclick="openDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        Legacy Archived Content
       </div>
     </div>
   </aside>
 
-  <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+  <!-- ── Main content ────────────────────────────────────────────────────── -->
   <main class="main">
-    <div class="main-header">
-      <div class="main-title">All Care Domains</div>
-      <div class="main-subtitle">Annette L. — showing all active care plan sections</div>
-    </div>
-    <div class="domain-grid">
-      <div class="pulse-card">
-        <h3>Mobility &amp; Physical Function</h3>
-        <p>Supporting safe and independent movement in daily activities.</p>
-        <div class="card-tags">
-          <span class="pulse-tag primary">3 needs</span>
-          <span class="pulse-tag success">In progress</span>
-        </div>
-      </div>
-      <div class="pulse-card">
-        <h3>Nutrition &amp; Hydration</h3>
-        <p>Monitoring dietary intake and fluid balance throughout the day.</p>
-        <div class="card-tags">
-          <span class="pulse-tag primary">2 needs</span>
-          <span class="pulse-tag attention">Review due</span>
-        </div>
-      </div>
-      <div class="pulse-card">
-        <h3>Mental Wellbeing</h3>
-        <p>Emotional support, mood monitoring and cognitive health assessments.</p>
-        <div class="card-tags">
-          <span class="pulse-tag primary">1 need</span>
-          <span class="pulse-tag success">Active</span>
-        </div>
-      </div>
-      <div class="pulse-card">
-        <h3>Social Support &amp; Engagement</h3>
-        <p>Connections to community, family and peer support networks.</p>
-        <div class="card-tags">
-          <span class="pulse-tag primary">2 needs</span>
-          <span class="pulse-tag success">Active</span>
-        </div>
-      </div>
-      <div class="pulse-card">
-        <h3>Medication Management</h3>
-        <p>Tracking prescriptions, adherence and monitoring for side effects.</p>
-        <div class="card-tags">
-          <span class="pulse-tag primary">4 needs</span>
-          <span class="pulse-tag attention">Alert</span>
-        </div>
-      </div>
-      <div class="pulse-card">
-        <h3>Personal Care</h3>
-        <p>Hygiene, grooming and daily living assistance planning.</p>
-        <div class="card-tags">
-          <span class="pulse-tag primary">1 need</span>
-          <span class="pulse-tag success">Active</span>
-        </div>
+
+    <!-- Patient -->
+    <div class="patient-bar">
+      <div class="patient-avatar">IH</div>
+      <div>
+        <div class="patient-name">Isabel Hill</div>
+        <div class="patient-age">(82 Years old)</div>
+        <div class="patient-tag">Nursing</div>
       </div>
     </div>
+
+    <!-- Search -->
+    <div class="content-section" style="padding-top:20px">
+      <div class="section-heading">Search</div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search by care plan, needs, tags" />
+      </div>
+    </div>
+
+    <!-- Recently Updated -->
+    <div class="content-section">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div class="section-heading" style="margin-bottom:0">Recently Updated</div>
+        <div class="carousel-dots">
+          <div class="dot"></div><div class="dot sm"></div><div class="dot sm"></div>
+        </div>
+      </div>
+      <div class="carousel">
+        <div class="carousel-card">
+          <h4>Infection prevention</h4>
+          <div class="cat">Medication and healthcare</div>
+          <div class="change">New interaction linked</div>
+        </div>
+        <div class="carousel-card">
+          <h4>Weight management</h4>
+          <div class="cat">Medication and healthcare</div>
+          <div class="change">Planned outcome altered</div>
+        </div>
+        <div class="carousel-card">
+          <h4>Pressure injury prevention</h4>
+          <div class="cat">Medication and healthcare</div>
+          <div class="change">New need added</div>
+        </div>
+        <div class="carousel-card">
+          <h4>Pain Management</h4>
+          <div class="cat">Medication and healthcare</div>
+          <div class="change">Interaction removed</div>
+        </div>
+        <div class="carousel-card">
+          <h4>Pain Management</h4>
+          <div class="cat">Medication and healthcare</div>
+          <div class="change">New interaction linked</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section -->
+    <div class="content-section">
+      <div class="section-heading">Section</div>
+      <div class="section-cards">
+        <div class="section-card">
+          <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+          <div class="sc-body">
+            <h4>Archive</h4>
+            <p>Understanding and responding to behavioural patterns with proactive strategies that promote safety, dignity, and emotional regulation in order to better provide substantial...</p>
+            <div class="sc-tags">
+              <span class="chip chip-pink">Needs 13</span>
+              <span class="chip chip-blue">Page 4</span>
+              <span class="chip chip-green">Section 2</span>
+            </div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="sc-icon" style="background:var(--su20)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="color:var(--su70)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="sc-body">
+            <h4>Recommendations</h4>
+            <p>Leila S Hassan Covers nutritional planning, allergy management, and assistance with meal preparation to promote autonomy and health.</p>
+            <div class="sc-tags">
+              <span class="chip chip-green">Added 13</span>
+              <span class="chip" style="background:var(--ur10);color:var(--ur70)">Removed 4</span>
+              <span class="chip chip-amber">Modified 2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Care Domains -->
+    <div class="content-section" style="padding-top:20px">
+      <div class="section-heading">All Care Domains</div>
+      <div class="domain-list" id="domain-list">
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#fce8f0"><svg viewBox="0 0 24 24" fill="none" stroke="#ba4e74" stroke-width="1.75"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="domain-body">
+            <h4>Behaviour</h4>
+            <p>Understanding and responding to behavioural patterns with proactive strategies that promote safety, dignity, and emotional regulation in order to better provide substantial...</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-green">Logs 4</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#fff3e0"><svg viewBox="0 0 24 24" fill="none" stroke="#e65100" stroke-width="1.75"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+          <div class="domain-body">
+            <h4>Food and Nutrition</h4>
+            <p>Leila S Hassan Covers nutritional planning, allergy management, and assistance with meal preparation to promote autonomy and health.</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-green">Logs 4</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#ede7f6"><svg viewBox="0 0 24 24" fill="none" stroke="#512da8" stroke-width="1.75"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div class="domain-body">
+            <h4>Cognition and Mental Capacity</h4>
+            <p>Includes emotional check-ins, coping strategies, and access to therapeutic resources to support psychological resilience.</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-green">Logs 4</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#e8f5e9"><svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="1.75"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="domain-body">
+            <h4>Communication</h4>
+            <p>Includes emotional check-ins, coping strategies, and access to therapeutic resources to support psychological resilience.</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-green">Logs 4</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#fce4ec"><svg viewBox="0 0 24 24" fill="none" stroke="#c2185b" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div class="domain-body">
+            <h4>Cultural, Religious and Spiritual Identity</h4>
+            <p>Personal beliefs and practices by integrating meaningful rituals, dietary needs, and observances into daily care.</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-green">Logs 4</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#e3f2fd"><svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="1.75"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="domain-body">
+            <h4>Daily Living and Environment</h4>
+            <p>Routines, physical surroundings, and adaptive tools to foster independence and wellbeing in everyday life.</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-green">Logs 4</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-icon" style="background:#f3e5f5"><svg viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="1.75"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div class="domain-body">
+            <h4>Education &amp; Employment</h4>
+            <p>Facilitates access to learning and work opportunities through tailored support, accommodations, and goal-setting.</p>
+            <div class="sc-tags"><span class="chip chip-pink">Needs 13</span><span class="chip chip-blue">Documents 2</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 </div>
 
-<!-- ── Overlay ───────────────────────────────────────────────────────────── -->
+<!-- ── Overlay ────────────────────────────────────────────────────────── -->
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
-<!-- ── PulseDrawer ───────────────────────────────────────────────────────── -->
-<div class="p-drawer" id="drawer">
-
-  <div class="p-drawer-header">
+<!-- ── Drawer ─────────────────────────────────────────────────────────── -->
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
     <div>
-      <div class="p-drawer-header-title">Legacy Archived Content</div>
-      <div class="p-drawer-header-subtitle">
-        These are the archived content from the old care plan platform.<br>
-        Select which items you wish to restore into the new 1CP.
-      </div>
+      <div class="drawer-title">Legacy Archived Content</div>
+      <div class="drawer-sub">These are the archived content from the old care plan platform. Select which items you wish to restore into the new 1CP.</div>
     </div>
-    <button class="p-drawer-close" onclick="closeDrawer()" aria-label="Close">
+    <button class="drawer-close" onclick="closeDrawer()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
 
-  <div class="p-drawer-content">
+  <div class="drawer-body">
+    <div class="form-block">
+      <div class="form-block-title">Locate items you wish to restore</div>
 
-    <!-- Section 1: Locate -->
-    <div class="form-section">
-      <div class="form-section-title">Locate items you wish to restore</div>
-
-      <div class="pulse-input-group">
-        <label class="pulse-input-label" for="restore-type">I wish to restore</label>
-        <select class="p-select" id="restore-type" onchange="onTypeChange()">
+      <div class="field">
+        <label for="sel-type">I wish to restore</label>
+        <select class="p-select" id="sel-type" onchange="onType()">
           <option value="">Select type...</option>
           <option value="folder">A Folder</option>
           <option value="page">A Page</option>
@@ -904,9 +713,9 @@
         </select>
       </div>
 
-      <div class="pulse-input-group">
-        <label class="pulse-input-label" for="restore-item">Select item</label>
-        <select class="p-select" id="restore-item" disabled onchange="onItemChange()">
+      <div class="field">
+        <label for="sel-item">Select item</label>
+        <select class="p-select" id="sel-item" disabled onchange="onItem()">
           <option value="">Select item...</option>
         </select>
       </div>
@@ -914,282 +723,179 @@
 
     <div class="form-divider"></div>
 
-    <!-- Section 2: Destination -->
-    <div class="form-section">
-      <div class="form-section-title">Select destination of these item(s)</div>
+    <div class="form-block" style="margin-top:0">
+      <div class="form-block-title">Select destination of these item(s)</div>
 
-      <div class="pulse-input-group">
-        <label class="pulse-input-label" for="restore-dest">Destination</label>
-        <div class="pulse-input-hint">Select where in the one care plan these items will be restored</div>
-        <select class="p-select" id="restore-dest" disabled onchange="onDestChange()">
+      <div class="field">
+        <label for="sel-dest">Destination</label>
+        <div class="hint">Select where in the care plan these items will be restored</div>
+        <select class="p-select" id="sel-dest" disabled onchange="onDest()">
           <option value="">Select...</option>
         </select>
       </div>
 
-      <!-- New section option (pages only) -->
-      <div class="pulse-checkbox-row" id="new-section-row">
-        <input type="checkbox" id="new-section-check" onchange="onNewSectionToggle()" />
-        <label for="new-section-check">Create a new section to restore this page into</label>
+      <div class="checkbox-row" id="new-sec-row">
+        <input type="checkbox" id="new-sec-check" onchange="onNewSec()" />
+        <label for="new-sec-check">Create a new section to restore this page into</label>
       </div>
 
-      <div class="new-section-input" id="new-section-input">
-        <label class="pulse-input-label" for="new-section-name">New section name</label>
-        <input class="p-inputtext" type="text" id="new-section-name" placeholder="e.g. Legacy wound care…" oninput="onNewSectionName()" />
+      <div class="new-section-field" id="new-sec-field">
+        <label class="field" style="gap:7px">
+          <span style="font-size:13px;color:var(--n120)">New section name</span>
+          <input class="p-inputtext" type="text" id="new-sec-name" placeholder="e.g. Legacy wound care…" oninput="onSecName()" />
+        </label>
       </div>
     </div>
-
   </div>
 
-  <div class="p-drawer-footer">
-    <button class="p-button p-button-secondary" onclick="closeDrawer()">Close</button>
-    <button class="p-button p-button-primary" id="restore-btn" disabled onclick="doRestore()">Restore</button>
+  <div class="drawer-footer">
+    <button class="btn-secondary-drawer" onclick="closeDrawer()">Close</button>
+    <button class="btn-primary" id="restore-btn" disabled onclick="doRestore()">Restore</button>
   </div>
 </div>
 
-<!-- ── Toast ─────────────────────────────────────────────────────────────── -->
+<!-- ── Toast ──────────────────────────────────────────────────────────── -->
 <div class="toast" id="toast">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
   <span id="toast-msg"></span>
 </div>
 
 <script>
-  /* ── Data ──────────────────────────────────────────────────────────────── */
-  const DATA = {
-    folder: {
-      items: [
-        { id: 'f1', label: 'Legacy Medications Folder' },
-        { id: 'f2', label: 'Legacy Wound Care Folder' },
-        { id: 'f3', label: 'Legacy Rehab Goals Folder' },
-      ],
-      destinations: [
-        { id: 'd1', label: 'Physical Health' },
-        { id: 'd2', label: 'Mental Wellbeing' },
-        { id: 'd3', label: 'Social Support' },
-        { id: 'd4', label: 'Add as top-level folder' },
-      ],
-    },
-    page: {
-      items: [
-        { id: 'p1', label: 'Pressure Sore Assessment — 2021' },
-        { id: 'p2', label: 'Fall Risk Review — Jan 2020' },
-        { id: 'p3', label: 'Hydration Plan — Q3 2019' },
-        { id: 'p4', label: 'Pain Management Notes — 2022' },
-      ],
-      destinations: [
-        { id: 'ds1', label: 'Physical Health' },
-        { id: 'ds2', label: 'Mental Wellbeing' },
-        { id: 'ds3', label: 'Social Support' },
-      ],
-    },
-    need: {
-      items: [
-        { id: 'n1', label: 'Assistance with bathing' },
-        { id: 'n2', label: 'Weekly physiotherapy' },
-        { id: 'n3', label: 'Dietary assessment referral' },
-        { id: 'n4', label: 'Cognitive stimulation activities' },
-        { id: 'n5', label: 'Social isolation support' },
-      ],
-      destinations: [
-        { id: 'dn1', label: 'Mobility — Physical Health' },
-        { id: 'dn2', label: 'Nutrition — Physical Health' },
-        { id: 'dn3', label: 'Mood tracking — Mental Wellbeing' },
-        { id: 'dn4', label: 'Community engagement — Social Support' },
-      ],
-    },
-  }
+const DATA = {
+  folder:{
+    items:[{id:'f1',label:'Legacy Medications'},{id:'f2',label:'Legacy Wound Care'},{id:'f3',label:'Legacy Rehab Goals'}],
+    dests:[{id:'d1',label:'Behaviour'},{id:'d2',label:'Food and Nutrition'},{id:'d3',label:'Mental Health'},{id:'d4',label:'Add as top-level section'}],
+  },
+  page:{
+    items:[{id:'p1',label:'Pressure Sore Assessment — 2021'},{id:'p2',label:'Fall Risk Review — Jan 2020'},{id:'p3',label:'Hydration Plan — Q3 2019'},{id:'p4',label:'Pain Management Notes — 2022'}],
+    dests:[{id:'ds1',label:'Behaviour'},{id:'ds2',label:'Cognition and Mental Capacity'},{id:'ds3',label:'Food and Nutrition'},{id:'ds4',label:'Daily Living and Environment'}],
+  },
+  need:{
+    items:[{id:'n1',label:'Assistance with bathing'},{id:'n2',label:'Weekly physiotherapy'},{id:'n3',label:'Dietary assessment referral'},{id:'n4',label:'Cognitive stimulation activities'},{id:'n5',label:'Social isolation support'}],
+    dests:[{id:'dn1',label:'Food and Nutrition — Nutrition and Hydration'},{id:'dn2',label:'Behaviour — Care Plan'},{id:'dn3',label:'Cognition and Mental Capacity'},{id:'dn4',label:'Daily Living and Environment'}],
+  },
+}
 
-  /* ── State ─────────────────────────────────────────────────────────────── */
-  let selType = '', selItem = '', selDest = ''
-  let newSectionMode = false, newSectionName = ''
+let sType='',sItem='',sDest='',newSec=false,newSecName=''
 
-  /* ── Drawer ────────────────────────────────────────────────────────────── */
-  function openDrawer() {
-    document.getElementById('overlay').classList.add('open')
-    document.getElementById('drawer').classList.add('open')
-  }
-  function closeDrawer() {
-    document.getElementById('overlay').classList.remove('open')
-    document.getElementById('drawer').classList.remove('open')
-  }
+function openDrawer(){
+  document.getElementById('overlay').classList.add('open')
+  document.getElementById('drawer').classList.add('open')
+}
+function closeDrawer(){
+  document.getElementById('overlay').classList.remove('open')
+  document.getElementById('drawer').classList.remove('open')
+}
 
-  /* ── Form logic ────────────────────────────────────────────────────────── */
-  function onTypeChange() {
-    selType = document.getElementById('restore-type').value
-    selItem = ''; selDest = ''; newSectionMode = false; newSectionName = ''
+function onType(){
+  sType=document.getElementById('sel-type').value
+  sItem='';sDest='';newSec=false;newSecName=''
+  const iEl=document.getElementById('sel-item'),dEl=document.getElementById('sel-dest')
+  const nr=document.getElementById('new-sec-row'),nf=document.getElementById('new-sec-field')
+  const nc=document.getElementById('new-sec-check'),nn=document.getElementById('new-sec-name')
+  iEl.innerHTML='<option value="">Select item...</option>'
+  dEl.innerHTML='<option value="">Select...</option>'
+  iEl.disabled=!sType; dEl.disabled=true
+  nr.classList.remove('show'); nf.classList.remove('show')
+  nc.checked=false; nn.value=''
+  if(sType&&DATA[sType]) DATA[sType].items.forEach(i=>iEl.appendChild(Object.assign(document.createElement('option'),{value:i.id,textContent:i.label})))
+  sync()
+}
 
-    const itemEl = document.getElementById('restore-item')
-    const destEl = document.getElementById('restore-dest')
-    const nsRow  = document.getElementById('new-section-row')
-    const nsInput = document.getElementById('new-section-input')
-    const nsCheck = document.getElementById('new-section-check')
-    const nsName  = document.getElementById('new-section-name')
+function onItem(){
+  sItem=document.getElementById('sel-item').value; sDest=''
+  const dEl=document.getElementById('sel-dest')
+  dEl.innerHTML='<option value="">Select...</option>'
+  if(sItem&&sType&&DATA[sType]){
+    DATA[sType].dests.forEach(d=>dEl.appendChild(Object.assign(document.createElement('option'),{value:d.id,textContent:d.label})))
+    dEl.disabled=false
+  } else { dEl.disabled=true }
+  const nr=document.getElementById('new-sec-row')
+  sType==='page'&&sItem ? nr.classList.add('show') : nr.classList.remove('show')
+  sync()
+}
 
-    itemEl.innerHTML = '<option value="">Select item...</option>'
-    destEl.innerHTML = '<option value="">Select...</option>'
-    itemEl.disabled = !selType
-    destEl.disabled = true
-    nsRow.classList.remove('visible')
-    nsInput.classList.remove('visible')
-    nsCheck.checked = false
-    nsName.value = ''
+function onDest(){ sDest=document.getElementById('sel-dest').value; sync() }
 
-    if (selType && DATA[selType]) {
-      DATA[selType].items.forEach(i => {
-        itemEl.appendChild(Object.assign(document.createElement('option'), { value: i.id, textContent: i.label }))
-      })
-    }
-    syncRestoreBtn()
-  }
+function onNewSec(){
+  newSec=document.getElementById('new-sec-check').checked
+  const nf=document.getElementById('new-sec-field'),dEl=document.getElementById('sel-dest')
+  if(newSec){ nf.classList.add('show'); dEl.disabled=true; dEl.value=''; sDest='' }
+  else { nf.classList.remove('show'); dEl.disabled=!sItem; newSecName=''; document.getElementById('new-sec-name').value='' }
+  sync()
+}
 
-  function onItemChange() {
-    selItem = document.getElementById('restore-item').value
-    selDest = ''
+function onSecName(){ newSecName=document.getElementById('new-sec-name').value.trim(); sync() }
 
-    const destEl  = document.getElementById('restore-dest')
-    const nsRow   = document.getElementById('new-section-row')
-    const nsInput = document.getElementById('new-section-input')
-    const nsCheck = document.getElementById('new-section-check')
+function sync(){
+  const ok=sType&&sItem&&(sDest||(newSec&&newSecName))
+  document.getElementById('restore-btn').disabled=!ok
+}
 
-    destEl.innerHTML = '<option value="">Select...</option>'
+function doRestore(){
+  const iLabel=DATA[sType].items.find(i=>i.id===sItem)?.label||''
+  const dLabel=DATA[sType].dests.find(d=>d.id===sDest)?.label||''
+  addToSidebar(sType,iLabel,dLabel,newSecName)
+  addToDomains(sType,iLabel)
+  const msg=sType==='folder'?`"${iLabel}" restored to ${dLabel}`:
+    sType==='page'?(newSecName?`"${iLabel}" restored under new section "${newSecName}"`:`"${iLabel}" restored to ${dLabel}`):
+    `"${iLabel}" added to ${dLabel}`
+  toast(msg); reset(); closeDrawer()
+}
 
-    if (selItem && selType && DATA[selType]) {
-      DATA[selType].destinations.forEach(d => {
-        destEl.appendChild(Object.assign(document.createElement('option'), { value: d.id, textContent: d.label }))
-      })
-      destEl.disabled = false
+function addToSidebar(type,label,dest,secName){
+  const c=document.getElementById('restored-items')
+  const div=document.createElement('div')
+  const tag=`<span class="status-tag new" style="margin-left:auto">New</span>`
+  if(type==='folder'){
+    div.innerHTML=`<div class="lhs-divider"></div><div class="lhs-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:10px;height:10px"><polyline points="6 9 12 15 18 9"/></svg>${label}</div>`
+  } else if(type==='page'){
+    if(secName){
+      div.innerHTML=`<div class="lhs-divider"></div><div class="lhs-row indent" style="color:var(--p90);font-weight:500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="6 9 12 15 18 9"/></svg>${secName}</div><div class="lhs-row indent2">${label}${tag}</div>`
     } else {
-      destEl.disabled = true
+      div.innerHTML=`<div class="lhs-row indent2">${label}${tag}</div>`
     }
-
-    if (selType === 'page' && selItem) {
-      nsRow.classList.add('visible')
-    } else {
-      nsRow.classList.remove('visible')
-      nsInput.classList.remove('visible')
-      nsCheck.checked = false
-      newSectionMode = false
-    }
-    syncRestoreBtn()
+  } else {
+    div.innerHTML=`<div class="lhs-row indent2">${label}${tag}</div>`
   }
+  c.appendChild(div)
+}
 
-  function onDestChange() {
-    selDest = document.getElementById('restore-dest').value
-    syncRestoreBtn()
-  }
+function addToDomains(type,label){
+  if(type!=='folder') return
+  const list=document.getElementById('domain-list')
+  const row=document.createElement('div')
+  row.className='domain-row'
+  row.innerHTML=`
+    <div class="domain-icon" style="background:var(--p10)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--p90)" stroke-width="1.75"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg></div>
+    <div class="domain-body">
+      <h4>${label} <span class="status-tag new">Restored</span></h4>
+      <p>Restored from legacy care plan archive.</p>
+      <div class="sc-tags"><span class="chip chip-green">Restored</span></div>
+    </div>`
+  list.appendChild(row)
+}
 
-  function onNewSectionToggle() {
-    newSectionMode = document.getElementById('new-section-check').checked
-    const nsInput = document.getElementById('new-section-input')
-    const destEl  = document.getElementById('restore-dest')
+function reset(){
+  sType='';sItem='';sDest='';newSec=false;newSecName=''
+  document.getElementById('sel-type').value=''
+  document.getElementById('sel-item').innerHTML='<option value="">Select item...</option>'
+  document.getElementById('sel-item').disabled=true
+  document.getElementById('sel-dest').innerHTML='<option value="">Select...</option>'
+  document.getElementById('sel-dest').disabled=true
+  document.getElementById('new-sec-row').classList.remove('show')
+  document.getElementById('new-sec-field').classList.remove('show')
+  document.getElementById('new-sec-check').checked=false
+  document.getElementById('new-sec-name').value=''
+  document.getElementById('restore-btn').disabled=true
+}
 
-    if (newSectionMode) {
-      nsInput.classList.add('visible')
-      destEl.disabled = true
-      destEl.value = ''
-      selDest = ''
-    } else {
-      nsInput.classList.remove('visible')
-      destEl.disabled = !selItem
-      newSectionName = ''
-      document.getElementById('new-section-name').value = ''
-    }
-    syncRestoreBtn()
-  }
-
-  function onNewSectionName() {
-    newSectionName = document.getElementById('new-section-name').value.trim()
-    syncRestoreBtn()
-  }
-
-  function syncRestoreBtn() {
-    const ready = selType && selItem && (selDest || (newSectionMode && newSectionName))
-    const btn = document.getElementById('restore-btn')
-    btn.disabled = !ready
-  }
-
-  /* ── Restore ───────────────────────────────────────────────────────────── */
-  function doRestore() {
-    const itemLabel = DATA[selType].items.find(i => i.id === selItem)?.label || ''
-    const destLabel = DATA[selType].destinations.find(d => d.id === selDest)?.label || ''
-
-    addToSidebar(selType, itemLabel, destLabel, newSectionName)
-
-    const msg = selType === 'folder'
-      ? `"${itemLabel}" restored to ${destLabel}`
-      : selType === 'page'
-        ? newSectionName
-          ? `"${itemLabel}" restored under new section "${newSectionName}"`
-          : `"${itemLabel}" restored to ${destLabel}`
-        : `"${itemLabel}" added to ${destLabel}`
-
-    showToast(msg)
-    resetForm()
-    closeDrawer()
-  }
-
-  function addToSidebar(type, itemLabel, destLabel, sectionName) {
-    const container = document.getElementById('restored-items')
-
-    const iconFolder = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px;color:var(--pulse-color-primary-90);flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`
-    const iconPage   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px;color:var(--pulse-color-neutral-90);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
-    const iconNeed   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px;color:var(--pulse-color-neutral-90);flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`
-    const tag = `<span class="status-tag success" style="margin-left:auto;flex-shrink:0">Restored</span>`
-
-    const wrap = document.createElement('div')
-
-    if (type === 'folder') {
-      wrap.innerHTML = `<div class="sidebar-item">${iconFolder}${itemLabel.replace('Legacy ','').replace(' Folder','')}${tag}</div>`
-    } else if (type === 'page') {
-      if (sectionName) {
-        const targetFolder = findFolderEl(destLabel)
-        const sectionEl = document.createElement('div')
-        sectionEl.innerHTML = `
-          <div class="sidebar-item indent" style="color:var(--pulse-color-primary-90);font-weight:var(--pulse-font-weight-strong)">
-            ${iconFolder} ${sectionName}
-          </div>
-          <div class="sidebar-item indent2">${iconPage}${itemLabel}${tag}</div>`
-        if (targetFolder) { targetFolder.insertAdjacentElement('afterend', sectionEl); return }
-        container.appendChild(sectionEl); return
-      } else {
-        const targetFolder = findFolderEl(destLabel)
-        const pageEl = document.createElement('div')
-        pageEl.innerHTML = `<div class="sidebar-item indent">${iconPage}${itemLabel}${tag}</div>`
-        if (targetFolder) { targetFolder.insertAdjacentElement('afterend', pageEl); return }
-        wrap.innerHTML = `<div class="sidebar-item indent">${iconPage}${itemLabel}${tag}</div>`
-      }
-    } else {
-      wrap.innerHTML = `<div class="sidebar-item indent2">${iconNeed}${itemLabel}${tag}</div>`
-    }
-    container.appendChild(wrap)
-  }
-
-  function findFolderEl(destLabel) {
-    if (destLabel.includes('Physical')) return document.getElementById('folder-physical')
-    if (destLabel.includes('Mental'))   return document.getElementById('folder-mental')
-    if (destLabel.includes('Social'))   return document.getElementById('folder-social')
-    return null
-  }
-
-  function resetForm() {
-    selType = ''; selItem = ''; selDest = ''; newSectionMode = false; newSectionName = ''
-    document.getElementById('restore-type').value = ''
-    document.getElementById('restore-item').innerHTML = '<option value="">Select item...</option>'
-    document.getElementById('restore-item').disabled = true
-    document.getElementById('restore-dest').innerHTML = '<option value="">Select...</option>'
-    document.getElementById('restore-dest').disabled = true
-    document.getElementById('new-section-row').classList.remove('visible')
-    document.getElementById('new-section-input').classList.remove('visible')
-    document.getElementById('new-section-check').checked = false
-    document.getElementById('new-section-name').value = ''
-    document.getElementById('restore-btn').disabled = true
-  }
-
-  function showToast(msg) {
-    document.getElementById('toast-msg').textContent = msg
-    const t = document.getElementById('toast')
-    t.classList.add('show')
-    setTimeout(() => t.classList.remove('show'), 3800)
-  }
+function toast(msg){
+  document.getElementById('toast-msg').textContent=msg
+  const t=document.getElementById('toast')
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),3800)
+}
 </script>
 </body>
 </html>
