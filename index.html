@@ -397,101 +397,165 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .overlay.open{opacity:1;pointer-events:all}
 
-/* ── Drawer ────────────────────────────────────────────────────────────── */
+/* ── Drawer — Figma 743-25233 ──────────────────────────────────────────── */
 .drawer{
   position:fixed;top:0;right:0;width:540px;height:100vh;
-  background:var(--n10);z-index:101;
+  background:#fff;z-index:101;
   display:flex;flex-direction:column;
-  box-shadow:-4px 0 24px rgba(0,0,0,.15);
+  border:1px solid #e2e8f0;
+  box-shadow:0px 20px 25px -5px rgba(0,0,0,.1),0px 8px 10px -6px rgba(0,0,0,.1);
   transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
 }
 .drawer.open{transform:translateX(0)}
 
+/* Header: title + XCircle close, no border-bottom */
 .drawer-header{
-  padding:16px 20px;border-bottom:1px solid var(--n40);
-  display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;
+  padding:16px 16px 0;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
-.drawer-title{font-size:16px;font-weight:700;color:var(--n120)}
-.drawer-sub{font-size:12.5px;color:var(--n100);margin-top:4px;line-height:1.5;max-width:430px}
+.drawer-title{
+  font-family:'FS Me',sans-serif;font-size:20px;font-weight:700;
+  color:var(--pulse-color-primary-100);line-height:1;
+}
 .drawer-close{
-  width:28px;height:28px;border-radius:50%;
-  border:1px solid var(--n50);background:var(--n10);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  color:var(--n90);flex-shrink:0;margin-left:12px;
-  transition:background .15s,color .15s,border-color .15s;
+  width:29px;height:29px;border-radius:50%;
+  background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--n80);flex-shrink:0;transition:color .15s,opacity .15s;
 }
-.drawer-close:hover{background:var(--ur10);color:var(--ur70);border-color:var(--ur70)}
-.drawer-close svg{width:14px;height:14px}
+.drawer-close:hover{color:var(--ur70)}
+.drawer-close svg{width:22px;height:22px}
 
-.drawer-body{flex:1;overflow-y:auto;padding:0 20px 20px}
+/* Description below header */
+.drawer-desc{
+  padding:12px 16px 0;flex-shrink:0;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:500;
+  color:#000;line-height:1.5;
+}
+
+/* Scrollable body */
+.drawer-body{flex:1;overflow-y:auto;padding:0 8px 16px}
 .drawer-body::-webkit-scrollbar{width:3px}
 .drawer-body::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
 
-.form-block{margin-top:20px}
-.form-block-title{font-size:13px;font-weight:700;color:var(--n120);margin-bottom:14px}
-.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;width:100%}
-.field label{font-size:13px;color:var(--n120)}
-.field .hint{font-size:11px;color:var(--n100);margin-top:-4px}
+/* Content section block */
+.drawer-section{padding:20px 8px 0;display:flex;flex-direction:column;gap:20px}
+.drawer-section-title{
+  font-family:'FS Me',sans-serif;font-size:20px;font-weight:700;
+  color:var(--pulse-color-primary-120);margin:0;line-height:1;
+}
 
+/* Fields */
+.field{display:flex;flex-direction:column;gap:6px;width:100%}
+.field>label{
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:400;color:var(--n120);
+}
+.field .hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--n100);margin-top:-2px}
+
+/* Dropdowns */
 .p-select{
   width:100%;height:52px;
-  border:1px solid var(--p50);border-radius:8px;
-  background:var(--n10);
-  font-size:14px;color:var(--p120);
-  font-family:'Inter',sans-serif;
+  border:1px solid var(--p50);border-radius:8px;background:var(--n10);
+  font-size:16px;color:var(--p120);font-family:'Inter',sans-serif;
   padding:0 36px 0 12px;
-  appearance:none;cursor:pointer;
+  appearance:none;-webkit-appearance:none;cursor:pointer;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%233e7e7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;
-  transition:border-color .15s,box-shadow .15s;
+  transition:border-color .15s;
 }
 .p-select:focus{outline:none;border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
-.p-select:disabled{background:var(--n40);color:var(--n90);border-color:var(--n50);cursor:not-allowed}
-.p-select:not(:disabled):valid:not([value=""]){background-color:var(--p10)}
+.p-select:disabled{background:var(--n30);color:var(--n80);border-color:var(--n40);cursor:not-allowed}
+
+/* Browse tree — Figma 743-25700 */
+.browse-tree-wrap{
+  background:#fff;border:1px solid #dbdde2;border-radius:9px;
+  box-shadow:0px 4px 2px rgba(0,0,0,.25);
+  overflow:hidden;max-height:300px;overflow-y:auto;padding:2px 0;
+}
+.browse-tree-wrap::-webkit-scrollbar{width:3px}
+.browse-tree-wrap::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
+.bt-root{
+  height:40px;display:flex;align-items:center;
+  padding:3.5px 7px;gap:8px;cursor:default;
+}
+.bt-caret-icon{
+  width:24.5px;height:24.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.bt-caret-icon svg{width:14px;height:14px;color:var(--n80);transform:rotate(90deg)}
+.bt-section-icon{width:14px;height:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.bt-section-icon svg{width:14px;height:14px;color:var(--n100)}
+.bt-root-label{font-family:'Inter',sans-serif;font-size:18px;font-weight:400;color:#36393f;white-space:nowrap}
+.bt-node{
+  min-height:40px;display:flex;align-items:center;
+  padding:3.5px 7px 3.5px 35px;cursor:pointer;border-radius:6px;
+  transition:background .1s;
+}
+.bt-node:hover:not(.selected){background:var(--n30)}
+.bt-node.selected{background:#f0fafa}
+.bt-node-label{
+  font-family:'Inter',sans-serif;font-size:16px;font-weight:400;
+  color:#36393f;flex:1;min-width:0;
+}
+.bt-node.selected .bt-node-label{font-weight:500}
+.bt-divider{height:1px;background:#e7e8eb;margin:2px 8px}
+
+/* Divider between sections */
+.form-divider{padding:14px 8px;flex-shrink:0}
+.form-divider-line{height:1px;background:#f3f4f5}
+
+/* Destination — new section name field */
+.new-section-field{display:none}
+.new-section-field.show{display:flex;flex-direction:column;gap:6px}
 
 .p-inputtext{
   width:100%;height:52px;
   border:1px solid var(--p50);border-radius:8px;
-  background:var(--n10);font-size:14px;color:var(--p120);
+  background:var(--n10);font-size:16px;color:var(--p120);
   font-family:'Inter',sans-serif;padding:0 12px;
-  transition:border-color .15s,box-shadow .15s;
+  transition:border-color .15s;
 }
 .p-inputtext:focus{outline:none;border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
 .p-inputtext::placeholder{color:var(--n80)}
 
-.form-divider{height:1px;background:var(--n40);margin:20px 0}
-
-.checkbox-row{display:none;align-items:flex-start;gap:10px;margin-bottom:14px}
-.checkbox-row.show{display:flex}
-.checkbox-row input{width:16px;height:16px;accent-color:var(--p70);margin-top:2px;flex-shrink:0;cursor:pointer}
-.checkbox-row label{font-size:12.5px;color:var(--n110);cursor:pointer;line-height:1.5}
-.new-section-field{display:none}
-.new-section-field.show{display:flex;flex-direction:column;gap:7px}
-
+/* Footer — pill buttons, Figma 743-25233 */
 .drawer-footer{
-  padding:12px 20px;border-top:1px solid var(--n40);
-  display:flex;gap:10px;flex-shrink:0;
+  padding:8px;border-top:1px solid #f3f4f5;
+  display:flex;gap:8px;flex-shrink:0;align-items:center;justify-content:center;
 }
-.btn-primary{
-  flex:1;padding:10px 16px;border-radius:6px;font-size:13px;
-  font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;
-  background:var(--p110);border:1px solid var(--n10);color:var(--n20);
-  transition:background .15s;
+.btn-close-pill{
+  flex:1;padding:10px 24px;border-radius:99px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:400;
+  background:transparent;border:1px solid var(--n50);color:var(--n120);
+  cursor:pointer;transition:background .15s;
 }
-.btn-primary:hover:not(:disabled){background:var(--p100)}
-.btn-primary:disabled{background:var(--n40);color:var(--n90);border-color:var(--n90);cursor:not-allowed}
-.btn-secondary-drawer{
-  flex:1;padding:10px 16px;border-radius:6px;font-size:13px;
-  font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;
-  background:var(--p10);border:1px solid var(--p100);color:var(--n120);
-  transition:background .15s;
+.btn-close-pill:hover{background:var(--n30)}
+.btn-restore-pill{
+  flex:1;padding:10px 24px;border-radius:99px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:400;
+  background:var(--p90);border:1px solid transparent;color:#fff;
+  cursor:pointer;transition:background .15s;
 }
-.btn-secondary-drawer:hover{background:var(--p20)}
+.btn-restore-pill:hover:not(:disabled){background:var(--p80)}
+.btn-restore-pill:disabled{
+  background:transparent;border:1px solid var(--n50);color:var(--n80);cursor:not-allowed;
+}
+
+/* LHS yellow indicators — Figma 743-27202 / 743-27581 */
+/* Filled dot: THIS item is the newly restored one */
+.lhs-new-dot{
+  width:8px;height:8px;border-radius:30px;
+  background:#e6c020;border:1px solid #e6c020;flex-shrink:0;
+}
+/* Hollow ring: a CHILD of this item is newly restored */
+.lhs-new-ring{
+  width:10px;height:10px;border-radius:30px;
+  border:1px solid #e6c020;background:transparent;flex-shrink:0;
+}
 
 /* Status tag */
 .status-tag{
   display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;
-  padding:1px 6px;border-radius:3px;margin-left:auto;flex-shrink:0;
+  padding:1px 6px;border-radius:3px;
 }
 .status-tag.new{background:var(--su20);color:var(--su70)}
 
@@ -862,72 +926,117 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 <!-- ── Overlay ────────────────────────────────────────────────────────── -->
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
-<!-- ── Drawer ─────────────────────────────────────────────────────────── -->
+<!-- ── Drawer — Figma 743-25233 / 743-25832 ───────────────────────────── -->
 <div class="drawer" id="drawer">
+
+  <!-- Header row: FS Me 20px primary-100 title + XCircle close -->
   <div class="drawer-header">
-    <div>
-      <div class="drawer-title">Legacy Archived Content</div>
-      <div class="drawer-sub">These are the archived content from the old care plan platform. Select which items you wish to restore into the new 1CP.</div>
-    </div>
-    <button class="drawer-close" onclick="closeDrawer()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <span class="drawer-title">Legacy Archived Content</span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
     </button>
   </div>
 
+  <!-- Description — Inter Medium 14px black -->
+  <p class="drawer-desc">These are the archived content from the old care plan platform. Select which items you wish to Restore into the new 1CP</p>
+
   <div class="drawer-body">
-    <div class="form-block">
-      <div class="form-block-title">Locate items you wish to restore</div>
+
+    <!-- Section 1: Locate -->
+    <div class="drawer-section">
+      <p class="drawer-section-title">Locate Items you wish to restore</p>
 
       <div class="field">
-        <label for="sel-type">I wish to restore</label>
+        <label>I wish to restore</label>
         <select class="p-select" id="sel-type" onchange="onType()">
-          <option value="">Select type...</option>
-          <option value="folder">A Folder</option>
+          <option value="">Select Page</option>
           <option value="page">A Page</option>
           <option value="need">A Need</option>
         </select>
       </div>
 
       <div class="field">
-        <label for="sel-item">Select item</label>
+        <label>Select item</label>
         <select class="p-select" id="sel-item" disabled onchange="onItem()">
-          <option value="">Select item...</option>
+          <option value="">Select Page</option>
         </select>
       </div>
-    </div>
 
-    <div class="form-divider"></div>
+      <!-- Browse tree — matches Figma 743-25700 -->
+      <div class="browse-tree-wrap">
+        <!-- Root: Care Plan Section -->
+        <div class="bt-root">
+          <div class="bt-caret-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="bt-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+          <span class="bt-root-label">Care Plan Section</span>
+        </div>
+        <!-- Children populated by JS -->
+        <div id="bt-main"></div>
+        <div class="bt-divider"></div>
+        <!-- Root: Section 2 -->
+        <div class="bt-root">
+          <div class="bt-caret-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="bt-section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+          <span class="bt-root-label">Section 2</span>
+        </div>
+        <div class="bt-node" data-id="s2p1" onclick="btPick(this,'s2p1','Section 2 Page 1')"><span class="bt-node-label">Section 2 Page 1</span></div>
+        <div class="bt-node" data-id="s2p2" onclick="btPick(this,'s2p2','Section 2 Page 2')"><span class="bt-node-label">Section 2 Page 2</span></div>
+      </div>
+    </div><!-- /drawer-section locate -->
 
-    <div class="form-block" style="margin-top:0">
-      <div class="form-block-title">Select destination of these item(s)</div>
+    <!-- Divider — #f3f4f5 line, 14px padding -->
+    <div class="form-divider"><div class="form-divider-line"></div></div>
+
+    <!-- Section 2: Destination — Figma 743-25832 -->
+    <div class="drawer-section" style="padding-top:0">
+      <p class="drawer-section-title">Select destination of these item(s)</p>
 
       <div class="field">
-        <label for="sel-dest">Destination</label>
-        <div class="hint">Select where in the care plan these items will be restored</div>
+        <label>Destination</label>
+        <div class="hint">Select where in the one care plan these items will be restored</div>
+        <!-- "Create New Section" is an option in this list — Figma 743-25832 -->
         <select class="p-select" id="sel-dest" disabled onchange="onDest()">
           <option value="">Select...</option>
+          <option value="behaviour">Behaviour</option>
+          <option value="cognition">Cognition and Mental Capacity</option>
+          <option value="communications">Communications</option>
+          <option value="continence">Continence</option>
+          <option value="cultural">Cultural, Religious &amp; Spiritual</option>
+          <option value="daily-living">Daily Living and Environment</option>
+          <option value="education">Education and Employment</option>
+          <option value="medication">Medication and Healthcare</option>
+          <option value="mental-health">Mental Health</option>
+          <option value="mobility">Mobility and Physical</option>
+          <option value="nutrition">Nutrition and Hydration</option>
+          <option value="personal-care">Personal Care and Hygiene</option>
+          <option value="sensory">Sensory</option>
+          <option value="sexuality">Sexuality and Relationships</option>
+          <option value="skin">Skin Integrity</option>
+          <option value="sleep">Sleep and Rest</option>
+          <option value="social">Social, Community and Recreation</option>
+          <option value="specific-ltc">Specific LTC</option>
+          <option value="create-new">Create New Section</option>
         </select>
       </div>
 
-      <div class="checkbox-row" id="new-sec-row">
-        <input type="checkbox" id="new-sec-check" onchange="onNewSec()" />
-        <label for="new-sec-check">Create a new section to restore this page into</label>
-      </div>
-
+      <!-- Shown only when "Create New Section" selected -->
       <div class="new-section-field" id="new-sec-field">
-        <label class="field" style="gap:7px">
-          <span style="font-size:13px;color:var(--n120)">New section name</span>
+        <div class="field">
+          <label>New section name</label>
           <input class="p-inputtext" type="text" id="new-sec-name" placeholder="e.g. Legacy wound care…" oninput="onSecName()" />
-        </label>
+        </div>
       </div>
-    </div>
+    </div><!-- /drawer-section destination -->
+
+  </div><!-- /drawer-body -->
+
+  <!-- Footer — pill buttons (Figma 743-25233) -->
+  <div class="drawer-footer">
+    <button class="btn-close-pill" onclick="closeDrawer()">Close</button>
+    <button class="btn-restore-pill" id="restore-btn" disabled onclick="doRestore()">Restore</button>
   </div>
 
-  <div class="drawer-footer">
-    <button class="btn-secondary-drawer" onclick="closeDrawer()">Close</button>
-    <button class="btn-primary" id="restore-btn" disabled onclick="doRestore()">Restore</button>
-  </div>
-</div>
+</div><!-- /drawer -->
 
 <!-- ── Toast ──────────────────────────────────────────────────────────── -->
 <div class="toast" id="toast">
@@ -936,23 +1045,78 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 </div>
 
 <script>
-const DATA = {
-  folder:{
-    items:[{id:'f1',label:'Legacy Medications'},{id:'f2',label:'Legacy Wound Care'},{id:'f3',label:'Legacy Rehab Goals'}],
-    dests:[{id:'d1',label:'Behaviour'},{id:'d2',label:'Food and Nutrition'},{id:'d3',label:'Mental Health'},{id:'d4',label:'Add as top-level section'}],
-  },
-  page:{
-    items:[{id:'p1',label:'Pressure Sore Assessment — 2021'},{id:'p2',label:'Fall Risk Review — Jan 2020'},{id:'p3',label:'Hydration Plan — Q3 2019'},{id:'p4',label:'Pain Management Notes — 2022'}],
-    dests:[{id:'ds1',label:'Behaviour'},{id:'ds2',label:'Cognition and Mental Capacity'},{id:'ds3',label:'Food and Nutrition'},{id:'ds4',label:'Daily Living and Environment'}],
-  },
-  need:{
-    items:[{id:'n1',label:'Assistance with bathing'},{id:'n2',label:'Weekly physiotherapy'},{id:'n3',label:'Dietary assessment referral'},{id:'n4',label:'Cognitive stimulation activities'},{id:'n5',label:'Social isolation support'}],
-    dests:[{id:'dn1',label:'Food and Nutrition — Nutrition and Hydration'},{id:'dn2',label:'Behaviour — Care Plan'},{id:'dn3',label:'Cognition and Mental Capacity'},{id:'dn4',label:'Daily Living and Environment'}],
-  },
+/* ── Legacy archive data ─────────────────────────────────────────────── */
+const LEGACY_PAGES = [
+  {id:'behaviour',      label:'Behaviour'},
+  {id:'cognitive',      label:'Cognitive and Mental Capacity'},
+  {id:'communications', label:'Communications'},
+  {id:'continence',     label:'Continence'},
+  {id:'cultural',       label:'Cultural, Religious and Spiritual'},
+  {id:'daily-living',   label:'Daily Living and Environment'},
+  {id:'education',      label:'Education and Employment'},
+  {id:'medication',     label:'Medication and Healthcare'},
+  {id:'mental-health',  label:'Mental Health'},
+  {id:'nutrition',      label:'Nutrition and Hydration'},
+  {id:'personal-care',  label:'Personal Care and Hygiene'},
+  {id:'sensory',        label:'Sensory'},
+  {id:'sexuality',      label:'Sexuality and Relationships'},
+  {id:'skin',           label:'Skin Integrity'},
+  {id:'sleep',          label:'Sleep and Rest'},
+  {id:'social',         label:'Social, Community and Recreation'},
+  {id:'specific-ltc',   label:'Specific LTC'},
+]
+const LEGACY_NEEDS = [
+  {id:'n1',label:'Assistance with bathing'},
+  {id:'n2',label:'Weekly physiotherapy'},
+  {id:'n3',label:'Dietary assessment referral'},
+  {id:'n4',label:'Cognitive stimulation activities'},
+  {id:'n5',label:'Social isolation support'},
+]
+const DEST_LABELS = {
+  'behaviour':'Behaviour','cognition':'Cognition and Mental Capacity',
+  'communications':'Communications','continence':'Continence',
+  'cultural':'Cultural, Religious & Spiritual','daily-living':'Daily Living and Environment',
+  'education':'Education and Employment','medication':'Medication and Healthcare',
+  'mental-health':'Mental Health','mobility':'Mobility and Physical',
+  'nutrition':'Nutrition and Hydration','personal-care':'Personal Care and Hygiene',
+  'sensory':'Sensory','sexuality':'Sexuality and Relationships',
+  'skin':'Skin Integrity','sleep':'Sleep and Rest',
+  'social':'Social, Community and Recreation','specific-ltc':'Specific LTC',
 }
 
-let sType='',sItem='',sDest='',newSec=false,newSecName=''
+let sType='', sItem='', sItemLabel='', sDest='', newSecName=''
 
+/* ── Browse tree ─────────────────────────────────────────────────────── */
+function initTree(){
+  const c = document.getElementById('bt-main')
+  LEGACY_PAGES.forEach(p => {
+    const d = document.createElement('div')
+    d.className = 'bt-node'
+    d.dataset.id = p.id
+    d.innerHTML = `<span class="bt-node-label">${p.label}</span>`
+    d.addEventListener('click', () => btPick(d, p.id, p.label))
+    c.appendChild(d)
+  })
+}
+
+function btPick(el, id, label){
+  document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
+  el.classList.add('selected')
+  sItem = id; sItemLabel = label
+  // Mirror selection into dropdown
+  const iEl = document.getElementById('sel-item')
+  let opt = iEl.querySelector(`option[value="${id}"]`)
+  if(!opt){
+    opt = document.createElement('option')
+    opt.value = id; opt.textContent = label
+    iEl.appendChild(opt)
+  }
+  iEl.value = id
+  document.getElementById('sel-dest').disabled = false
+  sync()
+}
+
+/* ── Drawer open/close ───────────────────────────────────────────────── */
 function openDrawer(){
   document.getElementById('overlay').classList.add('open')
   document.getElementById('drawer').classList.add('open')
@@ -962,107 +1126,138 @@ function closeDrawer(){
   document.getElementById('drawer').classList.remove('open')
 }
 
+/* ── Form interactions ───────────────────────────────────────────────── */
 function onType(){
-  sType=document.getElementById('sel-type').value
-  sItem='';sDest='';newSec=false;newSecName=''
-  const iEl=document.getElementById('sel-item'),dEl=document.getElementById('sel-dest')
-  const nr=document.getElementById('new-sec-row'),nf=document.getElementById('new-sec-field')
-  const nc=document.getElementById('new-sec-check'),nn=document.getElementById('new-sec-name')
-  iEl.innerHTML='<option value="">Select item...</option>'
-  dEl.innerHTML='<option value="">Select...</option>'
-  iEl.disabled=!sType; dEl.disabled=true
-  nr.classList.remove('show'); nf.classList.remove('show')
-  nc.checked=false; nn.value=''
-  if(sType&&DATA[sType]) DATA[sType].items.forEach(i=>iEl.appendChild(Object.assign(document.createElement('option'),{value:i.id,textContent:i.label})))
+  sType = document.getElementById('sel-type').value
+  sItem=''; sItemLabel=''; sDest=''; newSecName=''
+  const iEl = document.getElementById('sel-item')
+  const dEl = document.getElementById('sel-dest')
+  iEl.innerHTML = '<option value="">Select Page</option>'
+  dEl.value = ''; dEl.disabled = true
+  document.getElementById('new-sec-field').classList.remove('show')
+  document.getElementById('new-sec-name').value = ''
+  const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : []
+  items.forEach(i => {
+    const o = document.createElement('option')
+    o.value = i.id; o.textContent = i.label
+    iEl.appendChild(o)
+  })
+  iEl.disabled = !sType
+  document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
   sync()
 }
 
 function onItem(){
-  sItem=document.getElementById('sel-item').value; sDest=''
-  const dEl=document.getElementById('sel-dest')
-  dEl.innerHTML='<option value="">Select...</option>'
-  if(sItem&&sType&&DATA[sType]){
-    DATA[sType].dests.forEach(d=>dEl.appendChild(Object.assign(document.createElement('option'),{value:d.id,textContent:d.label})))
-    dEl.disabled=false
-  } else { dEl.disabled=true }
-  const nr=document.getElementById('new-sec-row')
-  sType==='page'&&sItem ? nr.classList.add('show') : nr.classList.remove('show')
+  const iEl = document.getElementById('sel-item')
+  sItem = iEl.value
+  const items = sType==='page' ? LEGACY_PAGES : LEGACY_NEEDS
+  const found = items.find(i => i.id===sItem)
+  sItemLabel = found ? found.label : ''
+  // Mirror highlight in tree
+  document.querySelectorAll('.bt-node').forEach(n =>
+    n.classList.toggle('selected', n.dataset.id===sItem))
+  document.getElementById('sel-dest').disabled = !sItem
   sync()
 }
 
-function onDest(){ sDest=document.getElementById('sel-dest').value; sync() }
-
-function onNewSec(){
-  newSec=document.getElementById('new-sec-check').checked
-  const nf=document.getElementById('new-sec-field'),dEl=document.getElementById('sel-dest')
-  if(newSec){ nf.classList.add('show'); dEl.disabled=true; dEl.value=''; sDest='' }
-  else { nf.classList.remove('show'); dEl.disabled=!sItem; newSecName=''; document.getElementById('new-sec-name').value='' }
+function onDest(){
+  sDest = document.getElementById('sel-dest').value
+  const nf = document.getElementById('new-sec-field')
+  if(sDest==='create-new'){
+    nf.classList.add('show')
+  } else {
+    nf.classList.remove('show')
+    newSecName = ''
+    document.getElementById('new-sec-name').value = ''
+  }
   sync()
 }
 
-function onSecName(){ newSecName=document.getElementById('new-sec-name').value.trim(); sync() }
+function onSecName(){
+  newSecName = document.getElementById('new-sec-name').value.trim()
+  sync()
+}
 
 function sync(){
-  const ok=sType&&sItem&&(sDest||(newSec&&newSecName))
-  document.getElementById('restore-btn').disabled=!ok
+  const ok = sItem && sDest && (sDest!=='create-new' || newSecName)
+  document.getElementById('restore-btn').disabled = !ok
 }
 
+/* ── Restore ─────────────────────────────────────────────────────────── */
 function doRestore(){
-  const iLabel=DATA[sType].items.find(i=>i.id===sItem)?.label||''
-  const dLabel=DATA[sType].dests.find(d=>d.id===sDest)?.label||''
-  addToSidebar(sType,iLabel,dLabel,newSecName)
-  addToDomains(sType,iLabel)
-  const msg=sType==='folder'?`"${iLabel}" restored to ${dLabel}`:
-    sType==='page'?(newSecName?`"${iLabel}" restored under new section "${newSecName}"`:`"${iLabel}" restored to ${dLabel}`):
-    `"${iLabel}" added to ${dLabel}`
-  toast(msg); reset(); closeDrawer()
+  addToSidebar()
+  const destLabel = sDest==='create-new' ? newSecName : (DEST_LABELS[sDest]||sDest)
+  const msg = sDest==='create-new'
+    ? `"${sItemLabel}" restored into new section "${newSecName}"`
+    : `"${sItemLabel}" restored to ${destLabel}`
+  toast(msg)
+  reset()
+  closeDrawer()
 }
 
-function addToSidebar(type,label,dest,secName){
-  const c=document.getElementById('restored-items')
-  const div=document.createElement('div')
-  const tag=`<span class="status-tag new" style="margin-left:auto">New</span>`
-  if(type==='folder'){
-    div.innerHTML=`<div class="lhs-divider"></div><div class="lhs-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:10px;height:10px"><polyline points="6 9 12 15 18 9"/></svg>${label}</div>`
-  } else if(type==='page'){
-    if(secName){
-      div.innerHTML=`<div class="lhs-divider"></div><div class="lhs-row indent" style="color:var(--p90);font-weight:500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="6 9 12 15 18 9"/></svg>${secName}</div><div class="lhs-row indent2">${label}${tag}</div>`
-    } else {
-      div.innerHTML=`<div class="lhs-row indent2">${label}${tag}</div>`
-    }
+const CARET = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`
+
+function addToSidebar(){
+  const c = document.getElementById('restored-items')
+  const div = document.createElement('div')
+
+  if(sDest==='create-new'){
+    /* New section: "(New)" italic label + filled yellow dot — Figma 743-26264 */
+    div.innerHTML = `
+      <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
+      <div class="lhs-items">
+        <div class="lhs-row" style="gap:4px">
+          <div class="lhs-caret down">${CARET}</div>
+          <span>${newSecName}</span>
+          <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
+          <div class="lhs-new-dot" style="margin-left:auto"></div>
+        </div>
+        <div class="lhs-row l1" style="gap:4px">
+          <div class="lhs-caret">${CARET}</div>
+          ${sItemLabel}
+        </div>
+      </div>`
   } else {
-    div.innerHTML=`<div class="lhs-row indent2">${label}${tag}</div>`
+    /* Existing section: hollow ring on parent, item appended with filled dot — Figma 743-27202 / 743-27581 */
+    const destLabel = DEST_LABELS[sDest] || sDest
+    addHollowRing(destLabel)
+    div.innerHTML = `
+      <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
+      <div class="lhs-items">
+        <div class="lhs-row l1" style="gap:4px">
+          <div class="lhs-caret dot"><svg/></div>
+          <span>${sItemLabel}</span>
+          <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
+          <div class="lhs-new-dot" style="margin-left:auto"></div>
+        </div>
+      </div>`
   }
   c.appendChild(div)
 }
 
-function addToDomains(type,label){
-  if(type!=='folder') return
-  const list=document.getElementById('domain-list')
-  const row=document.createElement('div')
-  row.className='domain-row'
-  row.innerHTML=`
-    <div class="domain-icon" style="background:var(--p10)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--p90)" stroke-width="1.75"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg></div>
-    <div class="domain-body">
-      <h4>${label} <span class="status-tag new">Restored</span></h4>
-      <p>Restored from legacy care plan archive.</p>
-      <div class="sc-tags"><span class="chip chip-green">Restored</span></div>
-    </div>`
-  list.appendChild(row)
+/* Add hollow yellow ring to the matching LHS parent row — Figma 743-27202 */
+function addHollowRing(sectionLabel){
+  document.querySelectorAll('.lhs-row').forEach(row => {
+    const txt = row.textContent.replace(/\s+/g,' ').trim()
+    if(txt.includes(sectionLabel) && !row.querySelector('.lhs-new-ring') && !row.querySelector('.lhs-new-dot')){
+      const ring = document.createElement('div')
+      ring.className = 'lhs-new-ring'
+      row.appendChild(ring)
+    }
+  })
 }
 
 function reset(){
-  sType='';sItem='';sDest='';newSec=false;newSecName=''
+  sType=''; sItem=''; sItemLabel=''; sDest=''; newSecName=''
   document.getElementById('sel-type').value=''
-  document.getElementById('sel-item').innerHTML='<option value="">Select item...</option>'
+  document.getElementById('sel-item').innerHTML='<option value="">Select Page</option>'
   document.getElementById('sel-item').disabled=true
-  document.getElementById('sel-dest').innerHTML='<option value="">Select...</option>'
+  document.getElementById('sel-dest').value=''
   document.getElementById('sel-dest').disabled=true
-  document.getElementById('new-sec-row').classList.remove('show')
   document.getElementById('new-sec-field').classList.remove('show')
-  document.getElementById('new-sec-check').checked=false
   document.getElementById('new-sec-name').value=''
   document.getElementById('restore-btn').disabled=true
+  document.querySelectorAll('.bt-node').forEach(n=>n.classList.remove('selected'))
 }
 
 function toast(msg){
@@ -1071,6 +1266,8 @@ function toast(msg){
   t.classList.add('show')
   setTimeout(()=>t.classList.remove('show'),3800)
 }
+
+initTree()
 </script>
 </body>
 </html>
