@@ -160,11 +160,11 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   height:35px;flex-shrink:0;margin-bottom:0;
 }
 .btn-add{
-  padding:6px 14px;background:var(--p90);border:none;border-radius:99px;
-  color:#fff;font-size:14px;font-weight:400;cursor:pointer;
+  padding:4px 14px;background:var(--p110);border:none;border-radius:99px;
+  color:var(--n20);font-size:var(--pulse-font-size-caption-regular);font-weight:400;cursor:pointer;
   font-family:'Inter',sans-serif;transition:background .15s;
 }
-.btn-add:hover{background:var(--p80)}
+.btn-add:hover{background:var(--p100)}
 .btn-edit{
   margin-left:auto;width:32px;height:32px;border-radius:50%;
   border:1px solid var(--n50);background:var(--n10);
@@ -264,10 +264,10 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   color:var(--pulse-color-primary-120);
 }
 .patient-tags{display:flex;align-items:center;gap:8px}
-/* PulseTag lapis — matches hub's PulseTag colour="lapis" */
+/* PulseTag lapis — font-weight:400 per PulseTag theme spec */
 .patient-tag{
   display:inline-flex;align-items:center;gap:4px;
-  font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
+  font-family:'Inter',sans-serif;font-size:var(--pulse-font-size-caption-small);font-weight:400;
   color:var(--pulse-color-neutral-120);
   background:var(--pulse-color-lapis-1);
   padding:3.5px 7px;border-radius:4px;
@@ -365,10 +365,10 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .domain-body .sc-tags{margin-top:4px}
 
-/* hub__stat-tag equivalents — exact match to easy-read prototype */
+/* hub__stat-tag equivalents — PulseTag font-size spec */
 .chip{
   display:inline-flex;align-items:center;gap:4px;
-  font-family:'Inter',sans-serif;font-size:12px;font-weight:400;
+  font-family:'Inter',sans-serif;font-size:var(--pulse-font-size-caption-small);font-weight:400;
   padding:3.5px 7px;border-radius:4px;white-space:nowrap;
   color:#36393f;
 }
@@ -443,12 +443,12 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   color:var(--pulse-color-primary-120);margin:0;line-height:1;
 }
 
-/* Fields */
-.field{display:flex;flex-direction:column;gap:6px;width:100%}
+/* Fields — matches PulseInputWrapper label/hint spec */
+.field{display:flex;flex-direction:column;gap:8px;width:100%}
 .field>label{
-  font-family:'Inter',sans-serif;font-size:12px;font-weight:400;color:var(--n120);
+  font-family:'Inter',sans-serif;font-size:var(--pulse-font-size-small);font-weight:400;color:var(--n120);
 }
-.field .hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--n100);margin-top:-2px}
+.field .hint{font-family:'Inter',sans-serif;font-size:var(--pulse-font-size-caption-small);color:var(--n100)}
 
 /* Custom Pulse-styled dropdown */
 .c-select{
@@ -456,9 +456,9 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   border:1px solid var(--n40);border-radius:8px;
 }
 .c-select-trigger{
-  width:100%;height:52px;border:none;
-  border-radius:8px; /* explicit — no longer clipped by parent overflow */
-  background:var(--n30);font-size:16px;color:var(--n80);
+  width:100%;height:54px;border:none;
+  border-radius:8px;
+  background:var(--n30);font-size:var(--pulse-font-size-regular);color:var(--n80);
   font-family:'Inter',sans-serif;padding:0 40px 0 12px;
   display:flex;align-items:center;cursor:not-allowed;position:relative;
   transition:background .15s,color .15s;
@@ -560,36 +560,36 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .new-section-field.show{display:flex;flex-direction:column;gap:6px}
 
 .p-inputtext{
-  width:100%;height:52px;
+  width:100%;height:54px;
   border:1px solid var(--p50);border-radius:8px;
-  background:var(--n10);font-size:16px;color:var(--p120);
+  background:var(--n10);font-size:var(--pulse-font-size-regular);color:var(--p120);
   font-family:'Inter',sans-serif;padding:0 12px;
   transition:border-color .15s;
 }
 .p-inputtext:focus{outline:none;border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
 .p-inputtext::placeholder{color:var(--n80)}
 
-/* Footer — pill buttons, Figma 743-25233 */
+/* Footer — pill buttons matching PulseButton primary/secondary */
 .drawer-footer{
   padding:8px;border-top:1px solid #f3f4f5;
   display:flex;gap:8px;flex-shrink:0;align-items:center;justify-content:center;
 }
 .btn-close-pill{
-  flex:1;padding:10px 24px;border-radius:99px;
-  font-family:'Inter',sans-serif;font-size:14px;font-weight:400;
-  background:transparent;border:1px solid var(--n50);color:var(--n120);
+  flex:1;padding:7px 10.5px;border-radius:99px;
+  font-family:'Inter',sans-serif;font-size:var(--pulse-font-size-regular);font-weight:400;
+  background:var(--p10);border:1px solid var(--p100);color:var(--n120);
   cursor:pointer;transition:background .15s;
 }
-.btn-close-pill:hover{background:var(--n30)}
+.btn-close-pill:hover{background:var(--p20)}
 .btn-restore-pill{
-  flex:1;padding:10px 24px;border-radius:99px;
-  font-family:'Inter',sans-serif;font-size:14px;font-weight:400;
-  background:var(--p90);border:1px solid transparent;color:#fff;
+  flex:1;padding:7px 10.5px;border-radius:99px;
+  font-family:'Inter',sans-serif;font-size:var(--pulse-font-size-regular);font-weight:400;
+  background:var(--p110);border:1px solid #fff;color:var(--n20);
   cursor:pointer;transition:background .15s;
 }
-.btn-restore-pill:hover:not(:disabled){background:var(--p80)}
+.btn-restore-pill:hover:not(:disabled){background:var(--p100);border-color:var(--p80)}
 .btn-restore-pill:disabled{
-  background:transparent;border:1px solid var(--n50);color:var(--n80);cursor:not-allowed;
+  background:var(--n40);border:1px solid var(--n90);color:var(--n90);cursor:not-allowed;
 }
 
 /* LHS yellow indicators — Figma 743-27202 / 743-27581 */
