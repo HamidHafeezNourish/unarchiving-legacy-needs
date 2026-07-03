@@ -1004,8 +1004,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
         </div>
       </div>
 
-      <!-- Browse tree — matches Figma 743-25700 -->
-      <div class="browse-tree-wrap">
+      <!-- Browse tree — matches Figma 743-25700; hidden until type is selected -->
+      <div class="browse-tree-wrap" id="browse-tree" style="display:none">
         <!-- Root: Care Plan Section -->
         <div class="bt-root">
           <div class="bt-caret-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
@@ -1251,6 +1251,7 @@ function handleTypeChange(){
   const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
+  document.getElementById('browse-tree').style.display = sType ? '' : 'none'
   document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
   sync()
 }
@@ -1368,6 +1369,7 @@ function reset(){
   /* keep dd-item and dd-dest disabled after reset */
   ddSetEnabled('dd-item', false)
   ddSetEnabled('dd-dest', false)
+  document.getElementById('browse-tree').style.display = 'none'
   document.getElementById('new-sec-field').classList.remove('show')
   document.getElementById('new-sec-name').value=''
   document.getElementById('restore-btn').disabled=true
