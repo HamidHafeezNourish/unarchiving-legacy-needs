@@ -193,7 +193,9 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   line-height:21.4px;color:var(--n120);
   cursor:pointer;border-radius:2px;
   transition:background .12s;user-select:none;flex-shrink:0;
+  overflow:hidden;
 }
+.lhs-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .lhs-row:hover{background:var(--n30)}
 .lhs-row.selected{background:var(--p10);color:var(--p120)}
 .lhs-caret{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
@@ -742,10 +744,10 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 
           <!-- L1 domain rows — clickable to expand/collapse up to 5 needs -->
           <div class="lhs-row l1" data-section="behaviour" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Behaviour</div>
-          <div class="lhs-row l1" data-section="cognition" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capac...</div>
+          <div class="lhs-row l1" data-section="cognition" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capacity</div>
           <div class="lhs-row l1" data-section="communications" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Communications</div>
           <div class="lhs-row l1" data-section="continence" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Continence</div>
-          <div class="lhs-row l1" data-section="cultural" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritua...</div>
+          <div class="lhs-row l1" data-section="cultural" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritual</div>
           <div class="lhs-row l1" data-section="daily-living" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Daily Living and Environment</div>
           <div class="lhs-row l1" data-section="education" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Education and Employment</div>
           <div class="lhs-row l1" data-section="medication" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Medication and Healthcare</div>
@@ -758,7 +760,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <div class="lhs-row l1" data-section="sexuality" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sexuality and Relationship</div>
           <div class="lhs-row l1" data-section="skin" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Skin Integrity</div>
           <div class="lhs-row l1" data-section="sleep" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sleep And Rest</div>
-          <div class="lhs-row l1" data-section="social" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recr...</div>
+          <div class="lhs-row l1" data-section="social" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recreation</div>
           <div class="lhs-row l1" data-section="specific-ltc" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Specific LTC</div>
 
         </div>
@@ -1103,7 +1105,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 
 <script>
 /* ── Legacy archive data ─────────────────────────────────────────────── */
-/* ── 10 care folders (shown when type = folder) ──────────────────────── */
+/* ── 10 care folders (used internally / for need groupings) ──────────── */
 const CARE_FOLDERS = [
   {id:'cf-health',    label:'Health & Medical'},
   {id:'cf-personal',  label:'Personal Care & Hygiene'},
@@ -1115,6 +1117,34 @@ const CARE_FOLDERS = [
   {id:'cf-social',    label:'Social & Community'},
   {id:'cf-education', label:'Education & Employment'},
   {id:'cf-cultural',  label:'Cultural, Spiritual & Relationships'},
+]
+
+/* ── Legacy pages — archived due to errors or superseded versions ─────── */
+const LEGACY_PAGES = [
+  {id:'lp-med',       label:'Medication Managment Plan v1'},
+  {id:'lp-skin',      label:'Skin Intergrity Assessment (Archived)'},
+  {id:'lp-mobility',  label:'Mobilty & Falls Risk Assessment v2'},
+  {id:'lp-nutrition', label:'Nutrtion and Hydration Record'},
+  {id:'lp-mental',    label:'Mental Helath & Wellbeing Plan (Superceded)'},
+  {id:'lp-comms',     label:'Comunication & Sensory Profile'},
+  {id:'lp-personal',  label:'Personal Care Suppoort Plan v1'},
+  {id:'lp-social',    label:'Social & Comunity Engagment Plan'},
+  {id:'lp-education', label:'Educaton & Employment Goals'},
+  {id:'lp-cultural',  label:'Cutural & Spiritual Profile v1'},
+]
+
+/* ── Admin folders — individual-related but not clinical care ─────────── */
+const ADMIN_FOLDERS = [
+  {id:'af-careplan',    label:'Care Plan'},
+  {id:'af-consent',     label:'Consent Forms'},
+  {id:'af-agreements',  label:'Agreements & Contracts'},
+  {id:'af-signatures',  label:'Signatures & Authorisations'},
+  {id:'af-profile',     label:'Personal Profile'},
+  {id:'af-risk',        label:'Risk & Safety Documentation'},
+  {id:'af-legal',       label:'Legal & Advocacy Documents'},
+  {id:'af-financial',   label:'Financial & Benefits Records'},
+  {id:'af-emergency',   label:'Emergency Information'},
+  {id:'af-comms-prefs', label:'Communication Preferences'},
 ]
 
 /* ── Pages grouped by care folder (shown when type = page) ───────────── */
@@ -1455,7 +1485,7 @@ function handleTypeChange(){
   ddReset('dd-item','Select item…')
   ddReset('dd-dest','Select destination…')
   ddSetEnabled('dd-dest', false)
-  const items = sType==='page' ? CARE_FOLDERS : sType==='need' ? LEGACY_NEEDS_GROUPED : sType==='folder' ? CARE_FOLDERS : []
+  const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS_GROUPED : sType==='folder' ? ADMIN_FOLDERS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
   document.getElementById('browse-tree').style.display = 'none'
@@ -1468,8 +1498,8 @@ function handleTypeChange(){
 function handleItemChange(){
   sItem = ddState['dd-item'].value
   let found = null
-  if(sType === 'folder') found = CARE_FOLDERS.find(i => i.id===sItem)
-  else if(sType === 'page') found = CARE_FOLDERS.find(i => i.id===sItem)
+  if(sType === 'folder') found = ADMIN_FOLDERS.find(i => i.id===sItem)
+  else if(sType === 'page') found = LEGACY_PAGES.find(i => i.id===sItem)
   else found = findInGrouped(LEGACY_NEEDS_GROUPED, sItem)
   sItemLabel = found ? found.label : ''
   if(sType !== 'folder'){
@@ -1667,6 +1697,22 @@ function initSections(){
 }
 
 initSections()
+
+/* ── LHS text truncation — wrap bare text nodes in .lhs-text spans ────── */
+;(function initLhsText(){
+  document.querySelectorAll('.lhs-row').forEach(function(row){
+    Array.from(row.childNodes).forEach(function(node){
+      if(node.nodeType === 3 && node.textContent.trim()){
+        var text = node.textContent.trim()
+        var span = document.createElement('span')
+        span.className = 'lhs-text'
+        span.textContent = text
+        span.title = text
+        row.replaceChild(span, node)
+      }
+    })
+  })
+})()
 </script>
 <!-- Backdrop closes any open dropdown when clicking outside the panel -->
 <div id="dd-backdrop" style="display:none;position:fixed;inset:0;z-index:9998;" onclick="closeAllPanels()"></div>
