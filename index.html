@@ -450,10 +450,14 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .field .hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--n100);margin-top:-2px}
 
-/* Custom Pulse-styled dropdown — inline panel (no absolute positioning) */
-.c-select{width:100%;user-select:none;border:1px solid var(--n40);border-radius:8px;}
+/* Custom Pulse-styled dropdown */
+.c-select{
+  width:100%;user-select:none;position:relative;
+  border:1px solid var(--n40);border-radius:8px;
+}
 .c-select-trigger{
-  width:100%;height:52px;border:none;border-radius:0;
+  width:100%;height:52px;border:none;
+  border-radius:8px; /* explicit — no longer clipped by parent overflow */
   background:var(--n30);font-size:16px;color:var(--n80);
   font-family:'Inter',sans-serif;padding:0 40px 0 12px;
   display:flex;align-items:center;cursor:not-allowed;position:relative;
@@ -464,8 +468,11 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .c-select.enabled .c-select-trigger:hover{background:var(--p10)}
 .c-select.filled .c-select-trigger{background:var(--p10)}
-.c-select.open{border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
-.c-select.open .c-select-trigger{background:var(--n10)}
+.c-select.open{
+  border-color:var(--p70);border-radius:8px 8px 0 0;
+  box-shadow:0 0 0 3px rgba(102,204,204,.2);
+}
+.c-select.open .c-select-trigger{background:var(--n10);border-radius:8px 8px 0 0}
 .c-select-chevron{
   position:absolute;right:12px;top:50%;transform:translateY(-50%);
   width:16px;height:16px;pointer-events:none;color:var(--n60);
@@ -474,16 +481,19 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .c-select.enabled .c-select-chevron{color:var(--p90)}
 .c-select.open .c-select-chevron{transform:translateY(-50%) rotate(180deg)}
 .c-select-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* Panel is inline — sits below trigger, hidden by default */
+/* Panel — positioned via JS as position:fixed relative to drawer transform ancestor */
 .c-select-panel{
   display:none;
-  border-top:1px solid var(--n40);
+  position:fixed; /* JS sets top/left/width; drawer transform makes it drawer-relative */
+  z-index:500;
+  border:1px solid var(--p70);border-top:1px solid var(--n40);
+  border-radius:0 0 8px 8px;
   background:var(--n10);
   max-height:280px;overflow-y:auto;
+  box-shadow:0 4px 10px rgba(0,0,0,.10);
 }
 .c-select-panel::-webkit-scrollbar{width:3px}
 .c-select-panel::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
-.c-select.open .c-select-panel{display:block}
 .c-select-opt{
   padding:10px 14px;font-size:16px;line-height:1.3;
   font-family:'Inter',sans-serif;color:var(--n120);
@@ -1243,8 +1253,22 @@ let sType='', sItem='', sItemLabel='', sDest=''
 /* ── Custom dropdown state ───────────────────────────────────────────── */
 const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 'dd-dest':{value:'',label:''} }
 
-function _panelShow(dd){ dd.classList.add('open'); dd.querySelector('.c-select-panel').style.display='block' }
-function _panelHide(dd){ dd.classList.remove('open'); dd.querySelector('.c-select-panel').style.display='none' }
+function _panelShow(dd){
+  dd.classList.add('open')
+  const panel  = dd.querySelector('.c-select-panel')
+  const trigR  = dd.querySelector('.c-select-trigger').getBoundingClientRect()
+  const drawR  = document.getElementById('drawer').getBoundingClientRect()
+  /* drawer has transform → fixed children are positioned relative to drawer */
+  panel.style.top   = (trigR.bottom - drawR.top) + 'px'
+  panel.style.left  = (trigR.left   - drawR.left) + 'px'
+  panel.style.width = trigR.width + 'px'
+  panel.style.display = 'block'
+}
+function _panelHide(dd){
+  dd.classList.remove('open')
+  const panel = dd.querySelector('.c-select-panel')
+  panel.style.display = 'none'
+}
 
 function ddToggle(id, e){
   if(e) e.stopPropagation()
