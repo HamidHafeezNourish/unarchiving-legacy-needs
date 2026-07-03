@@ -451,7 +451,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .field .hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--n100);margin-top:-2px}
 
 /* Custom Pulse-styled dropdown — inline panel (no absolute positioning) */
-.c-select{width:100%;user-select:none;border:1px solid var(--n40);border-radius:8px;overflow:hidden;}
+.c-select{width:100%;user-select:none;border:1px solid var(--n40);border-radius:8px;}
 .c-select-trigger{
   width:100%;height:52px;border:none;border-radius:0;
   background:var(--n30);font-size:16px;color:var(--n80);
@@ -498,6 +498,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   padding:8px 14px 3px;font-size:11px;font-weight:600;
   color:var(--n80);letter-spacing:.05em;text-transform:uppercase;
   background:var(--n20);cursor:default;border-top:1px solid var(--n30);
+  pointer-events:none;
 }
 .c-select-group-hdr:first-child{border-top:none}
 
@@ -536,7 +537,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .bt-group-hdr{
   padding:8px 14px 2px;font-size:11px;font-weight:600;
   color:var(--n80);letter-spacing:.05em;text-transform:uppercase;
-  cursor:default;
+  cursor:default;pointer-events:none;
 }
 .bt-divider{height:1px;background:#e7e8eb;margin:2px 8px}
 
@@ -981,7 +982,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
       <div class="field">
         <label>I wish to restore</label>
         <div class="c-select enabled" id="dd-type">
-          <div class="c-select-trigger" onclick="ddToggle('dd-type')">
+          <div class="c-select-trigger" onclick="ddToggle('dd-type',event)">
             <span class="c-select-value">Select type…</span>
             <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </div>
@@ -997,7 +998,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
       <div class="field">
         <label>Select item</label>
         <div class="c-select" id="dd-item">
-          <div class="c-select-trigger" onclick="ddToggle('dd-item')">
+          <div class="c-select-trigger" onclick="ddToggle('dd-item',event)">
             <span class="c-select-value">Select item…</span>
             <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </div>
@@ -1033,7 +1034,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
     <div class="form-divider"><div class="form-divider-line"></div></div>
 
     <!-- Section 2: Destination — Figma 743-25832 -->
-    <div class="drawer-section" style="padding-top:0">
+    <div class="drawer-section" id="dest-section" style="padding-top:0">
       <p class="drawer-section-title">Select destination of these item(s)</p>
 
       <div class="field">
@@ -1041,7 +1042,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
         <div class="hint">Select where in the one care plan these items will be restored</div>
         <!-- "Create New Section" is an option in this list — Figma 743-25832 -->
         <div class="c-select" id="dd-dest">
-          <div class="c-select-trigger" onclick="ddToggle('dd-dest')">
+          <div class="c-select-trigger" onclick="ddToggle('dd-dest',event)">
             <span class="c-select-value">Select destination…</span>
             <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </div>
@@ -1242,18 +1243,22 @@ let sType='', sItem='', sItemLabel='', sDest=''
 /* ── Custom dropdown state ───────────────────────────────────────────── */
 const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 'dd-dest':{value:'',label:''} }
 
-function ddToggle(id){
+function _panelShow(dd){ dd.classList.add('open'); dd.querySelector('.c-select-panel').style.display='block' }
+function _panelHide(dd){ dd.classList.remove('open'); dd.querySelector('.c-select-panel').style.display='none' }
+
+function ddToggle(id, e){
+  if(e) e.stopPropagation()
   const dd = document.getElementById(id)
   if(!dd.classList.contains('enabled')) return
   const wasOpen = dd.classList.contains('open')
-  document.querySelectorAll('.c-select.open').forEach(el => el.classList.remove('open'))
-  if(!wasOpen) dd.classList.add('open')
+  document.querySelectorAll('.c-select.open').forEach(el => _panelHide(el))
+  if(!wasOpen) _panelShow(dd)
 }
 
 function ddPick(id, value, label, e){
   if(e) e.stopPropagation()
   const dd = document.getElementById(id)
-  dd.classList.remove('open')
+  _panelHide(dd)
   ddState[id] = { value, label }
   dd.querySelector('.c-select-value').textContent = label
   dd.querySelectorAll('.c-select-opt').forEach(o =>
@@ -1267,7 +1272,7 @@ function ddPick(id, value, label, e){
 function ddSetEnabled(id, enabled){
   const dd = document.getElementById(id)
   dd.classList.toggle('enabled', enabled)
-  if(!enabled) dd.classList.remove('open')
+  if(!enabled) _panelHide(dd)
 }
 
 function ddReset(id, placeholder){
@@ -1275,7 +1280,8 @@ function ddReset(id, placeholder){
   ddState[id] = { value:'', label:'' }
   dd.querySelector('.c-select-value').textContent = placeholder
   dd.querySelectorAll('.c-select-opt').forEach(o => o.classList.remove('selected'))
-  dd.classList.remove('open','filled')
+  _panelHide(dd)
+  dd.classList.remove('filled')
 }
 
 function ddSetOptions(id, items){
@@ -1309,7 +1315,7 @@ function ddSetOptions(id, items){
 /* Close dropdowns when clicking outside */
 document.addEventListener('click', e => {
   if(!e.target.closest('.c-select'))
-    document.querySelectorAll('.c-select.open').forEach(el => el.classList.remove('open'))
+    document.querySelectorAll('.c-select.open').forEach(el => _panelHide(el))
 })
 
 /* ── Browse tree ─────────────────────────────────────────────────────── */
@@ -1366,8 +1372,8 @@ function btPick(el, id, label){
   }
   ddItem.querySelectorAll('.c-select-opt').forEach(o =>
     o.classList.toggle('selected', o.dataset.value === id))
-  ddItem.classList.remove('open')
-  ddSetEnabled('dd-dest', true)
+  _panelHide(ddItem)
+  if(sType !== 'folder') ddSetEnabled('dd-dest', true)
   sync()
 }
 
@@ -1392,6 +1398,8 @@ function handleTypeChange(){
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
   document.getElementById('browse-tree').style.display = sType ? '' : 'none'
+  /* Destination not needed for folders — they become new top-level sections */
+  document.getElementById('dest-section').style.display = sType==='folder' ? 'none' : ''
   initTree(sType)
   sync()
 }
@@ -1405,8 +1413,10 @@ function handleItemChange(){
   sItemLabel = found ? found.label : ''
   document.querySelectorAll('.bt-node').forEach(n =>
     n.classList.toggle('selected', n.dataset.id===sItem))
-  ddSetEnabled('dd-dest', !!sItem)
-  if(!sItem){ ddReset('dd-dest','Select destination…'); sDest='' }
+  if(sType !== 'folder'){
+    ddSetEnabled('dd-dest', !!sItem)
+    if(!sItem){ ddReset('dd-dest','Select destination…'); sDest='' }
+  }
   sync()
 }
 
@@ -1416,17 +1426,18 @@ function handleDestChange(){
 }
 
 function sync(){
-  const ok = sItem && sDest
+  const ok = sItem && (sType === 'folder' || sDest)
   document.getElementById('restore-btn').disabled = !ok
 }
 
 /* ── Restore ─────────────────────────────────────────────────────────── */
 function doRestore(){
   addToLHS()
-  const destLabel = sDest==='create-new' ? 'New Section' : (DEST_LABELS[sDest]||sDest)
-  const msg = sDest==='create-new'
-    ? `"${sItemLabel}" restored into a new section`
-    : `"${sItemLabel}" restored to ${destLabel}`
+  const msg = sType==='folder'
+    ? `Folder "${sItemLabel}" restored as a new section`
+    : sDest==='create-new'
+      ? `"${sItemLabel}" restored into a new section`
+      : `"${sItemLabel}" restored to ${DEST_LABELS[sDest]||sDest}`
   toast(msg)
   reset()
   closeDrawer()
@@ -1435,6 +1446,23 @@ function doRestore(){
 const CARET = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`
 
 function addToLHS(){
+  if(sType === 'folder'){
+    /* Folder restores as an empty new section — no children */
+    const c = document.getElementById('restored-items')
+    const div = document.createElement('div')
+    div.innerHTML = `
+      <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
+      <div class="lhs-items">
+        <div class="lhs-row" style="gap:4px">
+          <div class="lhs-caret">${CARET}</div>
+          <span>${sItemLabel}</span>
+          <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
+          <div class="lhs-new-dot" style="margin-left:auto"></div>
+        </div>
+      </div>`
+    c.appendChild(div)
+    return
+  }
   if(sDest === 'create-new'){
     /* Create brand-new section at the bottom of the LHS tree */
     const c = document.getElementById('restored-items')
@@ -1500,6 +1528,7 @@ function reset(){
   ddSetEnabled('dd-item', false)
   ddSetEnabled('dd-dest', false)
   document.getElementById('browse-tree').style.display = 'none'
+  document.getElementById('dest-section').style.display = ''
   document.getElementById('restore-btn').disabled=true
   document.querySelectorAll('.bt-node').forEach(n=>n.classList.remove('selected'))
   /* dd-type stays enabled */
