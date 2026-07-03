@@ -98,63 +98,92 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 
 /* ── LHS panel ─────────────────────────────────────────────────────────── */
 .lhs{
-  width:210px;background:var(--n10);border-right:1px solid var(--n50);
+  width:316px;background:var(--n30);
   display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;
+  padding:12px 8px 8px;
 }
+
+/* The white card wrapping the sidebar content */
+.lhs-card{
+  background:var(--n10);border-radius:12px;
+  box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);
+  display:flex;flex-direction:column;flex:1;overflow:hidden;
+  padding:16px;gap:0;
+}
+
 .lhs-actions{
-  padding:10px 12px;border-bottom:1px solid var(--n40);
-  display:flex;align-items:center;gap:8px;flex-shrink:0;
+  display:flex;align-items:center;gap:8px;
+  height:35px;flex-shrink:0;margin-bottom:0;
 }
 .btn-add{
-  padding:5px 12px;background:var(--p90);border:none;border-radius:5px;
-  color:#fff;font-size:12px;font-weight:500;cursor:pointer;
+  padding:6px 14px;background:var(--p90);border:none;border-radius:99px;
+  color:#fff;font-size:14px;font-weight:400;cursor:pointer;
   font-family:'Inter',sans-serif;transition:background .15s;
 }
 .btn-add:hover{background:var(--p80)}
 .btn-edit{
-  margin-left:auto;width:28px;height:28px;border-radius:50%;
+  margin-left:auto;width:32px;height:32px;border-radius:50%;
   border:1px solid var(--n50);background:var(--n10);
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;color:var(--n100);transition:background .15s;
 }
 .btn-edit:hover{background:var(--n30)}
-.btn-edit svg{width:14px;height:14px}
+.btn-edit svg{width:16px;height:16px}
 
-.lhs-scroll{flex:1;overflow-y:auto;padding:6px 0}
+/* Divider: 14px padding top+bottom, 1px line */
+.lhs-divider{
+  padding:14px 0;flex-shrink:0;
+}
+.lhs-divider-line{height:1px;background:var(--n30);width:100%}
+
+.lhs-scroll{flex:1;overflow-y:auto;margin-top:0}
 .lhs-scroll::-webkit-scrollbar{width:3px}
 .lhs-scroll::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
 
+/* Items: 16px Inter, 22px height, 17px gap between */
+.lhs-items{display:flex;flex-direction:column;gap:17px}
+
 .lhs-row{
-  display:flex;align-items:center;gap:6px;
-  padding:4px 12px;font-size:12.5px;color:var(--n110);
-  cursor:pointer;transition:background .12s;user-select:none;
+  display:flex;align-items:center;gap:4px;
+  height:22px;font-size:16px;font-weight:400;
+  line-height:21.4px;color:var(--n120);
+  cursor:pointer;border-radius:2px;
+  transition:background .12s;user-select:none;flex-shrink:0;
 }
 .lhs-row:hover{background:var(--n30)}
-.lhs-row.active{background:#e8f4ff;color:#1a6bbf;font-weight:500}
-.lhs-row svg{width:12px;height:12px;color:var(--n80);flex-shrink:0}
-.lhs-row .badge-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--at70);margin-left:auto;flex-shrink:0;
+.lhs-row.selected{background:var(--p10);color:var(--p120)}
+.lhs-caret{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.lhs-caret svg{width:12px;height:12px;color:var(--n80)}
+.lhs-caret.down svg{transform:rotate(90deg)}
+/* Leaf items: dot bullet */
+.lhs-caret.dot{position:relative}
+.lhs-caret.dot::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--n70);display:block;margin:auto}
+.lhs-caret.dot svg{display:none}
+
+/* Indentation */
+.lhs-row.l1{padding-left:20px}
+.lhs-row.l2{padding-left:34px}
+
+.lhs-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:17.5px;height:17.5px;border-radius:10.5px;
+  background:#f97316;padding:0 4px;
+  font-size:8.75px;font-weight:700;color:var(--p10);
+  margin-left:auto;flex-shrink:0;
 }
-.lhs-divider{height:1px;background:var(--n40);margin:4px 0}
-.lhs-section{
-  display:flex;align-items:center;gap:4px;
-  padding:6px 12px 2px;font-size:11px;font-weight:600;
-  color:var(--n90);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;
-}
-.lhs-section svg{width:10px;height:10px;color:var(--n80)}
-.lhs-row.indent{padding-left:24px}
-.lhs-row.indent2{padding-left:34px}
-.lhs-row.indent2::before{content:'·';margin-right:2px;color:var(--n70)}
 
 /* Legacy Archived Content — pinned bottom */
-.lhs-legacy{
-  border-top:1px solid var(--n40);flex-shrink:0;
+.lhs-legacy{flex-shrink:0;padding-top:14px}
+.lhs-legacy-row{
+  display:flex;align-items:center;gap:8px;cursor:pointer;
+  border-radius:2px;padding:2px 0;transition:background .15s;
 }
-.lhs-legacy .lhs-row{
-  color:var(--p90);font-weight:500;padding:10px 12px;
+.lhs-legacy-row:hover{background:var(--p10)}
+.lhs-legacy-row svg{width:24px;height:24px;color:var(--n120);flex-shrink:0}
+.lhs-legacy-label{
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
+  color:var(--n120);line-height:1;
 }
-.lhs-legacy .lhs-row:hover{background:var(--p10)}
-.lhs-legacy .lhs-row svg{color:var(--p70);width:14px;height:14px}
 
 /* ── Main content ──────────────────────────────────────────────────────── */
 .main{flex:1;overflow-y:auto;background:var(--n20)}
@@ -451,73 +480,120 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 
   <!-- ── LHS Panel ──────────────────────────────────────────────────────── -->
   <aside class="lhs">
-    <div class="lhs-actions">
-      <button class="btn-add">Add Item</button>
-      <button class="btn-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-    </div>
+    <div class="lhs-card">
 
-    <div class="lhs-scroll">
-      <div class="lhs-row">Recommendations <span class="badge-dot"></span></div>
-      <div class="lhs-row">Archived</div>
-      <div class="lhs-divider"></div>
-
-      <div class="lhs-section">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        Care Plan
+      <!-- Actions row -->
+      <div class="lhs-actions">
+        <button class="btn-add">Add Item</button>
+        <button class="btn-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
       </div>
 
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Behaviour</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Cognition and Mental Capac...</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Communications</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Continence</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Cultural, Religious &amp; Spiritua...</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Daily Living and Environment</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Education and Employment</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Medication and Healthcare</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Mental Health</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Mobility and Physical</div>
+      <!-- Divider -->
+      <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
 
-      <!-- Expanded: Nutrition -->
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Nutrition and Hydration</div>
-      <div class="lhs-row indent2">Diet Need</div>
-      <div class="lhs-row indent2">General Nutrition and Hyd...</div>
-      <div class="lhs-row indent2">Dysphagia / Swallowing</div>
-      <div class="lhs-row indent2 active">Food Allergies</div>
-      <div class="lhs-row indent2">Enteral Feeding</div>
-      <div class="lhs-row indent2">Weight Management</div>
+      <!-- Scrollable tree -->
+      <div class="lhs-scroll">
+        <div class="lhs-items">
 
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Personal Care &amp; Hygiene</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Sensory</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Sexuality and Relationship</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Skin Integrity</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Sleep And Rest</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Social, Community and Recr...</div>
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Specific LTC</div>
+          <!-- Recommendations -->
+          <div class="lhs-row">
+            <div class="lhs-caret"></div>
+            Recommendations
+            <span class="lhs-badge">3</span>
+          </div>
 
-      <div class="lhs-divider"></div>
+          <!-- Archived -->
+          <div class="lhs-row">
+            <div class="lhs-caret"></div>
+            Archived
+          </div>
 
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
-      <div class="lhs-row indent2" style="padding-left:44px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
-      <div class="lhs-row" style="padding-left:54px;font-size:12px;color:var(--n100)">· Need 1</div>
-      <div class="lhs-row" style="padding-left:54px;font-size:12px;color:var(--n100)">· Need 2</div>
+        </div>
 
-      <div class="lhs-divider"></div>
+        <!-- Divider -->
+        <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
 
-      <div class="lhs-row indent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
-      <div class="lhs-row indent2" style="padding-left:44px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px"><polyline points="6 9 12 15 18 9"/></svg>Section Page</div>
-      <div class="lhs-row" style="padding-left:54px;font-size:12px;color:var(--n100)">· Need 1</div>
+        <div class="lhs-items">
 
-      <!-- Dynamically added restored items appear here -->
-      <div id="restored-items"></div>
-    </div>
+          <!-- Care Plan (expanded, down caret) -->
+          <div class="lhs-row">
+            <div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+            Care Plan
+          </div>
 
-    <!-- Legacy Archived Content — pinned bottom -->
-    <div class="lhs-legacy">
-      <div class="lhs-row" onclick="openDrawer()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-        Legacy Archived Content
+          <!-- L1 items — right caret = collapsed -->
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Behaviour</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capac...</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Communications</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Continence</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritua...</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Daily Living and Environment</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Education and Employment</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Medication and Healthcare</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mental Health</div>
+          <div class="lhs-row l1"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mobility and Physical</div>
+
+          <!-- Nutrition — expanded (down caret) -->
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Nutrition and Hydration</div>
+
+          <!-- L2 items — dot bullet -->
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Diet Need</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>General Nutrition and Hyd...</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Dysphagia / Swallowing</div>
+          <div class="lhs-row l2 selected"><div class="lhs-caret dot"><svg/></div>Food Allergies</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Enteral Feeding</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Weight Management</div>
+
+          <!-- Remaining L1 collapsed -->
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Personal Care &amp; Hygiene</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sensory</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sexuality and Relationship</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Skin Integrity</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sleep And Rest</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recr...</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Specific LTC</div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
+
+        <div class="lhs-items">
+          <!-- Section Page group 1 -->
+          <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Need 2</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
+
+        <div class="lhs-items">
+          <!-- Section Page group 2 -->
+          <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
+          <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><svg/></div>Need 1</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="lhs-divider"><div class="lhs-divider-line"></div></div>
+
+        <!-- Restored items land here -->
+        <div id="restored-items"></div>
+
       </div>
-    </div>
+
+      <!-- Legacy Archived Content — pinned bottom inside card -->
+      <div class="lhs-legacy">
+        <div class="lhs-divider-line" style="margin-bottom:14px"></div>
+        <div class="lhs-legacy-row" onclick="openDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+          <span class="lhs-legacy-label">Legacy Archived Content</span>
+        </div>
+      </div>
+
+    </div><!-- /lhs-card -->
   </aside>
 
   <!-- ── Main content ────────────────────────────────────────────────────── -->
@@ -530,52 +606,6 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
         <div class="patient-name">Isabel Hill</div>
         <div class="patient-age">(82 Years old)</div>
         <div class="patient-tag">Nursing</div>
-      </div>
-    </div>
-
-    <!-- Search -->
-    <div class="content-section" style="padding-top:20px">
-      <div class="section-heading">Search</div>
-      <div class="search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Search by care plan, needs, tags" />
-      </div>
-    </div>
-
-    <!-- Recently Updated -->
-    <div class="content-section">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
-        <div class="section-heading" style="margin-bottom:0">Recently Updated</div>
-        <div class="carousel-dots">
-          <div class="dot"></div><div class="dot sm"></div><div class="dot sm"></div>
-        </div>
-      </div>
-      <div class="carousel">
-        <div class="carousel-card">
-          <h4>Infection prevention</h4>
-          <div class="cat">Medication and healthcare</div>
-          <div class="change">New interaction linked</div>
-        </div>
-        <div class="carousel-card">
-          <h4>Weight management</h4>
-          <div class="cat">Medication and healthcare</div>
-          <div class="change">Planned outcome altered</div>
-        </div>
-        <div class="carousel-card">
-          <h4>Pressure injury prevention</h4>
-          <div class="cat">Medication and healthcare</div>
-          <div class="change">New need added</div>
-        </div>
-        <div class="carousel-card">
-          <h4>Pain Management</h4>
-          <div class="cat">Medication and healthcare</div>
-          <div class="change">Interaction removed</div>
-        </div>
-        <div class="carousel-card">
-          <h4>Pain Management</h4>
-          <div class="cat">Medication and healthcare</div>
-          <div class="change">New interaction linked</div>
-        </div>
       </div>
     </div>
 
