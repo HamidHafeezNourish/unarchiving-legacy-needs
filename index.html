@@ -484,8 +484,6 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 /* Panel — teleported to <body> on open; position:fixed uses true viewport coords */
 .c-select-panel{
   display:none;
-  position:fixed;
-  z-index:9999;
   border:1px solid var(--p70);border-top:1px solid var(--n40);
   border-radius:0 0 8px 8px;
   background:var(--n10);
@@ -1254,33 +1252,29 @@ let sType='', sItem='', sItemLabel='', sDest=''
 
 /* ── Custom dropdown state ───────────────────────────────────────────── */
 const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 'dd-dest':{value:'',label:''} }
+const _ddPanels = new WeakMap()
 
 function _panelShow(dd){
   dd.classList.add('open')
-  const panel = dd.querySelector('.c-select-panel') || dd._panel
+  let panel = _ddPanels.get(dd) || dd.querySelector('.c-select-panel')
   if(!panel) return
-  dd._panel = panel
+  _ddPanels.set(dd, panel)
   const trigR = dd.querySelector('.c-select-trigger').getBoundingClientRect()
-  /* Teleport to body so no overflow ancestor clips it */
   document.body.appendChild(panel)
-  panel.style.position = 'fixed'   /* inline beats any CSS; body has no transform */
-  panel.style.top      = trigR.bottom + 'px'
-  panel.style.left     = trigR.left   + 'px'
-  panel.style.width    = trigR.width  + 'px'
-  panel.style.zIndex   = '9999'
-  panel.style.display  = 'block'
+  panel.removeAttribute('style')
+  panel.style.display   = 'block'
+  panel.style.position  = 'fixed'
+  panel.style.top       = trigR.bottom + 'px'
+  panel.style.left      = trigR.left + 'px'
+  panel.style.width     = trigR.width + 'px'
+  panel.style.zIndex    = '9999'
   document.getElementById('dd-backdrop').style.display = 'block'
 }
 function _panelHide(dd){
   dd.classList.remove('open')
-  const panel = dd._panel || dd.querySelector('.c-select-panel')
+  const panel = _ddPanels.get(dd) || dd.querySelector('.c-select-panel')
   if(!panel) return
-  panel.style.display  = 'none'
-  panel.style.position = ''
-  panel.style.top      = ''
-  panel.style.left     = ''
-  panel.style.width    = ''
-  panel.style.zIndex   = ''
+  panel.removeAttribute('style')   /* CSS display:none takes over */
   if(panel.parentElement !== dd) dd.appendChild(panel)
   if(!document.querySelector('.c-select.open'))
     document.getElementById('dd-backdrop').style.display = 'none'
@@ -1330,7 +1324,9 @@ function ddReset(id, placeholder){
 
 function ddSetOptions(id, items){
   const dd = document.getElementById(id)
-  const panel = dd._panel || dd.querySelector('.c-select-panel')
+  const panel = _ddPanels.get(dd) || dd.querySelector('.c-select-panel')
+  if(!panel) return
+  _ddPanels.set(dd, panel)
   if(panel.parentElement !== dd) dd.appendChild(panel)  /* return to dd before rebuilding */
   panel.innerHTML = ''
   items.forEach(item => {
