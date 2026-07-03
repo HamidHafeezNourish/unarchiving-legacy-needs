@@ -973,10 +973,10 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
             <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </div>
           <div class="c-select-panel">
-            <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-type','','Select type…')">Select type…</div>
-            <div class="c-select-opt" data-value="page" onclick="ddPick('dd-type','page','A Page')">A Page</div>
-            <div class="c-select-opt" data-value="need" onclick="ddPick('dd-type','need','A Need')">A Need</div>
-            <div class="c-select-opt" data-value="folder" onclick="ddPick('dd-type','folder','A Folder')">A Folder</div>
+            <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-type','','Select type…',event)">Select type…</div>
+            <div class="c-select-opt" data-value="page" onclick="ddPick('dd-type','page','A Page',event)">A Page</div>
+            <div class="c-select-opt" data-value="need" onclick="ddPick('dd-type','need','A Need',event)">A Need</div>
+            <div class="c-select-opt" data-value="folder" onclick="ddPick('dd-type','folder','A Folder',event)">A Folder</div>
           </div>
         </div>
       </div>
@@ -1033,37 +1033,30 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
             <svg class="c-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </div>
           <div class="c-select-panel">
-            <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-dest','','Select destination…')">Select destination…</div>
-            <div class="c-select-opt" data-value="create-new" onclick="ddPick('dd-dest','create-new','Create New Section')">+ Create New Section</div>
-            <div class="c-select-opt divider-top" data-value="behaviour" onclick="ddPick('dd-dest','behaviour','Behaviour')">Behaviour</div>
-            <div class="c-select-opt" data-value="cognition" onclick="ddPick('dd-dest','cognition','Cognition and Mental Capacity')">Cognition and Mental Capacity</div>
-            <div class="c-select-opt" data-value="communications" onclick="ddPick('dd-dest','communications','Communications')">Communications</div>
-            <div class="c-select-opt" data-value="continence" onclick="ddPick('dd-dest','continence','Continence')">Continence</div>
-            <div class="c-select-opt" data-value="cultural" onclick="ddPick('dd-dest','cultural','Cultural, Religious &amp; Spiritual')">Cultural, Religious &amp; Spiritual</div>
-            <div class="c-select-opt" data-value="daily-living" onclick="ddPick('dd-dest','daily-living','Daily Living and Environment')">Daily Living and Environment</div>
-            <div class="c-select-opt" data-value="education" onclick="ddPick('dd-dest','education','Education and Employment')">Education and Employment</div>
-            <div class="c-select-opt" data-value="medication" onclick="ddPick('dd-dest','medication','Medication and Healthcare')">Medication and Healthcare</div>
-            <div class="c-select-opt" data-value="mental-health" onclick="ddPick('dd-dest','mental-health','Mental Health')">Mental Health</div>
-            <div class="c-select-opt" data-value="mobility" onclick="ddPick('dd-dest','mobility','Mobility and Physical')">Mobility and Physical</div>
-            <div class="c-select-opt" data-value="nutrition" onclick="ddPick('dd-dest','nutrition','Nutrition and Hydration')">Nutrition and Hydration</div>
-            <div class="c-select-opt" data-value="personal-care" onclick="ddPick('dd-dest','personal-care','Personal Care and Hygiene')">Personal Care and Hygiene</div>
-            <div class="c-select-opt" data-value="sensory" onclick="ddPick('dd-dest','sensory','Sensory')">Sensory</div>
-            <div class="c-select-opt" data-value="sexuality" onclick="ddPick('dd-dest','sexuality','Sexuality and Relationships')">Sexuality and Relationships</div>
-            <div class="c-select-opt" data-value="skin" onclick="ddPick('dd-dest','skin','Skin Integrity')">Skin Integrity</div>
-            <div class="c-select-opt" data-value="sleep" onclick="ddPick('dd-dest','sleep','Sleep and Rest')">Sleep and Rest</div>
-            <div class="c-select-opt" data-value="social" onclick="ddPick('dd-dest','social','Social, Community and Recreation')">Social, Community and Recreation</div>
-            <div class="c-select-opt" data-value="specific-ltc" onclick="ddPick('dd-dest','specific-ltc','Specific LTC')">Specific LTC</div>
+            <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-dest','','Select destination…',event)">Select destination…</div>
+            <div class="c-select-opt" data-value="create-new" onclick="ddPick('dd-dest','create-new','Create New Section',event)">+ Create New Section</div>
+            <div class="c-select-opt divider-top" data-value="behaviour" onclick="ddPick('dd-dest','behaviour','Behaviour',event)">Behaviour</div>
+            <div class="c-select-opt" data-value="cognition" onclick="ddPick('dd-dest','cognition','Cognition and Mental Capacity',event)">Cognition and Mental Capacity</div>
+            <div class="c-select-opt" data-value="communications" onclick="ddPick('dd-dest','communications','Communications',event)">Communications</div>
+            <div class="c-select-opt" data-value="continence" onclick="ddPick('dd-dest','continence','Continence',event)">Continence</div>
+            <div class="c-select-opt" data-value="cultural" onclick="ddPick('dd-dest','cultural','Cultural, Religious &amp; Spiritual',event)">Cultural, Religious &amp; Spiritual</div>
+            <div class="c-select-opt" data-value="daily-living" onclick="ddPick('dd-dest','daily-living','Daily Living and Environment',event)">Daily Living and Environment</div>
+            <div class="c-select-opt" data-value="education" onclick="ddPick('dd-dest','education','Education and Employment',event)">Education and Employment</div>
+            <div class="c-select-opt" data-value="medication" onclick="ddPick('dd-dest','medication','Medication and Healthcare',event)">Medication and Healthcare</div>
+            <div class="c-select-opt" data-value="mental-health" onclick="ddPick('dd-dest','mental-health','Mental Health',event)">Mental Health</div>
+            <div class="c-select-opt" data-value="mobility" onclick="ddPick('dd-dest','mobility','Mobility and Physical',event)">Mobility and Physical</div>
+            <div class="c-select-opt" data-value="nutrition" onclick="ddPick('dd-dest','nutrition','Nutrition and Hydration',event)">Nutrition and Hydration</div>
+            <div class="c-select-opt" data-value="personal-care" onclick="ddPick('dd-dest','personal-care','Personal Care and Hygiene',event)">Personal Care and Hygiene</div>
+            <div class="c-select-opt" data-value="sensory" onclick="ddPick('dd-dest','sensory','Sensory',event)">Sensory</div>
+            <div class="c-select-opt" data-value="sexuality" onclick="ddPick('dd-dest','sexuality','Sexuality and Relationships',event)">Sexuality and Relationships</div>
+            <div class="c-select-opt" data-value="skin" onclick="ddPick('dd-dest','skin','Skin Integrity',event)">Skin Integrity</div>
+            <div class="c-select-opt" data-value="sleep" onclick="ddPick('dd-dest','sleep','Sleep and Rest',event)">Sleep and Rest</div>
+            <div class="c-select-opt" data-value="social" onclick="ddPick('dd-dest','social','Social, Community and Recreation',event)">Social, Community and Recreation</div>
+            <div class="c-select-opt" data-value="specific-ltc" onclick="ddPick('dd-dest','specific-ltc','Specific LTC',event)">Specific LTC</div>
           </div>
         </div>
       </div>
 
-      <!-- Shown only when "Create New Section" selected -->
-      <div class="new-section-field" id="new-sec-field">
-        <div class="field">
-          <label>New section name</label>
-          <input class="p-inputtext" type="text" id="new-sec-name" placeholder="e.g. Legacy wound care…" oninput="onSecName()" />
-        </div>
-      </div>
     </div><!-- /drawer-section destination -->
 
   </div><!-- /drawer-body -->
@@ -1129,7 +1122,7 @@ const DEST_LABELS = {
   'social':'Social, Community and Recreation','specific-ltc':'Specific LTC',
 }
 
-let sType='', sItem='', sItemLabel='', sDest='', newSecName=''
+let sType='', sItem='', sItemLabel='', sDest=''
 
 /* ── Custom dropdown state ───────────────────────────────────────────── */
 const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 'dd-dest':{value:'',label:''} }
@@ -1142,7 +1135,8 @@ function ddToggle(id){
   if(!wasOpen) dd.classList.add('open')
 }
 
-function ddPick(id, value, label){
+function ddPick(id, value, label, e){
+  if(e) e.stopPropagation()
   const dd = document.getElementById(id)
   dd.classList.remove('open')
   ddState[id] = { value, label }
@@ -1177,7 +1171,7 @@ function ddSetOptions(id, items){
     el.className = 'c-select-opt'
     el.dataset.value = i.id
     el.textContent = i.label
-    el.onclick = () => ddPick(id, i.id, i.label)
+    el.onclick = (e) => ddPick(id, i.id, i.label, e)
     panel.appendChild(el)
   })
 }
@@ -1240,12 +1234,10 @@ function closeDrawer(){
 /* ── Form interaction handlers ───────────────────────────────────────── */
 function handleTypeChange(){
   sType = ddState['dd-type'].value
-  sItem=''; sItemLabel=''; sDest=''; newSecName=''
+  sItem=''; sItemLabel=''; sDest=''
   ddReset('dd-item','Select item…')
   ddReset('dd-dest','Select destination…')
   ddSetEnabled('dd-dest', false)
-  document.getElementById('new-sec-field').classList.remove('show')
-  document.getElementById('new-sec-name').value = ''
   const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : sType==='folder' ? LEGACY_FOLDERS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
@@ -1268,33 +1260,20 @@ function handleItemChange(){
 
 function handleDestChange(){
   sDest = ddState['dd-dest'].value
-  const nf = document.getElementById('new-sec-field')
-  if(sDest==='create-new'){
-    nf.classList.add('show')
-  } else {
-    nf.classList.remove('show')
-    newSecName = ''
-    document.getElementById('new-sec-name').value = ''
-  }
-  sync()
-}
-
-function onSecName(){
-  newSecName = document.getElementById('new-sec-name').value.trim()
   sync()
 }
 
 function sync(){
-  const ok = sItem && sDest && (sDest!=='create-new' || newSecName)
+  const ok = sItem && sDest
   document.getElementById('restore-btn').disabled = !ok
 }
 
 /* ── Restore ─────────────────────────────────────────────────────────── */
 function doRestore(){
   addToLHS()
-  const destLabel = sDest==='create-new' ? newSecName : (DEST_LABELS[sDest]||sDest)
+  const destLabel = sDest==='create-new' ? 'New Section' : (DEST_LABELS[sDest]||sDest)
   const msg = sDest==='create-new'
-    ? `"${sItemLabel}" restored into new section "${newSecName}"`
+    ? `"${sItemLabel}" restored into a new section`
     : `"${sItemLabel}" restored to ${destLabel}`
   toast(msg)
   reset()
@@ -1313,7 +1292,7 @@ function addToLHS(){
       <div class="lhs-items">
         <div class="lhs-row" style="gap:4px">
           <div class="lhs-caret down">${CARET}</div>
-          <span>${newSecName}</span>
+          <span>New Section</span>
           <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
           <div class="lhs-new-dot" style="margin-left:auto"></div>
         </div>
@@ -1361,7 +1340,7 @@ function addToLHS(){
 }
 
 function reset(){
-  sType=''; sItem=''; sItemLabel=''; sDest=''; newSecName=''
+  sType=''; sItem=''; sItemLabel=''; sDest=''
   ddReset('dd-type','Select type…')
   ddReset('dd-item','Select item…')
   ddReset('dd-dest','Select destination…')
@@ -1369,8 +1348,6 @@ function reset(){
   ddSetEnabled('dd-item', false)
   ddSetEnabled('dd-dest', false)
   document.getElementById('browse-tree').style.display = 'none'
-  document.getElementById('new-sec-field').classList.remove('show')
-  document.getElementById('new-sec-name').value=''
   document.getElementById('restore-btn').disabled=true
   document.querySelectorAll('.bt-node').forEach(n=>n.classList.remove('selected'))
   /* dd-type stays enabled */
