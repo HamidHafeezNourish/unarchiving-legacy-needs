@@ -481,11 +481,11 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .c-select.enabled .c-select-chevron{color:var(--p90)}
 .c-select.open .c-select-chevron{transform:translateY(-50%) rotate(180deg)}
 .c-select-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* Panel — positioned via JS as position:fixed relative to drawer transform ancestor */
+/* Panel — teleported to <body> on open; position:fixed uses true viewport coords */
 .c-select-panel{
   display:none;
-  position:fixed; /* JS sets top/left/width; drawer transform makes it drawer-relative */
-  z-index:500;
+  position:fixed;
+  z-index:9999;
   border:1px solid var(--p70);border-top:1px solid var(--n40);
   border-radius:0 0 8px 8px;
   background:var(--n10);
@@ -597,11 +597,13 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .lhs-new-dot{
   width:8px;height:8px;border-radius:30px;
   background:#e6c020;border:1px solid #e6c020;flex-shrink:0;
+  margin-left:auto;
 }
 /* Hollow ring: a CHILD of this item is newly restored */
 .lhs-new-ring{
   width:10px;height:10px;border-radius:30px;
   border:1px solid #e6c020;background:transparent;flex-shrink:0;
+  margin-left:auto;
 }
 
 /* Status tag */
@@ -1255,19 +1257,22 @@ const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 
 
 function _panelShow(dd){
   dd.classList.add('open')
-  const panel  = dd.querySelector('.c-select-panel')
-  const trigR  = dd.querySelector('.c-select-trigger').getBoundingClientRect()
-  const drawR  = document.getElementById('drawer').getBoundingClientRect()
-  /* drawer has transform → fixed children are positioned relative to drawer */
-  panel.style.top   = (trigR.bottom - drawR.top) + 'px'
-  panel.style.left  = (trigR.left   - drawR.left) + 'px'
-  panel.style.width = trigR.width + 'px'
+  const panel = dd.querySelector('.c-select-panel') || dd._panel
+  if(!panel) return
+  dd._panel = panel
+  const trigR = dd.querySelector('.c-select-trigger').getBoundingClientRect()
+  document.body.appendChild(panel)
+  panel.style.top    = trigR.bottom + 'px'
+  panel.style.left   = trigR.left + 'px'
+  panel.style.width  = trigR.width + 'px'
   panel.style.display = 'block'
 }
 function _panelHide(dd){
   dd.classList.remove('open')
-  const panel = dd.querySelector('.c-select-panel')
+  const panel = dd._panel || dd.querySelector('.c-select-panel')
+  if(!panel) return
   panel.style.display = 'none'
+  if(panel.parentElement !== dd) dd.appendChild(panel)
 }
 
 function ddToggle(id, e){
@@ -1301,15 +1306,17 @@ function ddSetEnabled(id, enabled){
 
 function ddReset(id, placeholder){
   const dd = document.getElementById(id)
+  _panelHide(dd)  /* return panel to dd before querying inside it */
   ddState[id] = { value:'', label:'' }
   dd.querySelector('.c-select-value').textContent = placeholder
   dd.querySelectorAll('.c-select-opt').forEach(o => o.classList.remove('selected'))
-  _panelHide(dd)
   dd.classList.remove('filled')
 }
 
 function ddSetOptions(id, items){
-  const panel = document.getElementById(id).querySelector('.c-select-panel')
+  const dd = document.getElementById(id)
+  const panel = dd._panel || dd.querySelector('.c-select-panel')
+  if(panel.parentElement !== dd) dd.appendChild(panel)  /* return to dd before rebuilding */
   panel.innerHTML = ''
   items.forEach(item => {
     if(item.group){
@@ -1336,9 +1343,9 @@ function ddSetOptions(id, items){
   })
 }
 
-/* Close dropdowns when clicking outside */
+/* Close dropdowns when clicking outside — panel is teleported to body so also exclude it */
 document.addEventListener('click', e => {
-  if(!e.target.closest('.c-select'))
+  if(!e.target.closest('.c-select') && !e.target.closest('.c-select-panel'))
     document.querySelectorAll('.c-select.open').forEach(el => _panelHide(el))
 })
 
@@ -1379,9 +1386,9 @@ function btPick(el, id, label){
   document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
   el.classList.add('selected')
   sItem = id; sItemLabel = label
-  /* Update dd-item display directly (bypasses handleItemChange to avoid loop) */
   ddState['dd-item'] = { value: id, label }
   const ddItem = document.getElementById('dd-item')
+  _panelHide(ddItem)  /* return panel to ddItem before any querySelector */
   ddItem.querySelector('.c-select-value').textContent = label
   ddItem.classList.add('filled')
   /* Ensure option exists and is marked */
@@ -1396,7 +1403,6 @@ function btPick(el, id, label){
   }
   ddItem.querySelectorAll('.c-select-opt').forEach(o =>
     o.classList.toggle('selected', o.dataset.value === id))
-  _panelHide(ddItem)
   if(sType !== 'folder') ddSetEnabled('dd-dest', true)
   sync()
 }
