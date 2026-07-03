@@ -1261,18 +1261,33 @@ function _panelShow(dd){
   if(!panel) return
   dd._panel = panel
   const trigR = dd.querySelector('.c-select-trigger').getBoundingClientRect()
+  /* Teleport to body so no overflow ancestor clips it */
   document.body.appendChild(panel)
-  panel.style.top    = trigR.bottom + 'px'
-  panel.style.left   = trigR.left + 'px'
-  panel.style.width  = trigR.width + 'px'
-  panel.style.display = 'block'
+  panel.style.position = 'fixed'   /* inline beats any CSS; body has no transform */
+  panel.style.top      = trigR.bottom + 'px'
+  panel.style.left     = trigR.left   + 'px'
+  panel.style.width    = trigR.width  + 'px'
+  panel.style.zIndex   = '9999'
+  panel.style.display  = 'block'
+  document.getElementById('dd-backdrop').style.display = 'block'
 }
 function _panelHide(dd){
   dd.classList.remove('open')
   const panel = dd._panel || dd.querySelector('.c-select-panel')
   if(!panel) return
-  panel.style.display = 'none'
+  panel.style.display  = 'none'
+  panel.style.position = ''
+  panel.style.top      = ''
+  panel.style.left     = ''
+  panel.style.width    = ''
+  panel.style.zIndex   = ''
   if(panel.parentElement !== dd) dd.appendChild(panel)
+  if(!document.querySelector('.c-select.open'))
+    document.getElementById('dd-backdrop').style.display = 'none'
+}
+function closeAllPanels(){
+  document.querySelectorAll('.c-select.open').forEach(el => _panelHide(el))
+  document.getElementById('dd-backdrop').style.display = 'none'
 }
 
 function ddToggle(id, e){
@@ -1343,11 +1358,7 @@ function ddSetOptions(id, items){
   })
 }
 
-/* Close dropdowns when clicking outside — panel is teleported to body so also exclude it */
-document.addEventListener('click', e => {
-  if(!e.target.closest('.c-select') && !e.target.closest('.c-select-panel'))
-    document.querySelectorAll('.c-select.open').forEach(el => _panelHide(el))
-})
+/* Backdrop (z-index 9998) handles outside-click close; see #dd-backdrop in HTML */
 
 /* ── Browse tree ─────────────────────────────────────────────────────── */
 function initTree(type){
@@ -1639,5 +1650,7 @@ function initSections(){
 
 initSections()
 </script>
+<!-- Backdrop closes any open dropdown when clicking outside the panel -->
+<div id="dd-backdrop" style="display:none;position:fixed;inset:0;z-index:9998;" onclick="closeAllPanels()"></div>
 </body>
 </html>
