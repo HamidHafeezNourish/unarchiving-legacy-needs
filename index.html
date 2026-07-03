@@ -8,19 +8,67 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-/* ── Pulse tokens ──────────────────────────────────────────────────────── */
+/* ── Pulse design system tokens (from HamidHafeezNourish/pulse-components-vue-Hamid) ── */
 :root {
-  --p120:#172f2f; --p110:#214343; --p100:#2b5656; --p90:#3e7e7e;
-  --p80:#52a5a5;  --p70:#66cccc;  --p60:#85d6d6;  --p50:#a3e0e0;
-  --p40:#c2ebeb;  --p30:#d1f0f0;  --p20:#e0f5f5;  --p10:#f0fafa;
-  --n120:#36393f; --n110:#51555e; --n100:#6c727e; --n90:#878e9d;
-  --n80:#9fa5b1;  --n70:#b7bbc4;  --n60:#cfd2d8;  --n50:#dbdde2;
-  --n40:#e7e8eb;  --n30:#f3f4f5;  --n20:#f9f9fa;  --n10:#ffffff;
-  --cd6:#ba4e74;  --cd5:#dd5f8b;  --cd1:#f8dfe8;  --cd05:#fceff3;
-  --su70:#4bb97e; --su20:#edfcf4; --su10:#f6fef9;
-  --at70:#e6c020; --at10:#fcf9e9;
-  --ur70:#cc5252; --ur10:#fff5f5;
-  --ge70:#7390cd; --ge10:#f5f8ff;
+  /* Primary */
+  --pulse-color-primary-120:#172f2f; --pulse-color-primary-110:#214343;
+  --pulse-color-primary-100:#2b5656; --pulse-color-primary-90:#3e7e7e;
+  --pulse-color-primary-80:#52a5a5;  --pulse-color-primary-70:#66cccc;
+  --pulse-color-primary-60:#85d6d6;  --pulse-color-primary-50:#a3e0e0;
+  --pulse-color-primary-40:#c2ebeb;  --pulse-color-primary-30:#d1f0f0;
+  --pulse-color-primary-20:#e0f5f5;  --pulse-color-primary-10:#f0fafa;
+  /* Neutral */
+  --pulse-color-neutral-120:#36393f; --pulse-color-neutral-110:#51555e;
+  --pulse-color-neutral-100:#6c727e; --pulse-color-neutral-90:#878e9d;
+  --pulse-color-neutral-80:#9fa5b1;  --pulse-color-neutral-70:#b7bbc4;
+  --pulse-color-neutral-60:#cfd2d8;  --pulse-color-neutral-50:#dbdde2;
+  --pulse-color-neutral-40:#e7e8eb;  --pulse-color-neutral-30:#f3f4f5;
+  --pulse-color-neutral-20:#f9f9fa;  --pulse-color-neutral-10:#ffffff;
+  /* Accents */
+  --pulse-color-care-delivery-1:#f8dfe8; --pulse-color-care-delivery-2:#f1bfd1;
+  --pulse-color-care-delivery-5:#dd5f8b; --pulse-color-care-delivery-6:#ba4e74;
+  --pulse-color-pink-clay-1:#f7e7ea;  --pulse-color-pink-clay-6:#b36d7b;
+  --pulse-color-lapis-1:#dbdbec;      --pulse-color-lapis-6:#3d3c80;
+  --pulse-color-mulberry-1:#ecd9e9;   --pulse-color-mulberry-6:#813474;
+  --pulse-color-lavender-1:#e5ddf3;   --pulse-color-lavender-6:#65469b;
+  --pulse-color-jade-1:#e5ebea;       --pulse-color-jade-6:#627e76;
+  --pulse-color-ice-1:#ebf1f8;        --pulse-color-ice-6:#7e9dba;
+  --pulse-color-olive-1:#e8ecd7;      --pulse-color-olive-6:#717f2d;
+  /* Success / Attention / Urgency / General */
+  --pulse-color-success-70:#4bb97e;   --pulse-color-success-20:#edfcf4;
+  --pulse-color-attention-70:#e6c020; --pulse-color-attention-10:#fcf9e9;
+  --pulse-color-urgency-70:#cc5252;   --pulse-color-urgency-10:#fff5f5;
+  --pulse-color-general-70:#7390cd;   --pulse-color-general-10:#f5f8ff;
+  /* Typography scale (from typography.css) */
+  --pulse-font-size-caption-small:clamp(11px,10.6667px + 0.0926vw,12px);
+  --pulse-font-size-caption-regular:clamp(12px,11.3333px + 0.1852vw,14px);
+  --pulse-font-size-small:clamp(15px,14.7143px + 0.0893vw,16px);
+  --pulse-font-size-regular:clamp(16px,15.4286px + 0.1786vw,18px);
+  --pulse-font-size-large:clamp(18px,17.4286px + 0.1786vw,20px);
+  --pulse-font-size-xlarge:clamp(20px,18.8571px + 0.3571vw,24px);
+  --pulse-font-size-xxlarge:clamp(24px,21.7143px + 0.7143vw,32px);
+  --pulse-font-weight-light:300; --pulse-font-weight-regular:400;
+  --pulse-font-weight-strong:500; --pulse-font-weight-bold:700;
+
+  /* Shorthand aliases (for internal use) */
+  --p120:var(--pulse-color-primary-120); --p110:var(--pulse-color-primary-110);
+  --p100:var(--pulse-color-primary-100); --p90:var(--pulse-color-primary-90);
+  --p80:var(--pulse-color-primary-80);   --p70:var(--pulse-color-primary-70);
+  --p60:var(--pulse-color-primary-60);   --p50:var(--pulse-color-primary-50);
+  --p40:var(--pulse-color-primary-40);   --p30:var(--pulse-color-primary-30);
+  --p20:var(--pulse-color-primary-20);   --p10:var(--pulse-color-primary-10);
+  --n120:var(--pulse-color-neutral-120); --n110:var(--pulse-color-neutral-110);
+  --n100:var(--pulse-color-neutral-100); --n90:var(--pulse-color-neutral-90);
+  --n80:var(--pulse-color-neutral-80);   --n70:var(--pulse-color-neutral-70);
+  --n60:var(--pulse-color-neutral-60);   --n50:var(--pulse-color-neutral-50);
+  --n40:var(--pulse-color-neutral-40);   --n30:var(--pulse-color-neutral-30);
+  --n20:var(--pulse-color-neutral-20);   --n10:var(--pulse-color-neutral-10);
+  --cd6:var(--pulse-color-care-delivery-6); --cd5:var(--pulse-color-care-delivery-5);
+  --cd1:var(--pulse-color-care-delivery-1); --cd05:#fceff3;
+  --su70:var(--pulse-color-success-70);  --su20:var(--pulse-color-success-20);
+  --at70:var(--pulse-color-attention-70);--at10:var(--pulse-color-attention-10);
+  --ur70:var(--pulse-color-urgency-70);  --ur10:var(--pulse-color-urgency-10);
+  --ge70:var(--pulse-color-general-70);  --ge10:var(--pulse-color-general-10);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -190,30 +238,57 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .main::-webkit-scrollbar{width:4px}
 .main::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
 
-/* Patient header */
+/* Patient header — matches CarePlanHome.vue .cph__patient-header */
 .patient-bar{
-  background:var(--n10);border-bottom:1px solid var(--n40);
-  padding:32px 32px 16px;display:flex;align-items:flex-start;gap:16px;flex-shrink:0;
+  background:var(--pulse-color-neutral-10);
+  border-bottom:1px solid var(--pulse-color-neutral-40);
+  padding:32px 32px 16px;
+  display:flex;flex-direction:column;gap:8px;flex-shrink:0;
 }
+.patient-avatar-row{display:flex;align-items:center;gap:16px}
 .patient-avatar{
-  width:68px;height:68px;border-radius:50%;background:#172b34;
+  width:68px;height:68px;border-radius:50%;
+  background:var(--pulse-color-primary-120);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden;
+  font-size:22px;font-weight:var(--pulse-font-weight-bold);
+  color:var(--pulse-color-neutral-10);flex-shrink:0;overflow:hidden;
 }
 .patient-avatar img{width:100%;height:100%;object-fit:cover}
-.patient-nameline{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
-.patient-name{font-size:24px;font-family:'FS Me',sans-serif;font-weight:700;color:#172b34;line-height:1.2}
-.patient-age{font-size:24px;font-family:'FS Me',sans-serif;font-weight:400;color:#172b34;line-height:1.2}
+.patient-nameline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px}
+.patient-name{
+  font-family:'FS Me',sans-serif;
+  font-size:var(--pulse-font-size-xlarge);
+  font-weight:var(--pulse-font-weight-bold);
+  color:var(--pulse-color-primary-120);
+}
+.patient-age{
+  font-family:'FS Me',sans-serif;
+  font-size:var(--pulse-font-size-xlarge);
+  font-weight:var(--pulse-font-weight-regular);
+  color:var(--pulse-color-primary-120);
+}
+/* Tags row indented to align with name (avatar 68 + gap 16 = 84px) */
+.patient-tags{display:flex;gap:8px;padding-left:84px}
 .patient-tag{
-  display:inline-flex;align-items:center;gap:4px;margin-top:13px;
-  font-size:12.25px;font-weight:700;font-family:'Inter',sans-serif;color:#475569;
-  background:#f3f4f5;padding:3.5px 7px;border-radius:4px;border:none;
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:var(--pulse-font-size-caption-small);
+  font-weight:var(--pulse-font-weight-bold);
+  font-family:'Inter',sans-serif;
+  color:var(--pulse-color-neutral-120);
+  background:var(--pulse-color-neutral-30);
+  padding:3.5px 7px;border-radius:4px;
 }
 .patient-tag svg{width:10.5px;height:10.5px;flex-shrink:0}
 
-/* Sections */
-.content-section{padding:20px 28px 0}
-.section-heading{font-size:16px;font-weight:700;color:var(--n120);margin-bottom:12px}
+/* Sections — matches .cph__section-heading */
+.content-section{padding:20px 32px 0}
+.section-heading{
+  font-family:'FS Me',sans-serif;
+  font-size:var(--pulse-font-size-xlarge);
+  font-weight:var(--pulse-font-weight-bold);
+  color:var(--pulse-color-neutral-120);
+  margin-bottom:16px;
+}
 
 /* Search */
 .search-wrap{
@@ -240,62 +315,120 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .carousel-card .cat{font-size:11px;color:var(--cd6);margin-top:2px}
 .carousel-card .change{font-size:12px;color:var(--n100);margin-top:6px}
 
-/* Section cards */
+/* Section/admin cards — matches .cph__list-item + .cph__list-item-btn */
 .section-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
 .section-card{
   display:flex;align-items:center;gap:16px;
-  padding:12px 21px;min-height:88px;
-  border:1px solid #f3f4f5;border-radius:5px;
-  background:var(--n10);
+  padding:0 16px;min-height:120px;
+  border-radius:8px;
+  box-shadow:0 1px 1.5px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.1);
+  background:var(--pulse-color-neutral-10);
+  transition:background .12s;cursor:pointer;
 }
+.section-card:hover{background:var(--pulse-color-neutral-20)}
 .sc-icon{
-  width:48px;height:48px;border-radius:100px;background:var(--p20);
+  width:50px;height:50px;border-radius:100px;background:var(--pulse-color-primary-20);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
-.sc-icon svg{width:28px;height:28px;color:var(--p90)}
-.sc-body{flex:1;min-width:0}
-.sc-body h4{font-size:18px;font-family:'FS Me',sans-serif;font-weight:700;color:#2b5656;line-height:1;margin:0}
-.sc-body p{font-size:12px;font-family:'Inter',sans-serif;color:#6c727e;margin-top:3px;line-height:1.3}
-.sc-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.sc-icon svg{width:28px;height:28px;color:var(--pulse-color-primary-90)}
+.sc-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding:24px 0}
+.sc-body h4{
+  font-family:'FS Me',sans-serif;
+  font-size:var(--pulse-font-size-large);
+  font-weight:var(--pulse-font-weight-bold);
+  color:var(--pulse-color-primary-120);
+  line-height:1;margin:0;
+}
+.sc-body p{
+  font-family:'Inter',sans-serif;
+  font-size:var(--pulse-font-size-caption-regular);
+  font-weight:var(--pulse-font-weight-regular);
+  color:var(--pulse-color-neutral-100);
+  margin:0;line-height:1.35;
+}
+.sc-tags{display:flex;gap:6px;flex-wrap:wrap}
+/* Stats column (right side) — matches .cph__item-stats + .cph__stat */
+.sc-stats{display:flex;align-items:center;flex-shrink:0}
+.sc-stat{
+  display:flex;align-items:center;gap:8px;
+  min-width:120px;padding:8px;
+  font-family:'Inter',sans-serif;
+  font-size:var(--pulse-font-size-regular);
+  font-weight:var(--pulse-font-weight-regular);
+  color:var(--pulse-color-neutral-100);
+}
+.sc-stat svg{width:20px;height:20px;flex-shrink:0;color:var(--pulse-color-neutral-80)}
 
-/* All Care Domains list */
+/* All Care Domains list — matches .cph__domains-section + .cph__list */
 .domain-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+/* Domain row — matches .cph__list-item + .cph__list-item-btn */
 .domain-row{
   display:flex;align-items:center;gap:16px;
-  padding:12px 21px;min-height:112px;
-  border:1px solid #f3f4f5;border-radius:5px;
-  background:var(--n10);
+  padding:0 16px;min-height:120px;
+  border-radius:8px;
+  box-shadow:0 1px 1.5px rgba(0,0,0,.1),0 1px 1px rgba(0,0,0,.1);
+  background:var(--pulse-color-neutral-10);
   cursor:pointer;transition:background .12s;
+  text-decoration:none;color:inherit;
 }
-.domain-row:hover{background:var(--n20)}
+.domain-row:hover{background:var(--pulse-color-neutral-20)}
+/* Icon bubble — matches .cph__icon-bubble */
 .domain-icon{
-  width:48px;height:48px;border-radius:100px;
+  width:50px;height:50px;border-radius:100px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .domain-icon svg{width:28px;height:28px}
-.domain-body{flex:1;min-width:0}
+/* Item body — matches .cph__item-body */
+.domain-body{flex:1;display:flex;flex-direction:column;gap:4px;padding:24px 0;min-width:0}
 .domain-body h4{
-  font-size:18px;font-family:'FS Me',sans-serif;font-weight:700;
-  color:#2b5656;line-height:1;margin:0;
+  font-family:'FS Me',sans-serif;
+  font-size:var(--pulse-font-size-large);
+  font-weight:var(--pulse-font-weight-bold);
+  color:var(--pulse-color-primary-120);
+  line-height:1;margin:0;
 }
 .domain-body p{
-  font-size:12px;font-family:'Inter',sans-serif;
-  color:#6c727e;line-height:1.3;margin-top:3px;
+  font-family:'Inter',sans-serif;
+  font-size:var(--pulse-font-size-caption-small);
+  font-weight:var(--pulse-font-weight-regular);
+  color:var(--pulse-color-neutral-100);
+  margin:0;line-height:1.35;
   display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
 }
-.domain-body .sc-tags{margin-top:6px}
+/* Stats column (right) — matches .cph__item-stats + .cph__stat */
+.domain-stats{display:flex;align-items:center;flex-shrink:0}
+.domain-stat{
+  display:flex;align-items:center;gap:8px;
+  min-width:120px;padding:8px;
+  font-family:'Inter',sans-serif;
+  font-size:var(--pulse-font-size-regular);
+  font-weight:var(--pulse-font-weight-regular);
+  color:var(--pulse-color-neutral-100);
+}
+.domain-stat svg{width:20px;height:20px;flex-shrink:0;color:var(--pulse-color-neutral-80)}
 
-/* Chips / tags */
+/* PulseTag equivalents — colour names from PulseTag.vue */
 .chip{
-  display:inline-flex;align-items:center;gap:3px;
-  font-size:12px;font-weight:400;font-family:'Inter',sans-serif;
-  padding:4px;border-radius:4px;white-space:nowrap;color:#36393f;
+  display:inline-flex;align-items:center;gap:3.5px;
+  font-family:'Inter',sans-serif;
+  font-size:var(--pulse-font-size-caption-small);
+  font-weight:var(--pulse-font-weight-regular);
+  padding:3.5px 7px;border-radius:4px;white-space:nowrap;
+  color:var(--pulse-color-neutral-120);
 }
 .chip svg{width:10.5px;height:10.5px;flex-shrink:0}
-.chip-pink{background:#f7e7ea;color:#36393f}
-.chip-green{background:#dbdbec;color:#36393f}
-.chip-blue{background:#ecd9e9;color:#36393f}
-.chip-amber{background:var(--at10);color:#85600a}
+/* pink-clay (Needs) */
+.chip-pink{background:var(--pulse-color-pink-clay-1);color:var(--pulse-color-neutral-120)}
+/* lapis (Logs) */
+.chip-green{background:var(--pulse-color-lapis-1);color:var(--pulse-color-neutral-120)}
+/* mulberry (Documents) */
+.chip-blue{background:var(--pulse-color-mulberry-1);color:var(--pulse-color-neutral-120)}
+/* attention */
+.chip-amber{background:var(--pulse-color-attention-10);color:#85600a}
+/* success */
+.chip-success{background:var(--pulse-color-success-20);color:var(--pulse-color-success-70)}
+/* urgency */
+.chip-urgency{background:var(--pulse-color-urgency-10);color:var(--pulse-color-urgency-70)}
 
 /* Carousel pagination dots */
 .carousel-dots{display:flex;align-items:center;gap:4px;margin-bottom:12px}
@@ -610,14 +743,16 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   <!-- ── Main content ────────────────────────────────────────────────────── -->
   <main class="main">
 
-    <!-- Patient -->
+    <!-- Patient header — matches CarePlanHome.vue cph__patient-header -->
     <div class="patient-bar">
-      <div class="patient-avatar">IH</div>
-      <div>
+      <div class="patient-avatar-row">
+        <div class="patient-avatar">IH</div>
         <div class="patient-nameline">
           <span class="patient-name">Isabel Hill</span>
           <span class="patient-age">(82 Years old)</span>
         </div>
+      </div>
+      <div class="patient-tags">
         <div class="patient-tag">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>
           Nursing
@@ -625,7 +760,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
       </div>
     </div>
 
-    <!-- Section -->
+    <!-- Section (admin) — matches CarePlanHome.vue cph__admin-section -->
     <div class="content-section">
       <div class="section-heading">Section</div>
       <div class="section-cards">
@@ -633,44 +768,42 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
           <div class="sc-body">
             <h4>Archive</h4>
-            <p>Understanding and responding to behavioural patterns with proactive strategies that promote safety, dignity, and emotional regulation in order to better provide substantial...</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink">Needs 13</span>
-              <span class="chip chip-blue">Page 4</span>
-              <span class="chip chip-green">Section 2</span>
-            </div>
+            <p>Understanding and responding to behavioural patterns with proactive strategies that promote safety, dignity, and emotional regulation.</p>
+          </div>
+          <div class="sc-stats">
+            <div class="sc-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="sc-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>4</span><span>Pages</span></div>
           </div>
         </div>
         <div class="section-card">
-          <div class="sc-icon" style="background:var(--su20)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="color:var(--su70)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="sc-icon" style="background:var(--pulse-color-success-20)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="color:var(--pulse-color-success-70)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
           <div class="sc-body">
             <h4>Recommendations</h4>
-            <p>Leila S Hassan Covers nutritional planning, allergy management, and assistance with meal preparation to promote autonomy and health.</p>
-            <div class="sc-tags">
-              <span class="chip chip-green">Added 13</span>
-              <span class="chip" style="background:var(--ur10);color:var(--ur70)">Removed 4</span>
-              <span class="chip chip-amber">Modified 2</span>
-            </div>
+            <p>Covers nutritional planning, allergy management, and assistance with meal preparation to promote autonomy and health.</p>
+          </div>
+          <div class="sc-stats">
+            <div class="sc-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>13</span><span>Added</span></div>
+            <div class="sc-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>4</span><span>Removed</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- All Care Domains -->
+    <!-- All Care Domains — matches CarePlanHome.vue cph__domains-section -->
     <div class="content-section" style="padding-top:20px">
       <div class="section-heading">All Care Domains</div>
       <div class="domain-list" id="domain-list">
 
         <div class="domain-row">
-          <div class="domain-icon" style="background:#f8dfe8"><svg viewBox="0 0 24 24" fill="none" stroke="#ba4e74" stroke-width="1.75"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="domain-icon" style="background:var(--pulse-color-care-delivery-1)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pulse-color-care-delivery-6)" stroke-width="1.75"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
           <div class="domain-body">
             <h4>Behaviour</h4>
-            <p>Understanding and responding to behavioural patterns with proactive strategies that promote safety, dignity, and emotional regulation in order to better provide substantial...</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Logs 4</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+            <p>Understanding and responding to behavioural patterns with proactive strategies that promote safety, dignity, and emotional regulation.</p>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>4</span><span>Logs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
@@ -679,75 +812,75 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <div class="domain-body">
             <h4>Nutrition and Hydration</h4>
             <p>Covers nutritional planning, allergy management, and assistance with meal preparation to promote autonomy and health.</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Logs 4</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>4</span><span>Logs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
         <div class="domain-row">
-          <div class="domain-icon" style="background:#e4daf5"><svg viewBox="0 0 24 24" fill="none" stroke="#512da8" stroke-width="1.75"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div class="domain-icon" style="background:var(--pulse-color-lavender-1)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pulse-color-lavender-6)" stroke-width="1.75"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg></div>
           <div class="domain-body">
             <h4>Cognition and Mental Capacity</h4>
             <p>Includes emotional check-ins, coping strategies, and access to therapeutic resources to support psychological resilience.</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Logs 4</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>4</span><span>Logs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
         <div class="domain-row">
-          <div class="domain-icon" style="background:#d5ecd9"><svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="1.75"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="domain-icon" style="background:var(--pulse-color-jade-1)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pulse-color-jade-6)" stroke-width="1.75"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <div class="domain-body">
             <h4>Communication</h4>
             <p>Supporting effective expression and understanding through tailored communication strategies and assistive tools.</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Logs 4</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>4</span><span>Logs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
         <div class="domain-row">
-          <div class="domain-icon" style="background:#fce4ec"><svg viewBox="0 0 24 24" fill="none" stroke="#c2185b" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div class="domain-icon" style="background:var(--pulse-color-pink-clay-1)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pulse-color-pink-clay-6)" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
           <div class="domain-body">
             <h4>Cultural, Religious and Spiritual Identity</h4>
-            <p>Personal beliefs and practices integrated into daily care through meaningful rituals, dietary needs, and observances.</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Logs 4</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+            <p>Personal beliefs integrated into daily care through meaningful rituals, dietary needs, and observances.</p>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>4</span><span>Logs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
         <div class="domain-row">
-          <div class="domain-icon" style="background:#daeaf8"><svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="1.75"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="domain-icon" style="background:var(--pulse-color-ice-1)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pulse-color-ice-6)" stroke-width="1.75"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
           <div class="domain-body">
             <h4>Daily Living and Environment</h4>
             <p>Routines, physical surroundings, and adaptive tools to foster independence and wellbeing in everyday life.</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Logs 4</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>4</span><span>Logs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
         <div class="domain-row">
-          <div class="domain-icon" style="background:#ede0f5"><svg viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="1.75"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div class="domain-icon" style="background:var(--pulse-color-olive-1)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pulse-color-olive-6)" stroke-width="1.75"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
           <div class="domain-body">
             <h4>Education &amp; Employment</h4>
             <p>Facilitates access to learning and work opportunities through tailored support, accommodations, and goal-setting.</p>
-            <div class="sc-tags">
-              <span class="chip chip-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Needs 13</span>
-              <span class="chip chip-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documents 2</span>
-            </div>
+          </div>
+          <div class="domain-stats">
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>13</span><span>Needs</span></div>
+            <div class="domain-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>2</span><span>Documents</span></div>
           </div>
         </div>
 
