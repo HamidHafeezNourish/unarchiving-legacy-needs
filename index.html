@@ -479,7 +479,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   display:none;
   border-top:1px solid var(--n40);
   background:var(--n10);
-  max-height:220px;overflow-y:auto;
+  max-height:280px;overflow-y:auto;
 }
 .c-select-panel::-webkit-scrollbar{width:3px}
 .c-select-panel::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
@@ -493,6 +493,13 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .c-select-opt.selected{background:var(--p20);font-weight:500}
 .c-select-opt.is-placeholder{color:var(--n80)}
 .c-select-opt.divider-top{border-top:1px solid var(--n40);margin-top:4px}
+.c-select-opt.indented{padding-left:24px;font-size:15px}
+.c-select-group-hdr{
+  padding:8px 14px 3px;font-size:11px;font-weight:600;
+  color:var(--n80);letter-spacing:.05em;text-transform:uppercase;
+  background:var(--n20);cursor:default;border-top:1px solid var(--n30);
+}
+.c-select-group-hdr:first-child{border-top:none}
 
 /* Browse tree — Figma 743-25700 */
 .browse-tree-wrap{
@@ -525,6 +532,12 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
   color:#36393f;flex:1;min-width:0;
 }
 .bt-node.selected .bt-node-label{font-weight:500}
+.bt-node.indented{padding-left:52px}
+.bt-group-hdr{
+  padding:8px 14px 2px;font-size:11px;font-weight:600;
+  color:var(--n80);letter-spacing:.05em;text-transform:uppercase;
+  cursor:default;
+}
 .bt-divider{height:1px;background:#e7e8eb;margin:2px 8px}
 
 /* Divider between sections */
@@ -1077,39 +1090,141 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 
 <script>
 /* ── Legacy archive data ─────────────────────────────────────────────── */
-const LEGACY_PAGES = [
-  {id:'behaviour',      label:'Behaviour'},
-  {id:'cognitive',      label:'Cognitive and Mental Capacity'},
-  {id:'communications', label:'Communications'},
-  {id:'continence',     label:'Continence'},
-  {id:'cultural',       label:'Cultural, Religious and Spiritual'},
-  {id:'daily-living',   label:'Daily Living and Environment'},
-  {id:'education',      label:'Education and Employment'},
-  {id:'medication',     label:'Medication and Healthcare'},
-  {id:'mental-health',  label:'Mental Health'},
-  {id:'nutrition',      label:'Nutrition and Hydration'},
-  {id:'personal-care',  label:'Personal Care and Hygiene'},
-  {id:'sensory',        label:'Sensory'},
-  {id:'sexuality',      label:'Sexuality and Relationships'},
-  {id:'skin',           label:'Skin Integrity'},
-  {id:'sleep',          label:'Sleep and Rest'},
-  {id:'social',         label:'Social, Community and Recreation'},
-  {id:'specific-ltc',   label:'Specific LTC'},
+/* ── 10 care folders (shown when type = folder) ──────────────────────── */
+const CARE_FOLDERS = [
+  {id:'cf-health',    label:'Health & Medical'},
+  {id:'cf-personal',  label:'Personal Care & Hygiene'},
+  {id:'cf-mental',    label:'Mental Health & Wellbeing'},
+  {id:'cf-nutrition', label:'Nutrition & Hydration'},
+  {id:'cf-mobility',  label:'Mobility & Physical Activity'},
+  {id:'cf-comms',     label:'Communication & Sensory'},
+  {id:'cf-daily',     label:'Daily Living & Environment'},
+  {id:'cf-social',    label:'Social & Community'},
+  {id:'cf-education', label:'Education & Employment'},
+  {id:'cf-cultural',  label:'Cultural, Spiritual & Relationships'},
 ]
-const LEGACY_NEEDS = [
-  {id:'n1',label:'Assistance with bathing'},
-  {id:'n2',label:'Weekly physiotherapy'},
-  {id:'n3',label:'Dietary assessment referral'},
-  {id:'n4',label:'Cognitive stimulation activities'},
-  {id:'n5',label:'Social isolation support'},
+
+/* ── Pages grouped by care folder (shown when type = page) ───────────── */
+const LEGACY_PAGES_GROUPED = [
+  { group:'Health & Medical', items:[
+    {id:'medication',    label:'Medication and Healthcare'},
+    {id:'skin',          label:'Skin Integrity'},
+    {id:'specific-ltc',  label:'Specific LTC'},
+    {id:'continence',    label:'Continence'},
+  ]},
+  { group:'Personal Care & Hygiene', items:[
+    {id:'personal-care', label:'Personal Care & Hygiene'},
+    {id:'sleep',         label:'Sleep and Rest'},
+  ]},
+  { group:'Mental Health & Wellbeing', items:[
+    {id:'mental-health', label:'Mental Health'},
+    {id:'behaviour',     label:'Behaviour'},
+    {id:'cognition',     label:'Cognitive and Mental Capacity'},
+  ]},
+  { group:'Nutrition & Hydration', items:[
+    {id:'nutrition',     label:'Nutrition and Hydration'},
+  ]},
+  { group:'Mobility & Physical Activity', items:[
+    {id:'mobility',      label:'Mobility and Physical'},
+  ]},
+  { group:'Communication & Sensory', items:[
+    {id:'communications',label:'Communications'},
+    {id:'sensory',       label:'Sensory'},
+  ]},
+  { group:'Daily Living & Environment', items:[
+    {id:'daily-living',  label:'Daily Living and Environment'},
+  ]},
+  { group:'Social & Community', items:[
+    {id:'social',        label:'Social, Community and Recreation'},
+  ]},
+  { group:'Education & Employment', items:[
+    {id:'education',     label:'Education and Employment'},
+  ]},
+  { group:'Cultural, Spiritual & Relationships', items:[
+    {id:'cultural',      label:'Cultural, Religious & Spiritual'},
+    {id:'sexuality',     label:'Sexuality and Relationships'},
+  ]},
 ]
-const LEGACY_FOLDERS = [
-  {id:'f1',label:'Health & Wellbeing'},
-  {id:'f2',label:'Daily Routine'},
-  {id:'f3',label:'Social Engagement'},
-  {id:'f4',label:'Personal Development'},
-  {id:'f5',label:'Risk Management'},
+
+/* ── Needs grouped by care folder (shown when type = need) ───────────── */
+const LEGACY_NEEDS_GROUPED = [
+  { group:'Health & Medical', items:[
+    {id:'n-med1', label:'Medication administration plan'},
+    {id:'n-med2', label:'Allergy alert'},
+    {id:'n-med3', label:'Medication review schedule'},
+    {id:'n-skin1',label:'Pressure sore prevention'},
+    {id:'n-skin2',label:'Wound care plan'},
+    {id:'n-cont1',label:'Continence assessment'},
+    {id:'n-cont2',label:'Catheter care plan'},
+  ]},
+  { group:'Personal Care & Hygiene', items:[
+    {id:'n-pc1',  label:'Bathing and showering'},
+    {id:'n-pc2',  label:'Oral hygiene'},
+    {id:'n-pc3',  label:'Hair and nail care'},
+    {id:'n-sl1',  label:'Sleep assessment'},
+    {id:'n-sl2',  label:'Night-time routine'},
+  ]},
+  { group:'Mental Health & Wellbeing', items:[
+    {id:'n-mh1',  label:'Mental health assessment'},
+    {id:'n-mh2',  label:'Anxiety management plan'},
+    {id:'n-mh3',  label:'Crisis management plan'},
+    {id:'n-beh1', label:'Managing challenging behaviour'},
+    {id:'n-beh2', label:'De-escalation strategies'},
+    {id:'n-cog1', label:'Cognitive assessment'},
+    {id:'n-cog2', label:'Memory support plan'},
+  ]},
+  { group:'Nutrition & Hydration', items:[
+    {id:'n-nut1', label:'Diet Need'},
+    {id:'n-nut2', label:'General Nutrition and Hydration'},
+    {id:'n-nut3', label:'Dysphagia / Swallowing'},
+    {id:'n-nut4', label:'Food Allergies'},
+    {id:'n-nut5', label:'Enteral Feeding'},
+  ]},
+  { group:'Mobility & Physical Activity', items:[
+    {id:'n-mob1', label:'Mobility assessment'},
+    {id:'n-mob2', label:'Moving and handling plan'},
+    {id:'n-mob3', label:'Falls prevention strategy'},
+    {id:'n-mob4', label:'Physiotherapy needs'},
+  ]},
+  { group:'Communication & Sensory', items:[
+    {id:'n-com1', label:'Communication passport'},
+    {id:'n-com2', label:'Speech therapy referral'},
+    {id:'n-com3', label:'Augmentative and alternative communication'},
+    {id:'n-sen1', label:'Visual impairment support'},
+    {id:'n-sen2', label:'Hearing impairment support'},
+  ]},
+  { group:'Daily Living & Environment', items:[
+    {id:'n-dl1',  label:'Personal hygiene assistance'},
+    {id:'n-dl2',  label:'Meal preparation support'},
+    {id:'n-dl3',  label:'Domestic tasks'},
+    {id:'n-dl4',  label:'Shopping and errands'},
+  ]},
+  { group:'Social & Community', items:[
+    {id:'n-soc1', label:'Social activities plan'},
+    {id:'n-soc2', label:'Community engagement'},
+    {id:'n-soc3', label:'Recreation and hobbies'},
+  ]},
+  { group:'Education & Employment', items:[
+    {id:'n-edu1', label:'Learning goals and objectives'},
+    {id:'n-edu2', label:'Employment support plan'},
+    {id:'n-edu3', label:'Vocational training'},
+  ]},
+  { group:'Cultural, Spiritual & Relationships', items:[
+    {id:'n-cul1', label:'Cultural beliefs and preferences'},
+    {id:'n-cul2', label:'Religious observance needs'},
+    {id:'n-sex1', label:'Relationships and intimacy'},
+    {id:'n-sex2', label:'Safe relationship guidance'},
+  ]},
 ]
+
+/* Helper: flatten grouped list to find an item by id */
+function findInGrouped(grouped, id){
+  for(const g of grouped){
+    const found = g.items.find(i => i.id === id)
+    if(found) return found
+  }
+  return null
+}
 const DEST_LABELS = {
   'behaviour':'Behaviour','cognition':'Cognition and Mental Capacity',
   'communications':'Communications','continence':'Continence',
@@ -1166,13 +1281,28 @@ function ddReset(id, placeholder){
 function ddSetOptions(id, items){
   const panel = document.getElementById(id).querySelector('.c-select-panel')
   panel.innerHTML = ''
-  items.forEach(i => {
-    const el = document.createElement('div')
-    el.className = 'c-select-opt'
-    el.dataset.value = i.id
-    el.textContent = i.label
-    el.onclick = (e) => ddPick(id, i.id, i.label, e)
-    panel.appendChild(el)
+  items.forEach(item => {
+    if(item.group){
+      const hdr = document.createElement('div')
+      hdr.className = 'c-select-group-hdr'
+      hdr.textContent = item.group
+      panel.appendChild(hdr)
+      item.items.forEach(i => {
+        const el = document.createElement('div')
+        el.className = 'c-select-opt indented'
+        el.dataset.value = i.id
+        el.textContent = i.label
+        el.onclick = (e) => ddPick(id, i.id, i.label, e)
+        panel.appendChild(el)
+      })
+    } else {
+      const el = document.createElement('div')
+      el.className = 'c-select-opt'
+      el.dataset.value = item.id
+      el.textContent = item.label
+      el.onclick = (e) => ddPick(id, item.id, item.label, e)
+      panel.appendChild(el)
+    }
   })
 }
 
@@ -1183,16 +1313,36 @@ document.addEventListener('click', e => {
 })
 
 /* ── Browse tree ─────────────────────────────────────────────────────── */
-function initTree(){
+function initTree(type){
   const c = document.getElementById('bt-main')
-  LEGACY_PAGES.forEach(p => {
-    const d = document.createElement('div')
-    d.className = 'bt-node'
-    d.dataset.id = p.id
-    d.innerHTML = `<span class="bt-node-label">${p.label}</span>`
-    d.addEventListener('click', () => btPick(d, p.id, p.label))
-    c.appendChild(d)
-  })
+  c.innerHTML = ''
+  if(!type) return
+  if(type === 'folder'){
+    CARE_FOLDERS.forEach(f => {
+      const d = document.createElement('div')
+      d.className = 'bt-node'
+      d.dataset.id = f.id
+      d.innerHTML = `<span class="bt-node-label">${f.label}</span>`
+      d.addEventListener('click', () => btPick(d, f.id, f.label))
+      c.appendChild(d)
+    })
+  } else {
+    const groups = type === 'page' ? LEGACY_PAGES_GROUPED : LEGACY_NEEDS_GROUPED
+    groups.forEach(grp => {
+      const hdr = document.createElement('div')
+      hdr.className = 'bt-group-hdr'
+      hdr.textContent = grp.group
+      c.appendChild(hdr)
+      grp.items.forEach(i => {
+        const d = document.createElement('div')
+        d.className = 'bt-node indented'
+        d.dataset.id = i.id
+        d.innerHTML = `<span class="bt-node-label">${i.label}</span>`
+        d.addEventListener('click', () => btPick(d, i.id, i.label))
+        c.appendChild(d)
+      })
+    })
+  }
 }
 
 function btPick(el, id, label){
@@ -1238,18 +1388,20 @@ function handleTypeChange(){
   ddReset('dd-item','Select item…')
   ddReset('dd-dest','Select destination…')
   ddSetEnabled('dd-dest', false)
-  const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : sType==='folder' ? LEGACY_FOLDERS : []
+  const items = sType==='page' ? LEGACY_PAGES_GROUPED : sType==='need' ? LEGACY_NEEDS_GROUPED : sType==='folder' ? CARE_FOLDERS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
   document.getElementById('browse-tree').style.display = sType ? '' : 'none'
-  document.querySelectorAll('.bt-node').forEach(n => n.classList.remove('selected'))
+  initTree(sType)
   sync()
 }
 
 function handleItemChange(){
   sItem = ddState['dd-item'].value
-  const items = sType==='page' ? LEGACY_PAGES : sType==='folder' ? LEGACY_FOLDERS : LEGACY_NEEDS
-  const found = items.find(i => i.id===sItem)
+  let found = null
+  if(sType === 'folder') found = CARE_FOLDERS.find(i => i.id===sItem)
+  else if(sType === 'page') found = findInGrouped(LEGACY_PAGES_GROUPED, sItem)
+  else found = findInGrouped(LEGACY_NEEDS_GROUPED, sItem)
   sItemLabel = found ? found.label : ''
   document.querySelectorAll('.bt-node').forEach(n =>
     n.classList.toggle('selected', n.dataset.id===sItem))
@@ -1426,7 +1578,6 @@ function initSections(){
   }
 }
 
-initTree()
 initSections()
 </script>
 </body>
