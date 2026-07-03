@@ -199,10 +199,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .lhs-caret{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .lhs-caret svg{width:12px;height:12px;color:var(--n80)}
 .lhs-caret.down svg{transform:rotate(90deg)}
-/* Leaf items: dot bullet */
-.lhs-caret.dot{position:relative}
-.lhs-caret.dot::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--n70);display:block;margin:auto}
-.lhs-caret.dot svg{display:none}
+/* Leaf items: dot bullet — explicit span avoids pseudo-element rendering artifacts */
+.lhs-dot{width:5px;height:5px;border-radius:50%;background:var(--n70);display:block;flex-shrink:0}
 
 /* Indentation */
 .lhs-row.l1{padding-left:20px}
@@ -452,21 +450,22 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 }
 .field .hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--n100);margin-top:-2px}
 
-/* Custom Pulse-styled dropdown — replaces native <select> */
-.c-select{position:relative;width:100%;user-select:none}
+/* Custom Pulse-styled dropdown — inline panel (no absolute positioning) */
+.c-select{width:100%;user-select:none;border:1px solid var(--n40);border-radius:8px;overflow:hidden;}
 .c-select-trigger{
-  width:100%;height:52px;border:1px solid var(--n40);border-radius:8px;
+  width:100%;height:52px;border:none;border-radius:0;
   background:var(--n30);font-size:16px;color:var(--n80);
   font-family:'Inter',sans-serif;padding:0 40px 0 12px;
-  display:flex;align-items:center;cursor:not-allowed;
-  transition:border-color .15s,box-shadow .15s,background .15s;
+  display:flex;align-items:center;cursor:not-allowed;position:relative;
+  transition:background .15s,color .15s;
 }
 .c-select.enabled .c-select-trigger{
-  border-color:var(--p50);background:var(--n10);color:var(--p120);cursor:pointer;
+  background:var(--n10);color:var(--p120);cursor:pointer;
 }
-.c-select.enabled .c-select-trigger:hover{border-color:var(--p70)}
+.c-select.enabled .c-select-trigger:hover{background:var(--p10)}
 .c-select.filled .c-select-trigger{background:var(--p10)}
-.c-select.open .c-select-trigger{border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
+.c-select.open{border-color:var(--p70);box-shadow:0 0 0 3px rgba(102,204,204,.2)}
+.c-select.open .c-select-trigger{background:var(--n10)}
 .c-select-chevron{
   position:absolute;right:12px;top:50%;transform:translateY(-50%);
   width:16px;height:16px;pointer-events:none;color:var(--n60);
@@ -475,11 +474,12 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .c-select.enabled .c-select-chevron{color:var(--p90)}
 .c-select.open .c-select-chevron{transform:translateY(-50%) rotate(180deg)}
 .c-select-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Panel is inline — sits below trigger, hidden by default */
 .c-select-panel{
-  display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;
-  background:var(--n10);border:1px solid var(--n50);border-radius:8px;
-  box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:999;
-  max-height:240px;overflow-y:auto;padding:4px 0;
+  display:none;
+  border-top:1px solid var(--n40);
+  background:var(--n10);
+  max-height:220px;overflow-y:auto;
 }
 .c-select-panel::-webkit-scrollbar{width:3px}
 .c-select-panel::-webkit-scrollbar-thumb{background:var(--n50);border-radius:2px}
@@ -714,37 +714,26 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
             Care Plan
           </div>
 
-          <!-- L1 items — right caret = collapsed -->
-          <div class="lhs-row l1" data-section="behaviour"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Behaviour</div>
-          <div class="lhs-row l1" data-section="cognition"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capac...</div>
-          <div class="lhs-row l1" data-section="communications"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Communications</div>
-          <div class="lhs-row l1" data-section="continence"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Continence</div>
-          <div class="lhs-row l1" data-section="cultural"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritua...</div>
-          <div class="lhs-row l1" data-section="daily-living"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Daily Living and Environment</div>
-          <div class="lhs-row l1" data-section="education"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Education and Employment</div>
-          <div class="lhs-row l1" data-section="medication"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Medication and Healthcare</div>
-          <div class="lhs-row l1" data-section="mental-health"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mental Health</div>
-          <div class="lhs-row l1" data-section="mobility"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mobility and Physical</div>
-
-          <!-- Nutrition — expanded (down caret) -->
-          <div class="lhs-row l1" data-section="nutrition"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Nutrition and Hydration</div>
-
-          <!-- L2 items — dot bullet (no svg/ — CSS ::after draws the dot) -->
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Diet Need</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>General Nutrition and Hyd...</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Dysphagia / Swallowing</div>
-          <div class="lhs-row l2 selected"><div class="lhs-caret dot"></div>Food Allergies</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Enteral Feeding</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Weight Management</div>
-
-          <!-- Remaining L1 collapsed -->
-          <div class="lhs-row l1" data-section="personal-care"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Personal Care &amp; Hygiene</div>
-          <div class="lhs-row l1" data-section="sensory"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sensory</div>
-          <div class="lhs-row l1" data-section="sexuality"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sexuality and Relationship</div>
-          <div class="lhs-row l1" data-section="skin"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Skin Integrity</div>
-          <div class="lhs-row l1" data-section="sleep"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sleep And Rest</div>
-          <div class="lhs-row l1" data-section="social"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recr...</div>
-          <div class="lhs-row l1" data-section="specific-ltc"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Specific LTC</div>
+          <!-- L1 domain rows — clickable to expand/collapse up to 5 needs -->
+          <div class="lhs-row l1" data-section="behaviour" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Behaviour</div>
+          <div class="lhs-row l1" data-section="cognition" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cognition and Mental Capac...</div>
+          <div class="lhs-row l1" data-section="communications" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Communications</div>
+          <div class="lhs-row l1" data-section="continence" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Continence</div>
+          <div class="lhs-row l1" data-section="cultural" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Cultural, Religious &amp; Spiritua...</div>
+          <div class="lhs-row l1" data-section="daily-living" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Daily Living and Environment</div>
+          <div class="lhs-row l1" data-section="education" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Education and Employment</div>
+          <div class="lhs-row l1" data-section="medication" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Medication and Healthcare</div>
+          <div class="lhs-row l1" data-section="mental-health" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mental Health</div>
+          <div class="lhs-row l1" data-section="mobility" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Mobility and Physical</div>
+          <!-- Nutrition — starts expanded, JS inserts children on init -->
+          <div class="lhs-row l1" data-section="nutrition" data-expanded="true" onclick="toggleSection(this)"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Nutrition and Hydration</div>
+          <div class="lhs-row l1" data-section="personal-care" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Personal Care &amp; Hygiene</div>
+          <div class="lhs-row l1" data-section="sensory" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sensory</div>
+          <div class="lhs-row l1" data-section="sexuality" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sexuality and Relationship</div>
+          <div class="lhs-row l1" data-section="skin" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Skin Integrity</div>
+          <div class="lhs-row l1" data-section="sleep" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Sleep And Rest</div>
+          <div class="lhs-row l1" data-section="social" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Social, Community and Recr...</div>
+          <div class="lhs-row l1" data-section="specific-ltc" onclick="toggleSection(this)"><div class="lhs-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Specific LTC</div>
 
         </div>
 
@@ -755,8 +744,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <!-- Section Page group 1 -->
           <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
           <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Need 1</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Need 2</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><span class="lhs-dot"></span></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><span class="lhs-dot"></span></div>Need 2</div>
         </div>
 
         <!-- Divider -->
@@ -766,7 +755,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <!-- Section Page group 2 -->
           <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
           <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret dot"><span class="lhs-dot"></span></div>Need 1</div>
         </div>
 
         <!-- Divider -->
@@ -1320,7 +1309,7 @@ function addToLHS(){
           <div class="lhs-new-dot" style="margin-left:auto"></div>
         </div>
         <div class="lhs-row l2" style="gap:4px">
-          <div class="lhs-caret dot"></div>
+          <div class="lhs-caret dot"><span class="lhs-dot"></span></div>
           <span>${sItemLabel}</span>
           <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
           <div class="lhs-new-dot" style="margin-left:auto"></div>
@@ -1346,11 +1335,12 @@ function addToLHS(){
         insertAfter = next
         next = next.nextElementSibling
       }
-      /* Create the new child row */
+      /* Create the new child row — data-restored so collapse won't remove it */
       const newRow = document.createElement('div')
       newRow.className = 'lhs-row l2'
+      newRow.dataset.restored = 'true'
       newRow.innerHTML = `
-        <div class="lhs-caret dot"></div>
+        <div class="lhs-caret dot"><span class="lhs-dot"></span></div>
         <span>${sItemLabel}</span>
         <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
         <div class="lhs-new-dot" style="margin-left:auto"></div>`
@@ -1385,7 +1375,73 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'),3800)
 }
 
+/* ── LHS section needs data ──────────────────────────────────────────── */
+const SECTION_NEEDS = {
+  'behaviour':     ['Managing challenging behaviour','Behavioural risk assessment','De-escalation strategies','Positive behaviour support plan','Emotional regulation'],
+  'cognition':     ['Cognitive assessment','Memory support plan','Decision-making support','Mental capacity assessment','Reminiscence therapy'],
+  'communications':['Communication passport','Augmentative and alternative communication','Speech therapy referral','Sign language support','Easy-read materials'],
+  'continence':    ['Continence assessment','Catheter care plan','Bowel management plan','Toileting routine','Incontinence product needs'],
+  'cultural':      ['Cultural beliefs and preferences','Religious observance needs','Dietary requirements','Language and translation','Festival and ceremony needs'],
+  'daily-living':  ['Personal hygiene assistance','Dressing and undressing','Meal preparation support','Domestic tasks','Shopping and errands'],
+  'education':     ['Learning goals and objectives','Employment support plan','Vocational training','Financial independence','Literacy and numeracy'],
+  'medication':    ['Medication administration plan','PRN medication protocol','Controlled drug management','Allergy alert','Medication review schedule'],
+  'mental-health': ['Mental health assessment','Anxiety management plan','Mood monitoring','Crisis management plan','Therapeutic activities'],
+  'mobility':      ['Mobility assessment','Moving and handling plan','Falls prevention strategy','Physiotherapy needs','Wheelchair and equipment'],
+  'nutrition':     ['Diet Need','General Nutrition and Hydration','Dysphagia / Swallowing','Food Allergies','Enteral Feeding'],
+  'personal-care': ['Bathing and showering','Oral hygiene','Hair and nail care','Skin care routine','Shaving and grooming'],
+  'sensory':       ['Visual impairment support','Hearing impairment support','Sensory processing needs','Assistive technology','Sensory environment'],
+  'sexuality':     ['Relationships and intimacy','Sexuality and gender identity','Safe relationship guidance','Safeguarding considerations','Privacy and dignity'],
+  'skin':          ['Pressure sore prevention','Wound care plan','Skin integrity assessment','Emollient therapy','Moisture-associated skin damage'],
+  'sleep':         ['Sleep assessment','Night-time routine','Sleep hygiene plan','Night monitoring needs','Relaxation techniques'],
+  'social':        ['Social activities plan','Community engagement','Recreation and hobbies','Visitor management','Peer relationships'],
+  'specific-ltc':  ['Chronic condition management','Specialist referral plan','Long-term condition monitoring','Symptom management','Carer coordination'],
+}
+
+/* ── LHS section expand/collapse ─────────────────────────────────────── */
+function toggleSection(el){
+  const key = el.dataset.section
+  if(!key) return
+  const expanded = el.dataset.expanded === 'true'
+  const caret = el.querySelector('.lhs-caret')
+  if(expanded){
+    /* Remove SECTION_NEEDS rows; keep any restored items */
+    let next = el.nextElementSibling
+    while(next && next.classList.contains('l2')){
+      const cur = next
+      next = next.nextElementSibling
+      if(!cur.dataset.restored) cur.remove()
+    }
+    el.dataset.expanded = 'false'
+    /* Keep caret open if a restored child still exists */
+    const stillHasChild = el.nextElementSibling && el.nextElementSibling.classList.contains('l2')
+    if(caret && !stillHasChild) caret.classList.remove('down')
+  } else {
+    const needs = (SECTION_NEEDS[key] || []).slice(0, 5)
+    /* Insert needs before any existing restored children */
+    let insertAfter = el
+    let nextSib = el.nextElementSibling
+    needs.forEach(label => {
+      const row = document.createElement('div')
+      row.className = 'lhs-row l2'
+      row.innerHTML = `<div class="lhs-caret dot"><span class="lhs-dot"></span></div><span>${label}</span>`
+      el.parentNode.insertBefore(row, nextSib)
+      insertAfter = row
+    })
+    el.dataset.expanded = 'true'
+    if(caret) caret.classList.add('down')
+  }
+}
+
+function initSections(){
+  const nutritionRow = document.querySelector('.lhs-row.l1[data-section="nutrition"]')
+  if(nutritionRow){
+    nutritionRow.dataset.expanded = 'false'
+    toggleSection(nutritionRow)
+  }
+}
+
 initTree()
+initSections()
 </script>
 </body>
 </html>
