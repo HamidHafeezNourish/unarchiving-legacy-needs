@@ -1253,6 +1253,7 @@ let sType='', sItem='', sItemLabel='', sDest=''
 /* ── Custom dropdown state ───────────────────────────────────────────── */
 const ddState = { 'dd-type':{value:'',label:''}, 'dd-item':{value:'',label:''}, 'dd-dest':{value:'',label:''} }
 const _ddPanels = new WeakMap()
+const _ddDelegates = new WeakSet()
 
 function _panelShow(dd){
   dd.classList.add('open')
@@ -1327,7 +1328,19 @@ function ddSetOptions(id, items){
   const panel = _ddPanels.get(dd) || dd.querySelector('.c-select-panel')
   if(!panel) return
   _ddPanels.set(dd, panel)
-  if(panel.parentElement !== dd) dd.appendChild(panel)  /* return to dd before rebuilding */
+  if(panel.parentElement !== dd) dd.appendChild(panel)
+
+  /* One delegated listener on the panel — survives innerHTML rebuilds */
+  if(!_ddDelegates.has(panel)){
+    _ddDelegates.add(panel)
+    panel.addEventListener('click', function(e){
+      e.stopPropagation()
+      const opt = e.target.closest('.c-select-opt')
+      if(!opt || !opt.dataset.value) return
+      ddPick(id, opt.dataset.value, opt.textContent.trim(), e)
+    })
+  }
+
   panel.innerHTML = ''
   items.forEach(item => {
     if(item.group){
@@ -1340,7 +1353,6 @@ function ddSetOptions(id, items){
         el.className = 'c-select-opt indented'
         el.dataset.value = i.id
         el.textContent = i.label
-        el.onclick = (e) => ddPick(id, i.id, i.label, e)
         panel.appendChild(el)
       })
     } else {
@@ -1348,7 +1360,6 @@ function ddSetOptions(id, items){
       el.className = 'c-select-opt'
       el.dataset.value = item.id
       el.textContent = item.label
-      el.onclick = (e) => ddPick(id, item.id, item.label, e)
       panel.appendChild(el)
     }
   })
