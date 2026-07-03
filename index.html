@@ -481,9 +481,11 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
 .c-select.enabled .c-select-chevron{color:var(--p90)}
 .c-select.open .c-select-chevron{transform:translateY(-50%) rotate(180deg)}
 .c-select-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* Panel — teleported to <body> on open; position:fixed uses true viewport coords */
+/* Panel — teleported to <body> on open; position:fixed is default so panel
+   never pushes flow content even if inline styles fail mid-function */
 .c-select-panel{
   display:none;
+  position:fixed;
   border:1px solid var(--p70);border-top:1px solid var(--n40);
   border-radius:0 0 8px 8px;
   background:var(--n10);
@@ -1456,7 +1458,7 @@ function handleTypeChange(){
   const items = sType==='page' ? CARE_FOLDERS : sType==='need' ? LEGACY_NEEDS_GROUPED : sType==='folder' ? CARE_FOLDERS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
-  document.getElementById('browse-tree').style.display = sType ? '' : 'none'
+  document.getElementById('browse-tree').style.display = 'none'
   /* Destination not needed for folders — they become new top-level sections */
   document.getElementById('dest-section').style.display = sType==='folder' ? 'none' : ''
   initTree(sType)
@@ -1470,8 +1472,6 @@ function handleItemChange(){
   else if(sType === 'page') found = CARE_FOLDERS.find(i => i.id===sItem)
   else found = findInGrouped(LEGACY_NEEDS_GROUPED, sItem)
   sItemLabel = found ? found.label : ''
-  document.querySelectorAll('.bt-node').forEach(n =>
-    n.classList.toggle('selected', n.dataset.id===sItem))
   if(sType !== 'folder'){
     ddSetEnabled('dd-dest', !!sItem)
     if(!sItem){ ddReset('dd-dest','Select destination…'); sDest='' }
