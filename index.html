@@ -1301,8 +1301,8 @@ function ddToggle(id, e){
 
 function ddPick(id, value, label, e){
   if(e) e.stopPropagation()
+  closeAllPanels()
   const dd = document.getElementById(id)
-  _panelHide(dd)
   ddState[id] = { value, label }
   dd.querySelector('.c-select-value').textContent = label
   dd.querySelectorAll('.c-select-opt').forEach(o =>
@@ -1375,21 +1375,32 @@ function initTree(type){
       c.appendChild(d)
     })
   } else {
-    const groups = type === 'page' ? LEGACY_PAGES_GROUPED : LEGACY_NEEDS_GROUPED
-    groups.forEach(grp => {
-      const hdr = document.createElement('div')
-      hdr.className = 'bt-group-hdr'
-      hdr.textContent = grp.group
-      c.appendChild(hdr)
-      grp.items.forEach(i => {
+    if(type === 'page'){
+      CARE_FOLDERS.forEach(f => {
         const d = document.createElement('div')
-        d.className = 'bt-node indented'
-        d.dataset.id = i.id
-        d.innerHTML = `<span class="bt-node-label">${i.label}</span>`
-        d.addEventListener('click', () => btPick(d, i.id, i.label))
+        d.className = 'bt-node'
+        d.dataset.id = f.id
+        d.innerHTML = `<span class="bt-node-label">${f.label}</span>`
+        d.addEventListener('click', () => btPick(d, f.id, f.label))
         c.appendChild(d)
       })
-    })
+    } else {
+      const groups = LEGACY_NEEDS_GROUPED
+      groups.forEach(grp => {
+        const hdr = document.createElement('div')
+        hdr.className = 'bt-group-hdr'
+        hdr.textContent = grp.group
+        c.appendChild(hdr)
+        grp.items.forEach(i => {
+          const d = document.createElement('div')
+          d.className = 'bt-node indented'
+          d.dataset.id = i.id
+          d.innerHTML = `<span class="bt-node-label">${i.label}</span>`
+          d.addEventListener('click', () => btPick(d, i.id, i.label))
+          c.appendChild(d)
+        })
+      })
+    }
   }
 }
 
@@ -1435,7 +1446,7 @@ function handleTypeChange(){
   ddReset('dd-item','Select item…')
   ddReset('dd-dest','Select destination…')
   ddSetEnabled('dd-dest', false)
-  const items = sType==='page' ? LEGACY_PAGES_GROUPED : sType==='need' ? LEGACY_NEEDS_GROUPED : sType==='folder' ? CARE_FOLDERS : []
+  const items = sType==='page' ? CARE_FOLDERS : sType==='need' ? LEGACY_NEEDS_GROUPED : sType==='folder' ? CARE_FOLDERS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
   document.getElementById('browse-tree').style.display = sType ? '' : 'none'
@@ -1449,7 +1460,7 @@ function handleItemChange(){
   sItem = ddState['dd-item'].value
   let found = null
   if(sType === 'folder') found = CARE_FOLDERS.find(i => i.id===sItem)
-  else if(sType === 'page') found = findInGrouped(LEGACY_PAGES_GROUPED, sItem)
+  else if(sType === 'page') found = CARE_FOLDERS.find(i => i.id===sItem)
   else found = findInGrouped(LEGACY_NEEDS_GROUPED, sItem)
   sItemLabel = found ? found.label : ''
   document.querySelectorAll('.bt-node').forEach(n =>
