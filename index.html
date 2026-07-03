@@ -4,740 +4,899 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Unarchiving Legacy Needs — Care Plan Prototype</title>
+
+  <!-- Google Fonts: Inter (Pulse body font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
   <style>
+    /* ─── Pulse Design Tokens ─────────────────────────────────────────────── */
+    :root {
+      /* Primary */
+      --pulse-color-primary-120: #172f2f;
+      --pulse-color-primary-110: #214343;
+      --pulse-color-primary-100: #2b5656;
+      --pulse-color-primary-90:  #3e7e7e;
+      --pulse-color-primary-80:  #52a5a5;
+      --pulse-color-primary-70:  #66cccc;
+      --pulse-color-primary-60:  #85d6d6;
+      --pulse-color-primary-50:  #a3e0e0;
+      --pulse-color-primary-40:  #c2ebeb;
+      --pulse-color-primary-30:  #d1f0f0;
+      --pulse-color-primary-20:  #e0f5f5;
+      --pulse-color-primary-10:  #f0fafa;
+
+      /* Neutral */
+      --pulse-color-neutral-130: #000000;
+      --pulse-color-neutral-120: #36393f;
+      --pulse-color-neutral-110: #51555e;
+      --pulse-color-neutral-100: #6c727e;
+      --pulse-color-neutral-90:  #878e9d;
+      --pulse-color-neutral-80:  #9fa5b1;
+      --pulse-color-neutral-70:  #b7bbc4;
+      --pulse-color-neutral-60:  #cfd2d8;
+      --pulse-color-neutral-50:  #dbdde2;
+      --pulse-color-neutral-40:  #e7e8eb;
+      --pulse-color-neutral-30:  #f3f4f5;
+      --pulse-color-neutral-20:  #f9f9fa;
+      --pulse-color-neutral-10:  #ffffff;
+
+      /* Semantic */
+      --pulse-color-success-70: #4bb97e;
+      --pulse-color-success-20: #edfcf4;
+      --pulse-color-success-10: #f6fef9;
+      --pulse-color-urgency-70: #cc5252;
+      --pulse-color-urgency-20: #fee7e7;
+      --pulse-color-urgency-10: #fff5f5;
+      --pulse-color-error-70:   #f77321;
+      --pulse-color-error-10:   #fef1e9;
+      --pulse-color-general-70: #7390cd;
+      --pulse-color-general-10: #f5f8ff;
+      --pulse-color-attention-70: #e6c020;
+      --pulse-color-attention-10: #fcf9e9;
+
+      /* Typography */
+      --pulse-font-size-caption-small:   clamp(11px, 10.6667px + 0.0926vw, 12px);
+      --pulse-font-size-caption-regular: clamp(12px, 11.3333px + 0.1852vw, 14px);
+      --pulse-font-size-small:   clamp(15px, 14.7143px + 0.0893vw, 16px);
+      --pulse-font-size-regular: clamp(16px, 15.4286px + 0.1786vw, 18px);
+      --pulse-font-size-large:   clamp(18px, 17.4286px + 0.1786vw, 20px);
+      --pulse-font-size-xlarge:  clamp(20px, 18.8571px + 0.3571vw, 24px);
+      --pulse-font-size-xxlarge: clamp(24px, 21.7143px + 0.7143vw, 32px);
+
+      --pulse-font-weight-light:   300;
+      --pulse-font-weight-regular: 400;
+      --pulse-font-weight-strong:  500;
+      --pulse-font-weight-bold:    700;
+
+      /* Spacing */
+      --pulse-space-3xs: clamp(2px,   1.4286px + 0.1786vw, 4px);
+      --pulse-space-2xs: clamp(4px,   3.7143px + 0.0893vw, 5px);
+      --pulse-space-xs:  clamp(8px,   7.7143px + 0.0893vw, 9px);
+      --pulse-space-s:   clamp(16px, 15.4286px + 0.1786vw, 18px);
+      --pulse-space-m:   clamp(24px, 23.1429px + 0.2679vw, 27px);
+      --pulse-space-l:   clamp(32px, 30.8571px + 0.3571vw, 36px);
+      --pulse-space-s-m: clamp(16px, 12.8571px + 0.9821vw, 27px);
+    }
+
+    /* ─── Reset & Base ────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --teal-dark:   #1a5c55;
-      --teal-mid:    #2a7a70;
-      --teal-light:  #e8f4f2;
-      --teal-border: #c2deda;
-      --text-primary: #1a2e2c;
-      --text-secondary: #5a7672;
-      --text-muted:  #8aa8a4;
-      --surface:     #ffffff;
-      --surface-alt: #f5f8f7;
-      --border:      #dde8e6;
-      --disabled-bg: #f0f4f3;
-      --disabled-text: #b0c4c1;
-      --accent-red:  #c84b3e;
-      --shadow-sm:   0 1px 3px rgba(0,0,0,.08);
-      --shadow-md:   0 4px 16px rgba(0,0,0,.12);
-      --shadow-lg:   0 8px 32px rgba(0,0,0,.18);
-    }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #e9eef0;
+      font-family: 'Inter', sans-serif;
+      font-size: var(--pulse-font-size-small);
+      font-weight: var(--pulse-font-weight-regular);
+      color: var(--pulse-color-neutral-120);
+      background: var(--pulse-color-neutral-30);
       height: 100vh;
       overflow: hidden;
-      color: var(--text-primary);
     }
 
-    /* ── TOP NAV ── */
+    /* ─── Top Nav ─────────────────────────────────────────────────────────── */
     .top-nav {
       height: 52px;
-      background: var(--teal-dark);
+      background: var(--pulse-color-primary-120);
       display: flex;
       align-items: center;
-      padding: 0 16px;
-      gap: 28px;
+      padding: 0 var(--pulse-space-s);
+      gap: var(--pulse-space-s);
       position: relative;
       z-index: 10;
     }
-    .top-nav .logo {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: .5px;
-      margin-right: 8px;
+    .top-nav-logo {
+      font-size: var(--pulse-font-size-large);
+      font-weight: var(--pulse-font-weight-bold);
+      color: var(--pulse-color-neutral-10);
+      letter-spacing: 0.5px;
+      margin-right: var(--pulse-space-xs);
     }
-    .top-nav a {
-      color: rgba(255,255,255,.75);
-      font-size: 13px;
-      text-decoration: none;
+    .top-nav-link {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background .15s;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: var(--pulse-font-size-caption-regular);
+      font-weight: var(--pulse-font-weight-regular);
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: transparent;
+      font-family: inherit;
     }
-    .top-nav a:hover { background: rgba(255,255,255,.12); color:#fff; }
-    .top-nav a.active { color:#fff; background: rgba(255,255,255,.15); }
-    .top-nav .nav-icon { width:16px; height:16px; opacity:.8; }
-    .top-nav .spacer { flex:1; }
-    .top-nav .avatar {
+    .top-nav-link:hover { background: rgba(255,255,255,0.1); color: var(--pulse-color-neutral-10); }
+    .top-nav-link.active {
+      background: rgba(255,255,255,0.15);
+      color: var(--pulse-color-neutral-10);
+      font-weight: var(--pulse-font-weight-strong);
+    }
+    .top-nav-link svg { width: 16px; height: 16px; }
+    .top-nav-spacer { flex: 1; }
+    .top-nav-avatar {
       width: 32px; height: 32px;
       border-radius: 50%;
-      background: var(--teal-mid);
-      border: 2px solid rgba(255,255,255,.3);
+      background: var(--pulse-color-primary-90);
+      border: 2px solid rgba(255,255,255,0.25);
       display: flex; align-items: center; justify-content: center;
-      color:#fff; font-size:12px; font-weight:600;
+      color: var(--pulse-color-neutral-10);
+      font-size: var(--pulse-font-size-caption-small);
+      font-weight: var(--pulse-font-weight-bold);
     }
 
-    /* ── LAYOUT ── */
-    .layout {
+    /* ─── App Layout ──────────────────────────────────────────────────────── */
+    .app-layout {
       display: flex;
       height: calc(100vh - 52px);
       overflow: hidden;
     }
 
-    /* ── LEFT ICON RAIL ── */
+    /* ─── Icon Rail ───────────────────────────────────────────────────────── */
     .icon-rail {
       width: 48px;
-      background: var(--teal-dark);
+      background: var(--pulse-color-primary-110);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px 0;
-      gap: 4px;
+      padding: var(--pulse-space-xs) 0;
+      gap: var(--pulse-space-3xs);
       flex-shrink: 0;
     }
-    .icon-rail button {
+    .icon-rail-btn {
       width: 36px; height: 36px;
-      border: none; background: transparent;
+      border: none;
+      background: transparent;
       border-radius: 8px;
-      color: rgba(255,255,255,.6);
+      color: rgba(255,255,255,0.55);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background .15s, color .15s;
+      transition: background 0.15s, color 0.15s;
     }
-    .icon-rail button:hover { background: rgba(255,255,255,.12); color:#fff; }
-    .icon-rail button.active { background: rgba(255,255,255,.2); color:#fff; }
-    .icon-rail button svg { width:18px; height:18px; }
+    .icon-rail-btn:hover { background: rgba(255,255,255,0.1); color: var(--pulse-color-neutral-10); }
+    .icon-rail-btn.active {
+      background: var(--pulse-color-primary-100);
+      color: var(--pulse-color-primary-70);
+    }
+    .icon-rail-btn svg { width: 18px; height: 18px; }
 
-    /* ── LEFT SIDEBAR ── */
+    /* ─── Sidebar (PulseCard / sidebar pattern) ───────────────────────────── */
     .sidebar {
       width: 260px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
+      background: var(--pulse-color-neutral-10);
+      border-right: 1px solid var(--pulse-color-neutral-50);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       flex-shrink: 0;
     }
-    .sidebar-header {
-      padding: 14px 16px 10px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+
+    .sidebar-patient {
+      padding: var(--pulse-space-xs) var(--pulse-space-s);
+      border-bottom: 1px solid var(--pulse-color-neutral-40);
     }
-    .sidebar-header .patient-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .sidebar-patient-name {
+      font-size: var(--pulse-font-size-small);
+      font-weight: var(--pulse-font-weight-bold);
+      color: var(--pulse-color-primary-120);
     }
-    .sidebar-header .patient-sub {
-      font-size: 11px;
-      color: var(--text-secondary);
+    .sidebar-patient-sub {
+      font-size: var(--pulse-font-size-caption-small);
+      color: var(--pulse-color-neutral-100);
+      margin-top: 2px;
     }
+
     .sidebar-actions {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
+      padding: var(--pulse-space-xs) var(--pulse-space-s);
+      border-bottom: 1px solid var(--pulse-color-neutral-40);
       display: flex;
-      gap: 6px;
+      gap: var(--pulse-space-xs);
     }
-    .sidebar-actions button {
+
+    /* Secondary button (Pulse secondary style) */
+    .btn-secondary {
       flex: 1;
-      padding: 5px 8px;
-      border: 1px solid var(--teal-border);
-      background: var(--surface);
+      padding: 5px var(--pulse-space-xs);
+      background: var(--pulse-color-primary-10);
+      border: 1px solid var(--pulse-color-primary-100);
       border-radius: 6px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--teal-dark);
+      font-size: var(--pulse-font-size-caption-small);
+      font-weight: var(--pulse-font-weight-regular);
+      color: var(--pulse-color-neutral-120);
       cursor: pointer;
-      transition: background .15s;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s;
     }
-    .sidebar-actions button:hover { background: var(--teal-light); }
+    .btn-secondary:hover { background: var(--pulse-color-primary-20); }
 
     .sidebar-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 8px 0;
+      padding: var(--pulse-space-xs) 0;
     }
-    .sidebar-scroll::-webkit-scrollbar { width: 4px; }
-    .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius:2px; }
+    .sidebar-scroll::-webkit-scrollbar { width: 3px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: var(--pulse-color-neutral-50);
+      border-radius: 2px;
+    }
 
-    .sidebar-section-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .6px;
+    .sidebar-group-label {
+      font-size: var(--pulse-font-size-caption-small);
+      font-weight: var(--pulse-font-weight-bold);
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      color: var(--text-muted);
-      padding: 10px 16px 4px;
+      color: var(--pulse-color-neutral-90);
+      padding: var(--pulse-space-xs) var(--pulse-space-s) var(--pulse-space-3xs);
     }
+
     .sidebar-divider {
       height: 1px;
-      background: var(--border);
-      margin: 6px 12px;
+      background: var(--pulse-color-neutral-40);
+      margin: var(--pulse-space-xs) var(--pulse-space-s);
     }
+
     .sidebar-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 5px 12px 5px 16px;
-      font-size: 12.5px;
-      color: var(--text-primary);
+      gap: var(--pulse-space-xs);
+      padding: 5px var(--pulse-space-s);
+      font-size: var(--pulse-font-size-caption-regular);
+      font-weight: var(--pulse-font-weight-regular);
+      color: var(--pulse-color-neutral-120);
       cursor: pointer;
-      border-radius: 0;
-      transition: background .12s;
+      transition: background 0.12s;
       user-select: none;
-      position: relative;
     }
-    .sidebar-item:hover { background: var(--surface-alt); }
-    .sidebar-item.active { background: var(--teal-light); color: var(--teal-dark); font-weight:600; }
-    .sidebar-item .item-icon { width:14px; height:14px; color: var(--text-muted); flex-shrink:0; }
-    .sidebar-item.active .item-icon { color: var(--teal-dark); }
-    .sidebar-item .badge {
-      margin-left: auto;
-      background: var(--teal-mid);
-      color: #fff;
-      font-size: 9px;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 99px;
-      min-width: 16px;
-      text-align: center;
+    .sidebar-item:hover { background: var(--pulse-color-neutral-30); }
+    .sidebar-item.active {
+      background: var(--pulse-color-primary-10);
+      color: var(--pulse-color-primary-120);
+      font-weight: var(--pulse-font-weight-strong);
     }
+    .sidebar-item svg { width: 14px; height: 14px; color: var(--pulse-color-neutral-90); flex-shrink: 0; }
+    .sidebar-item.active svg { color: var(--pulse-color-primary-90); }
     .sidebar-item.indent { padding-left: 32px; }
-    .sidebar-item.indent2 { padding-left: 44px; }
+    .sidebar-item.indent2 { padding-left: 46px; }
 
-    /* Unarchived content item — bottom of sidebar */
+    /* PulseTag-style badge */
+    .sidebar-badge {
+      margin-left: auto;
+      background: var(--pulse-color-primary-40);
+      color: var(--pulse-color-primary-120);
+      font-size: var(--pulse-font-size-caption-small);
+      font-weight: var(--pulse-font-weight-bold);
+      padding: 1px 6px;
+      border-radius: 99px;
+      line-height: 1.5;
+    }
+    .sidebar-badge.success {
+      background: var(--pulse-color-success-20);
+      color: var(--pulse-color-success-70);
+    }
+
+    /* Unarchived content trigger — bottom of sidebar */
     .sidebar-unarchive {
-      margin-top: auto;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--pulse-color-neutral-40);
     }
     .sidebar-unarchive .sidebar-item {
-      color: var(--teal-mid);
-      font-weight: 500;
+      color: var(--pulse-color-primary-90);
+      font-weight: var(--pulse-font-weight-strong);
+      padding: var(--pulse-space-xs) var(--pulse-space-s);
     }
-    .sidebar-unarchive .sidebar-item:hover { background: var(--teal-light); }
-    .sidebar-unarchive .sidebar-item svg { color: var(--teal-mid); }
+    .sidebar-unarchive .sidebar-item:hover { background: var(--pulse-color-primary-10); }
+    .sidebar-unarchive .sidebar-item svg { color: var(--pulse-color-primary-70); }
 
-    /* Dynamic restored items */
-    .restored-badge {
-      background: #e6f4ea;
-      color: #1e7e34;
-      font-size: 9px;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 3px;
-      margin-left: auto;
-    }
-
-    /* ── MAIN CONTENT ── */
+    /* ─── Main Content ────────────────────────────────────────────────────── */
     .main {
       flex: 1;
-      background: var(--surface-alt);
+      background: var(--pulse-color-neutral-30);
       overflow-y: auto;
-      position: relative;
     }
     .main-header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
+      background: var(--pulse-color-neutral-10);
+      border-bottom: 1px solid var(--pulse-color-neutral-50);
+      padding: var(--pulse-space-s) var(--pulse-space-m);
     }
-    .main-header h1 {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .main-title {
+      font-size: var(--pulse-font-size-large);
+      font-weight: var(--pulse-font-weight-bold);
+      color: var(--pulse-color-primary-120);
     }
-    .main-header p {
-      font-size: 12px;
-      color: var(--text-secondary);
+    .main-subtitle {
+      font-size: var(--pulse-font-size-caption-regular);
+      color: var(--pulse-color-neutral-100);
       margin-top: 2px;
     }
-    .domains-grid {
-      padding: 20px 24px;
+    .domain-grid {
+      padding: var(--pulse-space-m);
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 12px;
-    }
-    .domain-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      box-shadow: var(--shadow-sm);
-    }
-    .domain-card h3 { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-    .domain-card p { font-size: 11.5px; color: var(--text-secondary); margin-top: 4px; line-height:1.4; }
-    .domain-card .domain-meta {
-      margin-top: 10px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .domain-chip {
-      font-size: 10.5px;
-      padding: 2px 8px;
-      border-radius: 99px;
-      background: var(--teal-light);
-      color: var(--teal-dark);
-      font-weight: 500;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--pulse-space-s);
     }
 
-    /* ── OVERLAY ── */
+    /* PulseCard */
+    .pulse-card {
+      background: var(--pulse-color-neutral-10);
+      border: 1px solid var(--pulse-color-neutral-50);
+      border-radius: 8px;
+      padding: var(--pulse-space-s);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .pulse-card h3 {
+      font-size: var(--pulse-font-size-small);
+      font-weight: var(--pulse-font-weight-bold);
+      color: var(--pulse-color-primary-120);
+    }
+    .pulse-card p {
+      font-size: var(--pulse-font-size-caption-regular);
+      color: var(--pulse-color-neutral-100);
+      margin-top: var(--pulse-space-3xs);
+      line-height: 1.5;
+    }
+    .card-tags {
+      display: flex;
+      gap: var(--pulse-space-xs);
+      margin-top: var(--pulse-space-xs);
+      flex-wrap: wrap;
+    }
+
+    /* PulseTag */
+    .pulse-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--pulse-font-size-caption-small);
+      font-weight: var(--pulse-font-weight-strong);
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .pulse-tag.primary {
+      background: var(--pulse-color-primary-20);
+      color: var(--pulse-color-primary-110);
+    }
+    .pulse-tag.success {
+      background: var(--pulse-color-success-20);
+      color: var(--pulse-color-success-70);
+    }
+    .pulse-tag.attention {
+      background: var(--pulse-color-attention-10);
+      color: var(--pulse-color-neutral-120);
+    }
+
+    /* ─── Overlay ─────────────────────────────────────────────────────────── */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(26, 44, 42, .35);
+      background: rgba(23, 47, 47, 0.4); /* primary-120 at 40% */
       z-index: 100;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .25s;
+      transition: opacity 0.25s;
     }
     .overlay.open { opacity: 1; pointer-events: all; }
 
-    /* ── SLIDE-OUT PANEL ── */
-    .slideout {
+    /* ─── PulseDrawer (right, 540px) ──────────────────────────────────────── */
+    .p-drawer {
       position: fixed;
       top: 0;
       right: 0;
       width: 540px;
+      min-width: 320px;
       height: 100vh;
-      background: var(--surface);
+      background: var(--pulse-color-neutral-10);
       z-index: 101;
       display: flex;
       flex-direction: column;
-      box-shadow: var(--shadow-lg);
+      box-shadow: -4px 0 24px rgba(0,0,0,0.14);
       transform: translateX(100%);
-      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .slideout.open { transform: translateX(0); }
+    .p-drawer.open { transform: translateX(0); }
 
-    .slideout-header {
-      padding: 16px 20px;
+    .p-drawer-header {
+      padding: var(--pulse-space-s);
+      border-bottom: 1px solid var(--pulse-color-neutral-40);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
-    .slideout-header h2 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
+    .p-drawer-header-title {
+      font-size: var(--pulse-font-size-regular);
+      font-weight: var(--pulse-font-weight-bold);
+      color: var(--pulse-color-primary-120);
+      line-height: 1.3;
     }
-    .slideout-close {
-      width: 30px; height: 30px;
-      border: 1px solid var(--border);
-      background: var(--surface);
+    .p-drawer-header-subtitle {
+      font-size: var(--pulse-font-size-caption-regular);
+      color: var(--pulse-color-neutral-100);
+      margin-top: var(--pulse-space-3xs);
+      line-height: 1.5;
+    }
+    .p-drawer-close {
+      width: 28px; height: 28px;
       border-radius: 50%;
+      border: 1px solid var(--pulse-color-neutral-50);
+      background: var(--pulse-color-neutral-10);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      color: var(--text-secondary);
-      transition: background .15s, color .15s;
-    }
-    .slideout-close:hover { background: #fdf0ef; color: var(--accent-red); border-color: #f0c0bc; }
-    .slideout-close svg { width:16px; height:16px; }
-
-    .slideout-description {
-      padding: 12px 20px;
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-      border-bottom: 1px solid var(--border);
+      color: var(--pulse-color-neutral-100);
       flex-shrink: 0;
+      margin-left: var(--pulse-space-xs);
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
+    .p-drawer-close:hover {
+      background: var(--pulse-color-urgency-10);
+      color: var(--pulse-color-urgency-70);
+      border-color: var(--pulse-color-urgency-70);
+    }
+    .p-drawer-close svg { width: 14px; height: 14px; }
 
-    .slideout-body {
+    .p-drawer-content {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 0 var(--pulse-space-s) var(--pulse-space-s);
     }
-    .slideout-body::-webkit-scrollbar { width:4px; }
-    .slideout-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .p-drawer-content::-webkit-scrollbar { width: 3px; }
+    .p-drawer-content::-webkit-scrollbar-thumb {
+      background: var(--pulse-color-neutral-50);
+      border-radius: 2px;
+    }
 
-    .form-section { margin-bottom: 0; }
+    /* ─── Form inside Drawer ─────────────────────────────────────────────── */
+    .form-section { margin-top: var(--pulse-space-s); }
+
     .form-section-title {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-    }
-    .form-group { margin-bottom: 16px; }
-    .form-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
+      font-size: var(--pulse-font-size-small);
+      font-weight: var(--pulse-font-weight-bold);
+      color: var(--pulse-color-primary-120);
+      margin-bottom: var(--pulse-space-s);
     }
 
-    .form-select {
+    /* PulseInputWrapper group */
+    .pulse-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       width: 100%;
-      padding: 10px 36px 10px 12px;
-      border: 1px solid var(--border);
+      margin-bottom: var(--pulse-space-s);
+    }
+
+    .pulse-input-label {
+      font-size: var(--pulse-font-size-small);
+      font-weight: var(--pulse-font-weight-regular);
+      color: var(--pulse-color-neutral-120);
+    }
+
+    .pulse-input-hint {
+      font-size: var(--pulse-font-size-caption-small);
+      color: var(--pulse-color-neutral-100);
+    }
+
+    /* p-select style (PulseSelect) */
+    .p-select {
+      width: 100%;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--pulse-space-xs);
+      border: 1px solid var(--pulse-color-primary-50);
       border-radius: 8px;
-      background: var(--surface);
-      font-size: 13px;
-      color: var(--text-primary);
+      background: var(--pulse-color-neutral-10);
+      font-size: var(--pulse-font-size-regular);
+      color: var(--pulse-color-primary-120);
+      font-family: 'Inter', sans-serif;
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%235a7672' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%233e7e7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 10px center;
+      background-position: right var(--pulse-space-xs) center;
+      padding-right: 36px;
       cursor: pointer;
-      transition: border-color .15s, box-shadow .15s;
-      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      line-height: var(--pulse-font-size-xlarge);
     }
-    .form-select:focus {
+    .p-select:focus {
       outline: none;
-      border-color: var(--teal-mid);
-      box-shadow: 0 0 0 3px rgba(42,122,112,.12);
+      border-color: var(--pulse-color-primary-70);
+      box-shadow: 0 0 0 3px rgba(102,204,204,0.2);
     }
-    .form-select:disabled {
-      background-color: var(--disabled-bg);
-      color: var(--disabled-text);
+    /* Filled state */
+    .p-select:not(:disabled):not([value=""]) {
+      background-color: var(--pulse-color-primary-10);
+    }
+    /* Disabled */
+    .p-select:disabled {
+      background: var(--pulse-color-neutral-40);
+      color: var(--pulse-color-neutral-90);
+      border-color: var(--pulse-color-neutral-50);
       cursor: not-allowed;
-      border-color: var(--border);
     }
-    .form-hint {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
+
+    /* PulseInputText */
+    .p-inputtext {
+      width: 100%;
+      height: 54px;
+      padding: 0 var(--pulse-space-xs);
+      border: 1px solid var(--pulse-color-primary-50);
+      border-radius: 8px;
+      background: var(--pulse-color-neutral-10);
+      font-size: var(--pulse-font-size-regular);
+      color: var(--pulse-color-primary-120);
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
+    .p-inputtext:focus {
+      outline: none;
+      border-color: var(--pulse-color-primary-70);
+      box-shadow: 0 0 0 3px rgba(102,204,204,0.2);
+    }
+    .p-inputtext::placeholder { color: var(--pulse-color-neutral-80); }
 
     .form-divider {
       height: 1px;
-      background: var(--border);
-      margin: 20px -20px;
+      background: var(--pulse-color-neutral-40);
+      margin: var(--pulse-space-s) 0;
     }
 
-    /* New section toggle (page only) */
-    .new-section-toggle {
+    /* Checkbox row */
+    .pulse-checkbox-row {
       display: none;
-      margin-top: 12px;
+      align-items: flex-start;
+      gap: var(--pulse-space-xs);
+      margin-bottom: var(--pulse-space-s);
     }
-    .new-section-toggle.visible { display: block; }
-    .toggle-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      user-select: none;
-    }
-    .toggle-label input[type="checkbox"] {
+    .pulse-checkbox-row.visible { display: flex; }
+    .pulse-checkbox-row input[type="checkbox"] {
       width: 16px; height: 16px;
-      accent-color: var(--teal-mid);
+      accent-color: var(--pulse-color-primary-70);
+      margin-top: 2px;
+      flex-shrink: 0;
       cursor: pointer;
     }
-    .new-section-input {
-      margin-top: 10px;
-      display: none;
+    .pulse-checkbox-row label {
+      font-size: var(--pulse-font-size-caption-regular);
+      color: var(--pulse-color-neutral-110);
+      cursor: pointer;
+      line-height: 1.5;
     }
-    .new-section-input.visible { display: block; }
-    .new-section-input input {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid var(--teal-border);
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--text-primary);
-      font-family: inherit;
-      transition: border-color .15s, box-shadow .15s;
-    }
-    .new-section-input input:focus {
-      outline: none;
-      border-color: var(--teal-mid);
-      box-shadow: 0 0 0 3px rgba(42,122,112,.12);
-    }
-    .new-section-input input::placeholder { color: var(--text-muted); }
 
-    /* ── SLIDEOUT FOOTER ── */
-    .slideout-footer {
-      padding: 14px 20px;
-      border-top: 1px solid var(--border);
+    .new-section-input { display: none; }
+    .new-section-input.visible { display: flex; flex-direction: column; gap: 8px; }
+
+    /* ─── PulseDrawer Footer ──────────────────────────────────────────────── */
+    .p-drawer-footer {
+      padding: var(--pulse-space-xs) var(--pulse-space-s);
+      border-top: 1px solid var(--pulse-color-neutral-40);
       display: flex;
-      gap: 12px;
+      gap: var(--pulse-space-xs);
       flex-shrink: 0;
     }
-    .btn {
+
+    /* PulseButton — primary */
+    .p-button {
       flex: 1;
-      padding: 10px 16px;
-      border-radius: 99px;
-      font-size: 13px;
-      font-weight: 600;
+      padding: 10px var(--pulse-space-s);
+      border-radius: 6px;
+      font-size: var(--pulse-font-size-small);
+      font-weight: var(--pulse-font-weight-regular);
       cursor: pointer;
-      transition: background .15s, border-color .15s, color .15s, opacity .15s;
-      font-family: inherit;
-      text-align: center;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      border: 1px solid transparent;
     }
-    .btn-outline {
-      background: var(--surface);
-      border: 1.5px solid var(--teal-border);
-      color: var(--teal-dark);
+    /* Primary: bg primary-110, text neutral-20 */
+    .p-button-primary {
+      background: var(--pulse-color-primary-110);
+      border-color: var(--pulse-color-neutral-10);
+      color: var(--pulse-color-neutral-20);
     }
-    .btn-outline:hover { background: var(--teal-light); }
-    .btn-primary {
-      background: var(--teal-light);
-      border: 1.5px solid var(--teal-border);
-      color: var(--teal-dark);
+    .p-button-primary:hover:not(:disabled) {
+      background: var(--pulse-color-primary-100);
+      border-color: var(--pulse-color-primary-80);
     }
-    .btn-primary:hover:not(:disabled) { background: var(--teal-border); }
-    .btn-primary:disabled {
-      opacity: .45;
+    .p-button-primary:disabled {
+      background: var(--pulse-color-neutral-40);
+      color: var(--pulse-color-neutral-90);
+      border-color: var(--pulse-color-neutral-90);
       cursor: not-allowed;
     }
-    .btn-primary.active-restore {
-      background: var(--teal-dark);
-      border-color: var(--teal-dark);
-      color: #fff;
+    /* Secondary: bg primary-10, border primary-100 */
+    .p-button-secondary {
+      background: var(--pulse-color-primary-10);
+      border-color: var(--pulse-color-primary-100);
+      color: var(--pulse-color-neutral-120);
     }
-    .btn-primary.active-restore:hover { background: var(--teal-mid); }
+    .p-button-secondary:hover {
+      background: var(--pulse-color-primary-20);
+      border-color: var(--pulse-color-primary-100);
+    }
 
-    /* ── SUCCESS TOAST ── */
+    /* ─── PulseStatusTag — restored indicator ─────────────────────────────── */
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--pulse-font-size-caption-small);
+      font-weight: var(--pulse-font-weight-strong);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .status-tag.success {
+      background: var(--pulse-color-success-20);
+      color: var(--pulse-color-success-70);
+    }
+
+    /* ─── Toast ───────────────────────────────────────────────────────────── */
     .toast {
       position: fixed;
-      bottom: 24px;
+      bottom: var(--pulse-space-m);
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: #1e7e34;
-      color: #fff;
-      padding: 10px 20px;
+      background: var(--pulse-color-primary-120);
+      color: var(--pulse-color-neutral-10);
+      padding: var(--pulse-space-xs) var(--pulse-space-s);
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      box-shadow: var(--shadow-md);
+      font-size: var(--pulse-font-size-caption-regular);
+      font-weight: var(--pulse-font-weight-regular);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
       z-index: 200;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      align-items: center;
+      gap: var(--pulse-space-xs);
       white-space: nowrap;
+      border-left: 4px solid var(--pulse-color-primary-70);
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast svg { width: 16px; height: 16px; color: var(--pulse-color-primary-70); flex-shrink: 0; }
   </style>
 </head>
 <body>
 
-<!-- TOP NAV -->
+<!-- ── Top Nav ───────────────────────────────────────────────────────────── -->
 <nav class="top-nav">
-  <span class="logo">1CP</span>
-  <a href="#">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+  <span class="top-nav-logo">1CP</span>
+
+  <button class="top-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
     Profile
-  </a>
-  <a href="#">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="4"/><path d="M19 8a4 4 0 0 0-4 4"/><path d="M15 15.5a4 4 0 0 0 4 3.5"/></svg>
+  </button>
+  <button class="top-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     Circle of Care
-  </a>
-  <a href="#">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+  </button>
+  <button class="top-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
     Assessments
-  </a>
-  <a href="#">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+  </button>
+  <button class="top-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
     Timeline
-  </a>
-  <a href="#" class="active">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+  </button>
+  <button class="top-nav-link active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
     Care Plan
-  </a>
-  <a href="#">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  </button>
+  <button class="top-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
     Warnings
-  </a>
-  <a href="#">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+  </button>
+  <button class="top-nav-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
     Goals
-  </a>
-  <span class="spacer"></span>
-  <div class="avatar">HH</div>
+  </button>
+
+  <span class="top-nav-spacer"></span>
+  <div class="top-nav-avatar">HH</div>
 </nav>
 
-<div class="layout">
+<div class="app-layout">
 
-  <!-- ICON RAIL -->
+  <!-- ── Icon Rail ─────────────────────────────────────────────────────────── -->
   <div class="icon-rail">
-    <button title="Overview">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <button class="icon-rail-btn" title="Dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
     </button>
-    <button title="Folders" class="active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    <button class="icon-rail-btn active" title="Care Plan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
     </button>
-    <button title="Goals">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    <button class="icon-rail-btn" title="Goals">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
     </button>
-    <button title="Needs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <button class="icon-rail-btn" title="Needs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     </button>
   </div>
 
-  <!-- LEFT SIDEBAR -->
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div>
-        <div class="patient-name">Annette L.</div>
-        <div class="patient-sub">DOB: 12 Mar 1948 · MRN 00421</div>
-      </div>
+  <!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-patient">
+      <div class="sidebar-patient-name">Annette L.</div>
+      <div class="sidebar-patient-sub">DOB: 12 Mar 1948 · MRN 00421</div>
     </div>
     <div class="sidebar-actions">
-      <button>+ Add</button>
-      <button>Filter</button>
+      <button class="btn-secondary">+ Add</button>
+      <button class="btn-secondary">Filter</button>
     </div>
 
     <div class="sidebar-scroll">
-      <div class="sidebar-section-label">Recommendations</div>
+      <div class="sidebar-group-label">Recommendations</div>
       <div class="sidebar-item">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Unresolved needs
-        <span class="badge">3</span>
+        <span class="sidebar-badge">3</span>
       </div>
 
       <div class="sidebar-divider"></div>
+      <div class="sidebar-group-label">Folders</div>
 
-      <div class="sidebar-section-label">Folders</div>
-
-      <!-- Folder: Physical Health -->
       <div class="sidebar-item" id="folder-physical">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         Physical Health
       </div>
       <div class="sidebar-item indent">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Mobility
       </div>
       <div class="sidebar-item indent">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Nutrition
       </div>
-      <div class="sidebar-item indent2">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-        Daily intake log
-      </div>
 
-      <!-- Folder: Mental Wellbeing -->
       <div class="sidebar-item" id="folder-mental">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         Mental Wellbeing
       </div>
       <div class="sidebar-item indent">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Mood tracking
       </div>
 
-      <!-- Folder: Social -->
       <div class="sidebar-item active" id="folder-social">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         Social Support
       </div>
       <div class="sidebar-item indent">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Community engagement
       </div>
 
-      <!-- Dynamic restored items go here -->
+      <!-- Restored items appear here -->
       <div id="restored-items"></div>
 
       <div class="sidebar-divider"></div>
-      <div class="sidebar-section-label">Archived</div>
+      <div class="sidebar-group-label">Archived</div>
       <div class="sidebar-item">
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
         Archived items
-        <span class="badge">7</span>
+        <span class="sidebar-badge">7</span>
       </div>
     </div>
 
-    <!-- UNARCHIVED CONTENT — bottom item -->
+    <!-- Unarchived content trigger -->
     <div class="sidebar-unarchive">
-      <div class="sidebar-item" id="open-slideout-btn" onclick="openSlideout()">
-        <svg style="width:15px;height:15px;color:var(--teal-mid)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
+      <div class="sidebar-item" onclick="openDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Unarchived content
-        <span class="badge" style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-border)">5</span>
+        <span class="sidebar-badge">5</span>
       </div>
     </div>
-  </div>
+  </aside>
 
-  <!-- MAIN CONTENT -->
+  <!-- ── Main Content ──────────────────────────────────────────────────────── -->
   <main class="main">
     <div class="main-header">
-      <h1>All Care Domains</h1>
-      <p>Annette L. — showing all active care plan sections</p>
+      <div class="main-title">All Care Domains</div>
+      <div class="main-subtitle">Annette L. — showing all active care plan sections</div>
     </div>
-    <div class="domains-grid">
-      <div class="domain-card">
+    <div class="domain-grid">
+      <div class="pulse-card">
         <h3>Mobility &amp; Physical Function</h3>
         <p>Supporting safe and independent movement in daily activities.</p>
-        <div class="domain-meta">
-          <span class="domain-chip">3 needs</span>
-          <span class="domain-chip">In progress</span>
+        <div class="card-tags">
+          <span class="pulse-tag primary">3 needs</span>
+          <span class="pulse-tag success">In progress</span>
         </div>
       </div>
-      <div class="domain-card">
+      <div class="pulse-card">
         <h3>Nutrition &amp; Hydration</h3>
-        <p>Monitoring dietary intake and fluid balance.</p>
-        <div class="domain-meta">
-          <span class="domain-chip">2 needs</span>
-          <span class="domain-chip">Review due</span>
+        <p>Monitoring dietary intake and fluid balance throughout the day.</p>
+        <div class="card-tags">
+          <span class="pulse-tag primary">2 needs</span>
+          <span class="pulse-tag attention">Review due</span>
         </div>
       </div>
-      <div class="domain-card">
+      <div class="pulse-card">
         <h3>Mental Wellbeing</h3>
-        <p>Emotional support, mood monitoring and cognitive health.</p>
-        <div class="domain-meta">
-          <span class="domain-chip">1 need</span>
-          <span class="domain-chip">Active</span>
+        <p>Emotional support, mood monitoring and cognitive health assessments.</p>
+        <div class="card-tags">
+          <span class="pulse-tag primary">1 need</span>
+          <span class="pulse-tag success">Active</span>
         </div>
       </div>
-      <div class="domain-card">
+      <div class="pulse-card">
         <h3>Social Support &amp; Engagement</h3>
-        <p>Connections to community, family and peer networks.</p>
-        <div class="domain-meta">
-          <span class="domain-chip">2 needs</span>
-          <span class="domain-chip">Active</span>
+        <p>Connections to community, family and peer support networks.</p>
+        <div class="card-tags">
+          <span class="pulse-tag primary">2 needs</span>
+          <span class="pulse-tag success">Active</span>
         </div>
       </div>
-      <div class="domain-card">
+      <div class="pulse-card">
         <h3>Medication Management</h3>
-        <p>Tracking prescriptions, adherence and side effects.</p>
-        <div class="domain-meta">
-          <span class="domain-chip">4 needs</span>
-          <span class="domain-chip">Alert</span>
+        <p>Tracking prescriptions, adherence and monitoring for side effects.</p>
+        <div class="card-tags">
+          <span class="pulse-tag primary">4 needs</span>
+          <span class="pulse-tag attention">Alert</span>
         </div>
       </div>
-      <div class="domain-card">
+      <div class="pulse-card">
         <h3>Personal Care</h3>
-        <p>Hygiene, grooming and daily living assistance.</p>
-        <div class="domain-meta">
-          <span class="domain-chip">1 need</span>
-          <span class="domain-chip">Active</span>
+        <p>Hygiene, grooming and daily living assistance planning.</p>
+        <div class="card-tags">
+          <span class="pulse-tag primary">1 need</span>
+          <span class="pulse-tag success">Active</span>
         </div>
       </div>
     </div>
   </main>
 </div>
 
-<!-- OVERLAY -->
-<div class="overlay" id="overlay" onclick="closeSlideout()"></div>
+<!-- ── Overlay ───────────────────────────────────────────────────────────── -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
-<!-- SLIDE-OUT PANEL -->
-<div class="slideout" id="slideout">
-  <div class="slideout-header">
-    <h2>Legacy Archived Content</h2>
-    <button class="slideout-close" onclick="closeSlideout()" aria-label="Close">
+<!-- ── PulseDrawer ───────────────────────────────────────────────────────── -->
+<div class="p-drawer" id="drawer">
+
+  <div class="p-drawer-header">
+    <div>
+      <div class="p-drawer-header-title">Legacy Archived Content</div>
+      <div class="p-drawer-header-subtitle">
+        These are the archived content from the old care plan platform.<br>
+        Select which items you wish to restore into the new 1CP.
+      </div>
+    </div>
+    <button class="p-drawer-close" onclick="closeDrawer()" aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
 
-  <div class="slideout-description">
-    These are the archived content from the old care plan platform. Select which items you wish to restore into the new 1CP.
-  </div>
+  <div class="p-drawer-content">
 
-  <div class="slideout-body">
-    <!-- SECTION 1: Locate items -->
+    <!-- Section 1: Locate -->
     <div class="form-section">
-      <div class="form-section-title">Locate Items you wish to restore</div>
+      <div class="form-section-title">Locate items you wish to restore</div>
 
-      <div class="form-group">
-        <label class="form-label" for="restore-type">I wish to restore</label>
-        <select class="form-select" id="restore-type" onchange="onTypeChange()">
+      <div class="pulse-input-group">
+        <label class="pulse-input-label" for="restore-type">I wish to restore</label>
+        <select class="p-select" id="restore-type" onchange="onTypeChange()">
           <option value="">Select type...</option>
           <option value="folder">A Folder</option>
           <option value="page">A Page</option>
@@ -745,9 +904,9 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="restore-item">Select item</label>
-        <select class="form-select" id="restore-item" disabled onchange="onItemChange()">
+      <div class="pulse-input-group">
+        <label class="pulse-input-label" for="restore-item">Select item</label>
+        <select class="p-select" id="restore-item" disabled onchange="onItemChange()">
           <option value="">Select item...</option>
         </select>
       </div>
@@ -755,42 +914,46 @@
 
     <div class="form-divider"></div>
 
-    <!-- SECTION 2: Select destination -->
+    <!-- Section 2: Destination -->
     <div class="form-section">
       <div class="form-section-title">Select destination of these item(s)</div>
 
-      <div class="form-group">
-        <label class="form-label" for="restore-dest">Destination</label>
-        <div class="form-hint" style="margin-bottom:6px">Select where in the one care plan these items will be restored</div>
-        <select class="form-select" id="restore-dest" disabled onchange="onDestChange()">
+      <div class="pulse-input-group">
+        <label class="pulse-input-label" for="restore-dest">Destination</label>
+        <div class="pulse-input-hint">Select where in the one care plan these items will be restored</div>
+        <select class="p-select" id="restore-dest" disabled onchange="onDestChange()">
           <option value="">Select...</option>
         </select>
       </div>
 
-      <!-- NEW SECTION option (pages only) -->
-      <div class="new-section-toggle" id="new-section-toggle">
-        <label class="toggle-label">
-          <input type="checkbox" id="new-section-check" onchange="onNewSectionToggle()" />
-          Create a new section to restore this page into
-        </label>
-        <div class="new-section-input" id="new-section-input">
-          <input type="text" id="new-section-name" placeholder="New section name..." oninput="onNewSectionName()" />
-        </div>
+      <!-- New section option (pages only) -->
+      <div class="pulse-checkbox-row" id="new-section-row">
+        <input type="checkbox" id="new-section-check" onchange="onNewSectionToggle()" />
+        <label for="new-section-check">Create a new section to restore this page into</label>
+      </div>
+
+      <div class="new-section-input" id="new-section-input">
+        <label class="pulse-input-label" for="new-section-name">New section name</label>
+        <input class="p-inputtext" type="text" id="new-section-name" placeholder="e.g. Legacy wound care…" oninput="onNewSectionName()" />
       </div>
     </div>
+
   </div>
 
-  <div class="slideout-footer">
-    <button class="btn btn-outline" onclick="closeSlideout()">Close</button>
-    <button class="btn btn-primary" id="restore-btn" disabled onclick="doRestore()">Restore</button>
+  <div class="p-drawer-footer">
+    <button class="p-button p-button-secondary" onclick="closeDrawer()">Close</button>
+    <button class="p-button p-button-primary" id="restore-btn" disabled onclick="doRestore()">Restore</button>
   </div>
 </div>
 
-<!-- SUCCESS TOAST -->
-<div class="toast" id="toast"></div>
+<!-- ── Toast ─────────────────────────────────────────────────────────────── -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg"></span>
+</div>
 
 <script>
-  // ── DATA ──────────────────────────────────────────────────────────────────
+  /* ── Data ──────────────────────────────────────────────────────────────── */
   const DATA = {
     folder: {
       items: [
@@ -833,253 +996,199 @@
         { id: 'dn4', label: 'Community engagement — Social Support' },
       ],
     },
-  };
-
-  // ── STATE ─────────────────────────────────────────────────────────────────
-  let selectedType = '';
-  let selectedItem = '';
-  let selectedDest = '';
-  let newSectionMode = false;
-  let newSectionName = '';
-
-  // ── PANEL OPEN / CLOSE ────────────────────────────────────────────────────
-  function openSlideout() {
-    document.getElementById('overlay').classList.add('open');
-    document.getElementById('slideout').classList.add('open');
   }
 
-  function closeSlideout() {
-    document.getElementById('overlay').classList.remove('open');
-    document.getElementById('slideout').classList.remove('open');
+  /* ── State ─────────────────────────────────────────────────────────────── */
+  let selType = '', selItem = '', selDest = ''
+  let newSectionMode = false, newSectionName = ''
+
+  /* ── Drawer ────────────────────────────────────────────────────────────── */
+  function openDrawer() {
+    document.getElementById('overlay').classList.add('open')
+    document.getElementById('drawer').classList.add('open')
+  }
+  function closeDrawer() {
+    document.getElementById('overlay').classList.remove('open')
+    document.getElementById('drawer').classList.remove('open')
   }
 
-  // ── FORM LOGIC ────────────────────────────────────────────────────────────
+  /* ── Form logic ────────────────────────────────────────────────────────── */
   function onTypeChange() {
-    const typeEl = document.getElementById('restore-type');
-    selectedType = typeEl.value;
-    selectedItem = '';
-    selectedDest = '';
-    newSectionMode = false;
+    selType = document.getElementById('restore-type').value
+    selItem = ''; selDest = ''; newSectionMode = false; newSectionName = ''
 
-    // Reset dependent fields
-    const itemEl = document.getElementById('restore-item');
-    const destEl = document.getElementById('restore-dest');
-    const toggleEl = document.getElementById('new-section-toggle');
-    const inputEl = document.getElementById('new-section-input');
-    const checkEl = document.getElementById('new-section-check');
+    const itemEl = document.getElementById('restore-item')
+    const destEl = document.getElementById('restore-dest')
+    const nsRow  = document.getElementById('new-section-row')
+    const nsInput = document.getElementById('new-section-input')
+    const nsCheck = document.getElementById('new-section-check')
+    const nsName  = document.getElementById('new-section-name')
 
-    itemEl.innerHTML = '<option value="">Select item...</option>';
-    destEl.innerHTML = '<option value="">Select...</option>';
-    itemEl.disabled = !selectedType;
-    destEl.disabled = true;
-    toggleEl.classList.remove('visible');
-    inputEl.classList.remove('visible');
-    checkEl.checked = false;
+    itemEl.innerHTML = '<option value="">Select item...</option>'
+    destEl.innerHTML = '<option value="">Select...</option>'
+    itemEl.disabled = !selType
+    destEl.disabled = true
+    nsRow.classList.remove('visible')
+    nsInput.classList.remove('visible')
+    nsCheck.checked = false
+    nsName.value = ''
 
-    if (selectedType && DATA[selectedType]) {
-      DATA[selectedType].items.forEach(i => {
-        const opt = document.createElement('option');
-        opt.value = i.id;
-        opt.textContent = i.label;
-        itemEl.appendChild(opt);
-      });
+    if (selType && DATA[selType]) {
+      DATA[selType].items.forEach(i => {
+        itemEl.appendChild(Object.assign(document.createElement('option'), { value: i.id, textContent: i.label }))
+      })
     }
-
-    updateRestoreBtn();
+    syncRestoreBtn()
   }
 
   function onItemChange() {
-    const itemEl = document.getElementById('restore-item');
-    selectedItem = itemEl.value;
-    selectedDest = '';
+    selItem = document.getElementById('restore-item').value
+    selDest = ''
 
-    const destEl = document.getElementById('restore-dest');
-    destEl.innerHTML = '<option value="">Select...</option>';
+    const destEl  = document.getElementById('restore-dest')
+    const nsRow   = document.getElementById('new-section-row')
+    const nsInput = document.getElementById('new-section-input')
+    const nsCheck = document.getElementById('new-section-check')
 
-    if (selectedItem && selectedType && DATA[selectedType]) {
-      DATA[selectedType].destinations.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.id;
-        opt.textContent = d.label;
-        destEl.appendChild(opt);
-      });
-      destEl.disabled = false;
+    destEl.innerHTML = '<option value="">Select...</option>'
+
+    if (selItem && selType && DATA[selType]) {
+      DATA[selType].destinations.forEach(d => {
+        destEl.appendChild(Object.assign(document.createElement('option'), { value: d.id, textContent: d.label }))
+      })
+      destEl.disabled = false
     } else {
-      destEl.disabled = true;
+      destEl.disabled = true
     }
 
-    // Show new section toggle for pages
-    const toggleEl = document.getElementById('new-section-toggle');
-    if (selectedType === 'page' && selectedItem) {
-      toggleEl.classList.add('visible');
+    if (selType === 'page' && selItem) {
+      nsRow.classList.add('visible')
     } else {
-      toggleEl.classList.remove('visible');
-      document.getElementById('new-section-input').classList.remove('visible');
-      document.getElementById('new-section-check').checked = false;
-      newSectionMode = false;
+      nsRow.classList.remove('visible')
+      nsInput.classList.remove('visible')
+      nsCheck.checked = false
+      newSectionMode = false
     }
-
-    updateRestoreBtn();
+    syncRestoreBtn()
   }
 
   function onDestChange() {
-    const destEl = document.getElementById('restore-dest');
-    selectedDest = destEl.value;
-    updateRestoreBtn();
+    selDest = document.getElementById('restore-dest').value
+    syncRestoreBtn()
   }
 
   function onNewSectionToggle() {
-    const checkEl = document.getElementById('new-section-check');
-    const inputEl = document.getElementById('new-section-input');
-    newSectionMode = checkEl.checked;
+    newSectionMode = document.getElementById('new-section-check').checked
+    const nsInput = document.getElementById('new-section-input')
+    const destEl  = document.getElementById('restore-dest')
+
     if (newSectionMode) {
-      inputEl.classList.add('visible');
-      // When creating new section, destination not needed
-      document.getElementById('restore-dest').disabled = true;
-      document.getElementById('restore-dest').value = '';
-      selectedDest = '';
+      nsInput.classList.add('visible')
+      destEl.disabled = true
+      destEl.value = ''
+      selDest = ''
     } else {
-      inputEl.classList.remove('visible');
-      document.getElementById('restore-dest').disabled = !selectedItem;
-      newSectionName = '';
+      nsInput.classList.remove('visible')
+      destEl.disabled = !selItem
+      newSectionName = ''
+      document.getElementById('new-section-name').value = ''
     }
-    updateRestoreBtn();
+    syncRestoreBtn()
   }
 
   function onNewSectionName() {
-    newSectionName = document.getElementById('new-section-name').value.trim();
-    updateRestoreBtn();
+    newSectionName = document.getElementById('new-section-name').value.trim()
+    syncRestoreBtn()
   }
 
-  function updateRestoreBtn() {
-    const btn = document.getElementById('restore-btn');
-    const ready = (
-      selectedType &&
-      selectedItem &&
-      (selectedDest || (newSectionMode && newSectionName))
-    );
-    btn.disabled = !ready;
-    if (ready) {
-      btn.classList.add('active-restore');
-    } else {
-      btn.classList.remove('active-restore');
-    }
+  function syncRestoreBtn() {
+    const ready = selType && selItem && (selDest || (newSectionMode && newSectionName))
+    const btn = document.getElementById('restore-btn')
+    btn.disabled = !ready
   }
 
-  // ── RESTORE ACTION ────────────────────────────────────────────────────────
+  /* ── Restore ───────────────────────────────────────────────────────────── */
   function doRestore() {
-    const type = selectedType;
-    const itemId = selectedItem;
-    const itemLabel = DATA[type].items.find(i => i.id === itemId)?.label || '';
-    const destId = selectedDest;
-    const destLabel = DATA[type]?.destinations.find(d => d.id === destId)?.label || '';
-    const sectionName = newSectionName;
+    const itemLabel = DATA[selType].items.find(i => i.id === selItem)?.label || ''
+    const destLabel = DATA[selType].destinations.find(d => d.id === selDest)?.label || ''
 
-    // Update the left sidebar
-    addToSidebar(type, itemLabel, destLabel, sectionName);
+    addToSidebar(selType, itemLabel, destLabel, newSectionName)
 
-    // Show toast
-    let msg = '';
-    if (type === 'folder') msg = `Folder "${itemLabel}" restored to ${destLabel}`;
-    else if (type === 'page') msg = sectionName
-      ? `Page "${itemLabel}" restored under new section "${sectionName}"`
-      : `Page "${itemLabel}" restored to ${destLabel}`;
-    else msg = `Need "${itemLabel}" added to ${destLabel}`;
+    const msg = selType === 'folder'
+      ? `"${itemLabel}" restored to ${destLabel}`
+      : selType === 'page'
+        ? newSectionName
+          ? `"${itemLabel}" restored under new section "${newSectionName}"`
+          : `"${itemLabel}" restored to ${destLabel}`
+        : `"${itemLabel}" added to ${destLabel}`
 
-    showToast(msg);
-
-    // Reset and close
-    resetForm();
-    closeSlideout();
+    showToast(msg)
+    resetForm()
+    closeDrawer()
   }
 
   function addToSidebar(type, itemLabel, destLabel, sectionName) {
-    const container = document.getElementById('restored-items');
+    const container = document.getElementById('restored-items')
+
+    const iconFolder = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px;color:var(--pulse-color-primary-90);flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`
+    const iconPage   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px;color:var(--pulse-color-neutral-90);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
+    const iconNeed   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px;color:var(--pulse-color-neutral-90);flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`
+    const tag = `<span class="status-tag success" style="margin-left:auto;flex-shrink:0">Restored</span>`
+
+    const wrap = document.createElement('div')
 
     if (type === 'folder') {
-      // Add a new folder entry in sidebar
-      const el = document.createElement('div');
-      el.className = 'sidebar-item';
-      el.innerHTML = `
-        <svg class="item-icon" style="color:var(--teal-mid)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        ${itemLabel.replace('Legacy ', '').replace(' Folder', '')}
-        <span class="restored-badge">Restored</span>
-      `;
-      container.appendChild(el);
+      wrap.innerHTML = `<div class="sidebar-item">${iconFolder}${itemLabel.replace('Legacy ','').replace(' Folder','')}${tag}</div>`
     } else if (type === 'page') {
-      const sectionEl = document.createElement('div');
       if (sectionName) {
-        // New section header
+        const targetFolder = findFolderEl(destLabel)
+        const sectionEl = document.createElement('div')
         sectionEl.innerHTML = `
-          <div class="sidebar-item indent" style="color:var(--teal-mid);font-weight:600;font-style:italic">
-            <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-            ${sectionName}
+          <div class="sidebar-item indent" style="color:var(--pulse-color-primary-90);font-weight:var(--pulse-font-weight-strong)">
+            ${iconFolder} ${sectionName}
           </div>
-          <div class="sidebar-item indent2">
-            <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            ${itemLabel}
-            <span class="restored-badge">Restored</span>
-          </div>
-        `;
+          <div class="sidebar-item indent2">${iconPage}${itemLabel}${tag}</div>`
+        if (targetFolder) { targetFolder.insertAdjacentElement('afterend', sectionEl); return }
+        container.appendChild(sectionEl); return
       } else {
-        sectionEl.innerHTML = `
-          <div class="sidebar-item indent">
-            <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            ${itemLabel}
-            <span class="restored-badge">Restored</span>
-          </div>
-        `;
+        const targetFolder = findFolderEl(destLabel)
+        const pageEl = document.createElement('div')
+        pageEl.innerHTML = `<div class="sidebar-item indent">${iconPage}${itemLabel}${tag}</div>`
+        if (targetFolder) { targetFolder.insertAdjacentElement('afterend', pageEl); return }
+        wrap.innerHTML = `<div class="sidebar-item indent">${iconPage}${itemLabel}${tag}</div>`
       }
-      // Try to insert after the relevant folder
-      const targetFolder = findFolderEl(destLabel);
-      if (targetFolder) {
-        targetFolder.insertAdjacentElement('afterend', sectionEl);
-      } else {
-        container.appendChild(sectionEl);
-      }
-      return;
-    } else if (type === 'need') {
-      // Add a need item (indented 2 levels)
-      const el = document.createElement('div');
-      el.className = 'sidebar-item indent2';
-      el.innerHTML = `
-        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-        ${itemLabel}
-        <span class="restored-badge">Restored</span>
-      `;
-      container.appendChild(el);
+    } else {
+      wrap.innerHTML = `<div class="sidebar-item indent2">${iconNeed}${itemLabel}${tag}</div>`
     }
+    container.appendChild(wrap)
   }
 
   function findFolderEl(destLabel) {
-    // Map destination labels to known folder element IDs
-    if (destLabel.includes('Physical')) return document.getElementById('folder-physical');
-    if (destLabel.includes('Mental')) return document.getElementById('folder-mental');
-    if (destLabel.includes('Social')) return document.getElementById('folder-social');
-    return null;
+    if (destLabel.includes('Physical')) return document.getElementById('folder-physical')
+    if (destLabel.includes('Mental'))   return document.getElementById('folder-mental')
+    if (destLabel.includes('Social'))   return document.getElementById('folder-social')
+    return null
   }
 
   function resetForm() {
-    selectedType = ''; selectedItem = ''; selectedDest = '';
-    newSectionMode = false; newSectionName = '';
-    document.getElementById('restore-type').value = '';
-    document.getElementById('restore-item').innerHTML = '<option value="">Select item...</option>';
-    document.getElementById('restore-item').disabled = true;
-    document.getElementById('restore-dest').innerHTML = '<option value="">Select...</option>';
-    document.getElementById('restore-dest').disabled = true;
-    document.getElementById('new-section-toggle').classList.remove('visible');
-    document.getElementById('new-section-input').classList.remove('visible');
-    document.getElementById('new-section-check').checked = false;
-    document.getElementById('new-section-name').value = '';
-    document.getElementById('restore-btn').disabled = true;
-    document.getElementById('restore-btn').classList.remove('active-restore');
+    selType = ''; selItem = ''; selDest = ''; newSectionMode = false; newSectionName = ''
+    document.getElementById('restore-type').value = ''
+    document.getElementById('restore-item').innerHTML = '<option value="">Select item...</option>'
+    document.getElementById('restore-item').disabled = true
+    document.getElementById('restore-dest').innerHTML = '<option value="">Select...</option>'
+    document.getElementById('restore-dest').disabled = true
+    document.getElementById('new-section-row').classList.remove('visible')
+    document.getElementById('new-section-input').classList.remove('visible')
+    document.getElementById('new-section-check').checked = false
+    document.getElementById('new-section-name').value = ''
+    document.getElementById('restore-btn').disabled = true
   }
 
   function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = '✓  ' + msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3500);
+    document.getElementById('toast-msg').textContent = msg
+    const t = document.getElementById('toast')
+    t.classList.add('show')
+    setTimeout(() => t.classList.remove('show'), 3800)
   }
 </script>
 </body>
