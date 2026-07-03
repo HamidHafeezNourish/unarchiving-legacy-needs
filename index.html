@@ -744,8 +744,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <!-- Section Page group 1 -->
           <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
           <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><span class="lhs-dot"></span></div>Need 1</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><span class="lhs-dot"></span></div>Need 2</div>
+          <div class="lhs-row l2"><div class="lhs-caret"><span class="lhs-dot"></span></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret"><span class="lhs-dot"></span></div>Need 2</div>
         </div>
 
         <!-- Divider -->
@@ -755,7 +755,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           <!-- Section Page group 2 -->
           <div class="lhs-row"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
           <div class="lhs-row l1"><div class="lhs-caret down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>Section Page</div>
-          <div class="lhs-row l2"><div class="lhs-caret dot"><span class="lhs-dot"></span></div>Need 1</div>
+          <div class="lhs-row l2"><div class="lhs-caret"><span class="lhs-dot"></span></div>Need 1</div>
         </div>
 
         <!-- Divider -->
@@ -976,6 +976,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
             <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-type','','Select type…')">Select type…</div>
             <div class="c-select-opt" data-value="page" onclick="ddPick('dd-type','page','A Page')">A Page</div>
             <div class="c-select-opt" data-value="need" onclick="ddPick('dd-type','need','A Need')">A Need</div>
+            <div class="c-select-opt" data-value="folder" onclick="ddPick('dd-type','folder','A Folder')">A Folder</div>
           </div>
         </div>
       </div>
@@ -1033,7 +1034,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
           </div>
           <div class="c-select-panel">
             <div class="c-select-opt is-placeholder" data-value="" onclick="ddPick('dd-dest','','Select destination…')">Select destination…</div>
-            <div class="c-select-opt" data-value="behaviour" onclick="ddPick('dd-dest','behaviour','Behaviour')">Behaviour</div>
+            <div class="c-select-opt" data-value="create-new" onclick="ddPick('dd-dest','create-new','Create New Section')">+ Create New Section</div>
+            <div class="c-select-opt divider-top" data-value="behaviour" onclick="ddPick('dd-dest','behaviour','Behaviour')">Behaviour</div>
             <div class="c-select-opt" data-value="cognition" onclick="ddPick('dd-dest','cognition','Cognition and Mental Capacity')">Cognition and Mental Capacity</div>
             <div class="c-select-opt" data-value="communications" onclick="ddPick('dd-dest','communications','Communications')">Communications</div>
             <div class="c-select-opt" data-value="continence" onclick="ddPick('dd-dest','continence','Continence')">Continence</div>
@@ -1051,7 +1053,6 @@ body{font-family:'Inter',sans-serif;font-size:13px;color:var(--n120);background:
             <div class="c-select-opt" data-value="sleep" onclick="ddPick('dd-dest','sleep','Sleep and Rest')">Sleep and Rest</div>
             <div class="c-select-opt" data-value="social" onclick="ddPick('dd-dest','social','Social, Community and Recreation')">Social, Community and Recreation</div>
             <div class="c-select-opt" data-value="specific-ltc" onclick="ddPick('dd-dest','specific-ltc','Specific LTC')">Specific LTC</div>
-            <div class="c-select-opt divider-top" data-value="create-new" onclick="ddPick('dd-dest','create-new','Create New Section')">+ Create New Section</div>
           </div>
         </div>
       </div>
@@ -1108,6 +1109,13 @@ const LEGACY_NEEDS = [
   {id:'n3',label:'Dietary assessment referral'},
   {id:'n4',label:'Cognitive stimulation activities'},
   {id:'n5',label:'Social isolation support'},
+]
+const LEGACY_FOLDERS = [
+  {id:'f1',label:'Health & Wellbeing'},
+  {id:'f2',label:'Daily Routine'},
+  {id:'f3',label:'Social Engagement'},
+  {id:'f4',label:'Personal Development'},
+  {id:'f5',label:'Risk Management'},
 ]
 const DEST_LABELS = {
   'behaviour':'Behaviour','cognition':'Cognition and Mental Capacity',
@@ -1214,6 +1222,7 @@ function btPick(el, id, label){
   }
   ddItem.querySelectorAll('.c-select-opt').forEach(o =>
     o.classList.toggle('selected', o.dataset.value === id))
+  ddItem.classList.remove('open')
   ddSetEnabled('dd-dest', true)
   sync()
 }
@@ -1237,7 +1246,7 @@ function handleTypeChange(){
   ddSetEnabled('dd-dest', false)
   document.getElementById('new-sec-field').classList.remove('show')
   document.getElementById('new-sec-name').value = ''
-  const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : []
+  const items = sType==='page' ? LEGACY_PAGES : sType==='need' ? LEGACY_NEEDS : sType==='folder' ? LEGACY_FOLDERS : []
   ddSetOptions('dd-item', items)
   ddSetEnabled('dd-item', !!sType)
   document.getElementById('browse-tree').style.display = sType ? '' : 'none'
@@ -1247,7 +1256,7 @@ function handleTypeChange(){
 
 function handleItemChange(){
   sItem = ddState['dd-item'].value
-  const items = sType==='page' ? LEGACY_PAGES : LEGACY_NEEDS
+  const items = sType==='page' ? LEGACY_PAGES : sType==='folder' ? LEGACY_FOLDERS : LEGACY_NEEDS
   const found = items.find(i => i.id===sItem)
   sItemLabel = found ? found.label : ''
   document.querySelectorAll('.bt-node').forEach(n =>
@@ -1309,7 +1318,7 @@ function addToLHS(){
           <div class="lhs-new-dot" style="margin-left:auto"></div>
         </div>
         <div class="lhs-row l2" style="gap:4px">
-          <div class="lhs-caret dot"><span class="lhs-dot"></span></div>
+          <div class="lhs-caret"><span class="lhs-dot"></span></div>
           <span>${sItemLabel}</span>
           <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
           <div class="lhs-new-dot" style="margin-left:auto"></div>
@@ -1340,7 +1349,7 @@ function addToLHS(){
       newRow.className = 'lhs-row l2'
       newRow.dataset.restored = 'true'
       newRow.innerHTML = `
-        <div class="lhs-caret dot"><span class="lhs-dot"></span></div>
+        <div class="lhs-caret"><span class="lhs-dot"></span></div>
         <span>${sItemLabel}</span>
         <em style="font-size:14px;color:var(--n100);font-style:italic">&nbsp;(New)</em>
         <div class="lhs-new-dot" style="margin-left:auto"></div>`
@@ -1423,7 +1432,7 @@ function toggleSection(el){
     needs.forEach(label => {
       const row = document.createElement('div')
       row.className = 'lhs-row l2'
-      row.innerHTML = `<div class="lhs-caret dot"><span class="lhs-dot"></span></div><span>${label}</span>`
+      row.innerHTML = `<div class="lhs-caret"><span class="lhs-dot"></span></div><span>${label}</span>`
       el.parentNode.insertBefore(row, nextSib)
       insertAfter = row
     })
